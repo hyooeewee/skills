@@ -1,0 +1,8 @@
+# Files skipped by the continuous-translation action.
+# Release machinery — a translated copy of a changeset would be applied as a
+# real changeset by `changeset version`, causing duplicate releases.
+.changeset/
+CHANGELOG.md
+# The action's own cache and generated translation index.
+.genaiscript/
+translations/

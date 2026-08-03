@@ -1,0 +1,52 @@
+name: Continuous Translation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.md"
+      - "!.changeset/**"
+      - "!CHANGELOG.md"
+      - "!translations/**"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  continuous_translation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: .genaiscript/cache/**
+          key: continuous-translation-${{ github.run_id }}
+          restore-keys: |
+            continuous-translation-
+
+      - uses: pelikhan/action-continuous-translation@v0
+        with:
+          lang: zh
+          files: |
+            **/*.md
+          model_alias: |
+            translation: openai:${{ vars.OPENAI_MODEL_NAME }}
+            validation: openai:${{ vars.OPENAI_MODEL_NAME }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_BASE: ${{ vars.OPENAI_API_BASE }}
+
+      - run: git pull --ff-only
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: "**.md* translations/**"
+          commit_message: "[cai] 🤖 translate docs to zh"
+          commit_user_name: genaiscript
