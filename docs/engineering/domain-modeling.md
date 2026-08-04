@@ -8,39 +8,39 @@ npx skills add mattpocock/skills --skill=domain-modeling
 npx skills update domain-modeling
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/domain-modeling)
+[源码](https://github.com/mattpocock/skills/tree/main/skills/engineering/domain-modeling)
 
-## What it does
+## 功能说明
 
-`domain-modeling` builds and sharpens a project's **ubiquitous language** as you design — challenging fuzzy terms, stress-testing relationships with concrete scenarios, and writing the glossary and decisions down the moment they crystallise.
+`domain-modeling` 在设计时构建并打磨项目的**通用语言**——挑战模糊的术语，用具体场景压力测试关系，并在概念形成时立即记录下术语表和决策。
 
-This is the **active** discipline, not the passive one. Merely reading `CONTEXT.md` to borrow its vocabulary is a one-line habit any skill can do; this skill is for when you are *changing* the model — coining a canonical term, catching a contradiction between the code and what you just said, recording a hard-to-reverse decision. And it keeps the glossary clean: `CONTEXT.md` is a glossary and nothing else — no implementation details, no spec, no scratch pad.
+这是**主动**的实践，而非被动的。仅仅阅读 `CONTEXT.md` 来借用其词汇是任何技能都能做到的一行代码习惯；这个技能是为了当你*改变*模型时使用——创造规范术语，捕捉代码与你刚才所说之间的矛盾，记录难以回溯的决定。此外，它还能保持术语表的整洁：`CONTEXT.md` 就是术语表，除此之外别无他物——没有实现细节，没有规范，没有草稿本。
 
-## When to reach for it
+## 何时使用
 
-Type `/domain-modeling`, or the agent reaches for it automatically when a task fits — when you are pinning down terminology, resolving an overloaded word, or recording an architectural decision.
+输入 `/domain-modeling`，或者当任务匹配时代理会自动调用它——当你需要锁定术语、解决一词多义或记录架构决策时。
 
-Reach for it when the *words* are the problem: two people mean different things by "cancellation", "account" is doing three jobs, or a design conversation keeps snagging on a concept that has never been named precisely. If instead the module's *shape* is the problem — where the seam goes, how deep the interface is — use [codebase-design](https://aihero.dev/skills-codebase-design). If you want the plan itself interrogated before you build, use [grilling](https://aihero.dev/skills-grilling).
+当*词语*成为问题时使用它：两个人对“取消”有着不同的理解，“账户”承担了三个职责，或者设计对话一直纠缠于一个从未被精确命名的概念。如果相反，模块的*形状*是问题所在——接口在哪里，接口有多深——请使用 [codebase-design](https://aihero.dev/skills-codebase-design)。如果你想在构建之前质询计划本身，请使用 [grilling](https://aihero.dev/skills-grilling)。
 
-## Prerequisites
+## 前置条件
 
-The skill writes into two places, both created lazily — only once there is something to record. Resolved terms go into `CONTEXT.md` at the root (or, in a multi-context repo flagged by a `CONTEXT-MAP.md`, into the per-context `CONTEXT.md`). Decisions go into `docs/adr/`. Nothing needs to exist up front; the first resolved term creates the glossary, the first real trade-off creates the ADR.
+该技能写入两个位置，都是按需创建的——只有当有东西需要记录时才会创建。解析后的术语进入根目录下的 `CONTEXT.md`（或者，在由 `CONTEXT-MAP.md` 标记的多上下文仓库中，进入每个上下文的 `CONTEXT.md`）。决策进入 `docs/adr/`。不需要预先存在任何内容；第一个解析后的术语会创建术语表，第一个真正的权衡会创建 ADR。
 
-## Glossary vs. ADR
+## 术语表 vs. 架构决策记录
 
-Two artifacts, two different bars:
+两个产物，两把不同的标准：
 
-- **The glossary** (`CONTEXT.md`) captures language. Every time a vague term is made canonical, it's written down inline — not batched — so the shared vocabulary stays current with the conversation. It stays ruthlessly free of implementation detail.
-- **An ADR** captures a decision, and the bar is high: offered only when the choice is **hard to reverse**, **surprising without context**, and **the result of a real trade-off**. Miss any one of the three and there is no ADR. This is what keeps `docs/adr/` a record of consequential forks rather than a diary.
+* **术语表** (`CONTEXT.md`) 捕获语言。每次将模糊术语规范化时，都会内联记录——而不是批量记录——以便共享词汇与对话保持同步。它无情地剔除实现细节。
+* **ADR** 捕获决策，且标准很高：仅当选择是**难以回溯**的、**脱离上下文令人惊讶**的，并且是**真正权衡的结果**时才提供。错过这三点中的任何一个就没有 ADR。这就是为什么 `docs/adr/` 是有后果的分支记录，而不是日记。
 
-The move that makes it click: when you state how something works, the skill cross-references the code and surfaces the contradiction — "your code cancels entire Orders, but you just said partial cancellation is possible — which is right?" The language and the code are forced to agree.
+让它生效的举动：当你陈述某事物如何运作时，技能会交叉引用代码并揭示矛盾——“你的代码取消了整个订单，但你刚刚说部分取消是可能的——哪个是对的？”语言和代码被迫达成一致。
 
-## Pulled out on purpose
+## 专门提取
 
-`domain-modeling` is the **single source of truth** for building the project's ubiquitous language, split out as its own model-invoked skill so any other skill can reach it. [grill-with-docs](https://aihero.dev/skills-grill-with-docs) leans on it to record terms and decisions as a grilling session runs, [triage](https://aihero.dev/skills-triage) uses it to keep tickets in the project's own words, and [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) reaches for it while it works.
+`domain-modeling` 是构建项目通用语言的**单一事实来源**，被拆分为自己的模型触发技能，以便任何其他技能都可以调用它。[grill-with-docs](https://aihero.dev/skills-grill-with-docs) 依赖它来记录术语和决策，[triage](https://aihero.dev/skills-triage) 使用它以项目自己的语言保持工单清晰，而 [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) 在工作时也会调用它。
 
-Keeping it standalone means you can also reach for it directly — as a **reference** for how to sharpen a model — without committing to the steps any of those skills mandate. The language lives in one place, and everything that needs it points there.
+保持其独立性意味着你也可以直接调用它——作为 sharpen a model（打磨模型）的**参考**——而不必承诺任何这些技能要求的步骤。语言存在于一个地方，所有需要它的东西都指向那里。
 
-## Where it fits
+## 在系统中的位置
 
-`domain-modeling` is a **reach-for-it-anytime standalone** that runs *underneath* other skills as often as at a fixed step. Its closest neighbour is [codebase-design](https://aihero.dev/skills-codebase-design), because a shared language is what lets you name a deep module and its seam precisely; downstream, a settled glossary is exactly what [to-spec](https://aihero.dev/skills-to-spec) synthesises into a spec written in the project's own words. When you're unsure which skill or flow fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+`domain-modeling` 是一个**随时可用的独立技能**，它运行在*底层*其他技能中，就像在固定步骤中一样。它最近的邻居是 [codebase-design](https://aihero.dev/skills-codebase-design)，因为共享语言正是让你能够精确命名深层模块及其接口的原因；在下游， settled 术语表正是 [to-spec](https://aihero.dev/skills-to-spec) 合成为项目自己的语言编写的规范的内容。当你不确定哪个技能或流程合适时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指引。

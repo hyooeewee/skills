@@ -8,40 +8,40 @@ npx skills add mattpocock/skills --skill=tdd
 npx skills update tdd
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd)
+[源码](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd)
 
-## What it does
+## 功能说明
 
-`tdd` builds a feature or fixes a bug test-first, one behaviour at a time, driving the code out through a red-green loop.
+`tdd` 按照红绿循环，逐个行为地构建功能或修复 bug，先写测试，再编写代码。
 
-It will **not** write all the tests up front. Batching the tests first ("horizontal slicing") produces tests of _imagined_ behaviour — they check the shape of things and go numb to real changes. `tdd` instead takes vertical slices: one test, then just enough code to pass it, then the next test, each cycle informed by what the last one taught you. Tests target public interfaces only, so the implementation underneath can change without the tests moving.
+它不会预先写完所有测试。先批量测试（“水平切片”）会产生*想象中*的行为测试——它们检查事物的形状，对真实的变化不敏感。`tdd` 采取垂直切片：写一个测试，然后编写刚好足够的代码使其通过，再写下一个测试，每个循环都从前一个中学到的东西中汲取信息。测试仅针对公共接口，因此底层的实现可以改变而无需移动测试。
 
-## When to reach for it
+## 何时使用
 
-Type `/tdd`, or the agent reaches for it automatically when a task fits — building a feature or fixing a bug test-first, or when you say "red-green-refactor".
+输入 `/tdd`，或者当任务合适时——构建功能或修复 bug 测试优先，或者当你提到“red-green-refactor”时，代理会自动使用它。
 
-Reach for it when there's a concrete behaviour to build and you want tests that survive a refactor. If the behaviour isn't pinned down yet, settle the spec first — for that, use [to-spec](https://aihero.dev/skills-to-spec). When the work is really about the shape of the interface rather than the tests, use [codebase-design](https://aihero.dev/skills-codebase-design); `tdd` calls into it for the deep-module vocabulary during planning.
+当有一个具体的行为需要构建，并且你想要能经受重构的测试时，使用它。如果行为尚未确定，请先确定规范——为此，请使用 [to-spec](https://aihero.dev/skills-to-spec)。当工作真正是关于接口的形状而不是测试时，请使用 [codebase-design](https://aihero.dev/skills-codebase-design)；`tdd` 在规划期间调用它以获取深层模块的词汇。
 
-## Red-green, one slice at a time
+## 红绿循环，一次一个切片
 
-The leading idea is the **red-green loop**: write one failing test (red), add just enough code to pass it (green), then repeat for the next behaviour — each cycle informed by what the last one taught you. The very first cycle is a **tracer bullet**: one test that proves a single path works end-to-end, before you build outward from it. Because you just wrote the code, you know exactly which behaviour matters and how to verify it — you never outrun your headlights by committing to test structure you don't yet understand.
+核心思想是 **红绿循环**：写一个失败的测试（红），添加刚好足够的代码使其通过（绿），然后对下一个行为重复此过程——每个循环都从前一个中学到的东西中汲取信息。第一个循环是 **子弹测试**：一个证明单个路径端到端有效的测试，在你从它向外扩展之前。因为你刚刚编写了代码，你确切地知道哪个行为很重要以及如何验证它——你永远不会因为承诺了一个你尚不理解的结构而跑在车头灯前面。
 
-Two rules keep the tests honest. A good test reads like a specification ("user can checkout with valid cart") and exercises real code paths through the public API, so renaming an internal function never breaks it. And expected values come from an independent source of truth — a known-good literal, a worked example, the spec — never recomputed the way the code computes them, which is how a **tautological** test passes by construction and tells you nothing.
+两条规则保持测试的可靠性。一个好的测试读起来像规范（“用户可以用有效购物车结账”），并通过公共 API 演练真实的代码路径，因此重命名内部函数永远不会破坏它。预期的值来自独立的真理来源——一个已知正确的字面量、一个已完成的示例、规范——从不以代码计算它们的方式重新计算，这就是一个**同义反复**测试通过构造并通过，却告诉你任何信息。
 
-Refactoring only happens once the suite is green; never while red.
+只有在套件变绿时才进行重构；绝不能在红色状态下进行。
 
-## It's working if
+## 判断是否生效
 
-- It writes one test, gets it passing, and only then writes the next — not a batch of tests followed by a batch of code.
-- The tests name behaviours, not internals, and would survive an internal rename.
-- Expected values are literals from the spec, not figures derived the same way the code derives them.
+* 它写一个测试，让它通过，然后才写下一个——而不是一批发测试后跟一批发代码。
+* 测试命名行为，而不是内部实现，并且能经受住内部重命名的考验。
+* 预期的值是规范中的字面量，而不是以代码推导它们的方式推导出的数值。
 
-## Where it fits
+## 在系统中的位置
 
-`tdd` is the red-green loop the main build chain runs to write code:
+`tdd` 是主构建链用于编写代码的红绿循环：
 
 ```txt
 grill-with-docs → to-spec → to-tickets → implement → code-review
 ```
 
-[implement](https://aihero.dev/skills-implement) is the chain's build step, and it drives `tdd` internally to build each ticket test-first before handing off to [code-review](https://aihero.dev/skills-code-review) — so `tdd` is the engine inside that step rather than a step of its own. You can also reach for it directly, whenever there's a concrete behaviour to build without a full spec. Its other neighbour is [codebase-design](https://aihero.dev/skills-codebase-design), which it leans on to find deep-module seams worth testing at. When you're unsure which skill or flow fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+[implement](https://aihero.dev/skills-implement) 是构建链的构建步骤，它在向 [code-review](https://aihero.dev/skills-code-review) 交接之前，内部驱动 `tdd` 先测试优先地构建每个任务——因此 `tdd` 是该步骤内部的引擎，而不是它自己的步骤。只要有一个具体的行为需要构建但没有完整规范，你随时可以直接使用它。它的另一个“邻居”是 [codebase-design](https://aihero.dev/skills-codebase-design)，`tdd` 依赖它来寻找值得测试的深层模块结合点。当你不确定哪个技能或流程适合时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指引方向。

@@ -1,75 +1,76 @@
 ---
 name: to-spec
-description: Turn the current conversation into a spec and publish it to the project issue tracker — no interview, just synthesis of what you've already discussed.
+description: 将当前对话转换为规范并发布到项目问题跟踪器 — 无需访谈，只需综合您已经讨论过的内容。
 disable-model-invocation: true
+
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a spec (you may know this document as a PRD). Do NOT interview the user — just synthesize what you already know.
+此技能获取当前对话上下文和代码库理解，并生成规范（您可能知道此文档为 PRD）。不要对用户进行访谈 — 只需综合您已经知道的内容。
 
-The issue tracker and triage label vocabulary should have been provided to you — run `/setup-matt-pocock-skills` if not.
+问题跟踪器和分类标签词汇表应该已经提供给你了——如果没有，请运行 `/setup-matt-pocock-skills`。
 
-## Process
+## 流程
 
-1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the spec, and respect any ADRs in the area you're touching.
+1. 探索仓库以了解代码库的当前状态（如果尚未完成）。在整个规范中使用项目的领域词汇表，并尊重您所涉及的区域中的任何 ADR。
 
-2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
+2. 勾勒您将测试功能的接缝。应优先使用现有的接缝而不是新的接缝。尽可能使用最高级别的接缝。如果需要新的接缝，请在您能提供的最高点提出。代码库中的接缝越少越好 - 理想数量是一个。
 
-Check with the user that these seams match their expectations.
+与用户确认这些接缝是否符合他们的期望。
 
-3. Write the spec using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
+3. 使用下方的模板编写规范，然后将其发布到项目问题跟踪器。应用 `ready-for-agent` 分类标签 — 无需额外的分类。
 
 <spec-template>
 
-## Problem Statement
+## 问题陈述
 
-The problem that the user is facing, from the user's perspective.
+用户所面临的问题，从用户的角度来看。
 
-## Solution
+## 解决方案
 
-The solution to the problem, from the user's perspective.
+从用户的角度来看解决问题的方案。
 
-## User Stories
+## 用户故事
 
-A LONG, numbered list of user stories. Each user story should be in the format of:
+用户故事的编号列表。每个用户故事应采用以下格式：
 
-1. As an <actor>, I want a <feature>, so that <benefit>
+1. 作为一个 <actor>，我想要一个 <feature>，以便 <benefit>
 
 <user-story-example>
 1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
 </user-story-example>
 
-This list of user stories should be extremely extensive and cover all aspects of the feature.
+此用户故事列表应非常详尽，并涵盖该功能的所有方面。
 
-## Implementation Decisions
+## 实施决策
 
-A list of implementation decisions that were made. This can include:
+做出的实施决策列表。这可能包括：
 
-- The modules that will be built/modified
-- The interfaces of those modules that will be modified
-- Technical clarifications from the developer
-- Architectural decisions
-- Schema changes
-- API contracts
-- Specific interactions
+* 将要构建/修改的模块
+* 将要修改的这些模块的接口
+* 来自开发者的技术澄清
+* 架构决策
+* 模式变更
+* API 协议
+* 特定的交互
 
-Do NOT include specific file paths or code snippets. They may end up being outdated very quickly.
+不要包含具体的文件路径或代码片段。它们可能会很快过时。
 
 Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it within the relevant decision and note briefly that it came from a prototype. Trim to the decision-rich parts — not a working demo, just the important bits.
 
-## Testing Decisions
+## 测试决策
 
-A list of testing decisions that were made. Include:
+做出的测试决策列表。包括：
 
-- A description of what makes a good test (only test external behavior, not implementation details)
-- Which modules will be tested
-- Prior art for the tests (i.e. similar types of tests in the codebase)
+* 什么构成了好的测试的描述（仅测试外部行为，不测试实现细节）
+* 将测试哪些模块
+* 测试的先例（即代码库中类似类型的测试）
 
-## Out of Scope
+## 超出范围
 
-A description of the things that are out of scope for this spec.
+本规范未涵盖事项的描述。
 
-## Further Notes
+## 关于功能的任何进一步说明。
 
-Any further notes about the feature.
+关于功能的任何进一步说明。
 
 </spec-template>

@@ -8,35 +8,35 @@ npx skills add mattpocock/skills --skill=prototype
 npx skills update prototype
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype)
+[源码](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype)
 
-## What it does
+## 功能说明
 
-`prototype` builds a small, disposable program whose only job is to answer one design question — does this state model feel right, or what should this UI look like.
+`prototype` 构建了一个小的、一次性程序，它的唯一工作是回答一个设计问题——这个状态模型感觉对吗，或者这个 UI 应该长什么样。
 
-The code is **throwaway from day one**, and marked as such. It carries no tests, no error handling beyond what makes it run, no abstractions, and no persistence. The point is to learn something fast and then delete it — so the moment you start hardening it, you've stopped prototyping.
+代码从一开始就是**可丢弃的**，并以此标记。它不带测试，除了能运行之外没有任何错误处理，没有抽象层，也没有持久化。目的是快速学习然后删除它——所以当你开始加固它（使其健壮）的那一刻，你就停止了原型设计。
 
-## When to reach for it
+## 何时使用
 
-Type `/prototype`, or the agent reaches for it automatically when a task fits.
+输入 `/prototype`，或者当任务适合时，代理会自动使用它。
 
-Reach for it when you have a design question that's hard to settle on paper — a state machine with cases you can't hold in your head, or a screen you can't picture until you see a few versions side by side. If instead something already built is misbehaving and you need to find out why, use [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs); prototyping explores what to build, not why the built thing is broken.
+当你有一个很难在纸上确定的设计问题时使用它——一个案例多得记不住的状态机，或者一个必须看到几个版本并排对比才能想象出来的界面。如果相反，已经构建好的东西出了问题且你需要找出原因，请使用 [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs)；原型设计探索的是要构建什么，而不是为什么构建的东西坏了。
 
-## Two branches
+## 两个分支
 
-The question decides the shape, and there are two shapes:
+问题决定了形式，有两种形式：
 
-- **"Does this logic / state model feel right?"** — a tiny interactive terminal app that pushes the state machine through the awkward cases, printing the full state after every action so you can watch what changes.
-- **"What should this look like?"** — several radically different UI variations on one route, switchable from a floating bar, so you compare real renders instead of imagining them.
+* **“这个逻辑/状态模型感觉对吗？”** —— 一个微型的交互式终端应用，它将状态机推演通过棘手的情况，在每次操作后打印完整状态，以便你可以观察发生了什么变化。
+* **“这个应该长什么样？”** —— 在一个路由上的几种截然不同的 UI 变体，可以从浮动栏切换，这样你可以比较真实的渲染效果，而不是凭空想象。
 
-Picking the wrong branch wastes the whole prototype, so the question comes first. Both branches keep state in memory, run from one command, and surface the full state on every step.
+选择错误的分支会浪费整个原型，所以问题优先。两个分支都保持状态在内存中，从一个命令运行，并在每一步显示完整状态。
 
-## Keep the prototype as a primary source
+## 将原型作为主要来源
 
-A finished prototype leaves two things. The **answer** — the verdict plus the question it settled — is what you capture durably (a commit message, an ADR, an issue). The **prototype itself is a primary source** — the runnable evidence the answer came from.
+完成的原型留下了两样东西。**答案**——裁决加上它解决的问题——是你持久化保存的内容（提交信息、ADR、问题）。**原型本身是主要来源**——答案来自的可运行证据。
 
-The prototype doesn't belong in the main branch: no tests, no error handling, nothing to maintain. But that's not a reason to destroy it. Once the answer is captured, fold any validated decision into the real code, then capture the prototype on a throwaway branch — out of main, never merged — and leave a context pointer to it on the implementation issue. The main branch stays clean; the raw exploration stays one click away for anyone who wants to re-run it. A prototype left rotting in the main branch has outlived its purpose — a prototype captured as a primary source on a side branch hasn't.
+原型不属于主分支：没有测试，没有错误处理，没有什么需要维护。但这不是销毁它的理由。一旦答案被捕获，将任何经过验证的决策纳入真实代码中，然后将原型捕获在一个一次性分支上——不在主分支，永不合并——并在实现问题上留下一个上下文指针指向它。主分支保持干净；原始探索对于任何想要重新运行它的人来说只需点击一次即可访问。留在主分支上腐烂的原型已经失去了它的目的——作为主要来源捕获在侧分支上的原型则没有。
 
-## Where it fits
+## 在系统中的位置
 
-`prototype` is a reach-for-it-anytime standalone: you drop into it to resolve a design question, then drop back out. Its answer often feeds the next step — a validated state model or UI direction becomes settled input for [to-spec](https://aihero.dev/skills-to-spec) to write up, or an architectural decision worth recording via [domain-modeling](https://aihero.dev/skills-domain-modeling). When you're unsure which skill or flow fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+`prototype` 是一个随时可用的独立工具：你进入它来解决设计问题，然后退出。它的答案经常作为下一步的输入——经过验证的状态模型或 UI 方向成为 [to-spec](https://aihero.dev/skills-to-spec) 撰写内容的确定输入，或者是一个值得通过 [domain-modeling](https://aihero.dev/skills-domain-modeling) 记录的架构决策。当你不确定哪个技能或流程适合时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指路。

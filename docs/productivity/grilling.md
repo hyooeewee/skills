@@ -8,30 +8,30 @@ npx skills add mattpocock/skills --skill=grilling
 npx skills update grilling
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling)
+[源码](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling)
 
-## What it does
+## 功能说明
 
-`grilling` is the relentless interview that stress-tests a plan or design before you build it. It walks down the decision tree branch by branch, resolving the dependencies between decisions one at a time until you and the agent share the same understanding.
+`grilling` 是一种持续的面试，旨在在构建之前对计划或设计进行压力测试。它会逐个分支地遍历决策树，逐一解决决策之间的依赖关系，直到您和代理达成一致的理解。
 
-It asks **one question at a time** and waits for your answer before the next — never a bulk list, which is bewildering. Each question comes with the agent's own recommended answer, and any question the codebase can settle it explores instead of asking you. It won't start enacting the plan until you confirm the shared understanding has been reached.
+它会一次问**一个问题**，在下一个问题到来之前等待你的回答——绝不是一个令人困惑的批量列表。每个问题都附带代理的推荐答案，如果代码库能够自行解决某些问题，它会直接探索这些方案，而不是问你。只有在确认已达成共同理解后，它才会开始执行计划。
 
-## When to reach for it
+## 何时使用
 
-Type `/grilling`, or the agent reaches for it automatically when a task fits — this is the underlying primitive, not a user-only entry point.
+输入 `/grilling`，或者当任务匹配时，代理会自动调用它——这是底层的基础机制，而不仅仅是面向用户的入口。
 
-Reach for it when a plan or design still has soft spots and you want them surfaced before code is written. In practice you usually invoke it through one of its two wrappers rather than by name: for a plain grilling session use [grill-me](https://aihero.dev/skills-grill-me); to have the session also write ADRs and a glossary as it goes, use [grill-with-docs](https://aihero.dev/skills-grill-with-docs).
+当计划或设计仍存在薄弱点，且你希望在编写代码之前将其暴露出来时，使用它。实际上，你通常通过它的两个封装器之一来调用它，而不是直接使用其名称：对于简单的 grilled 会话，使用 [grill-me](https://aihero.dev/skills-grill-me)；如果希望会话在进行过程中同时写入 ADR 和术语表，则使用 [grill-with-docs](https://aihero.dev/skills-grill-with-docs)。
 
-## The decision tree
+## 决策树
 
-The mental model is a **decision tree**: every plan branches into decisions, and decisions depend on each other. `grilling` descends that tree one node at a time, so an early answer can reshape which questions come next. That is why the questions arrive singly and in dependency order — a firehose of parallel questions loses the structure that makes the interview converge on a shared understanding.
+心理模型是一棵**决策树**：每个计划都会分支成决策，而这些决策又相互依赖。`grilling` 会逐个节点地遍历这棵树，因此早期的回答可以改变接下来出现的问题。这就是为什么问题会逐一出现并按依赖顺序排列——一股并行问题的洪流会破坏那种使面试最终达成共识的结构。
 
-## Pulled out on purpose
+## 专门提取
 
-`grilling` is the **single source of truth** for the interview technique, split out as a model-invoked **primitive** so every skill that needs an interview can reach it instead of reinventing one. [grill-me](https://aihero.dev/skills-grill-me) and [grill-with-docs](https://aihero.dev/skills-grill-with-docs) are its two user-invoked front doors, but [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) and [triage](https://aihero.dev/skills-triage) also lean on it to pressure-test their own decisions.
+`grilling` 是该面试技术的**单一事实来源**，被拆分出来作为模型调用的**原语**，这样每个需要面试的技能都可以调用它，而不是重新发明一个。 [grill-me](https://aihero.dev/skills-grill-me) 和 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) 是它的两个用户调用的入口，但 [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) 和 [triage](https://aihero.dev/skills-triage) 也依赖它来压力测试它们自己的决策。
 
-Keeping the technique in one place means you can also reach for it directly when you just want the interview — without the ADR-writing or ticket-shaping that its wrappers add on top.
+将该技术集中在一个地方，意味着当你只想进行面试时，也可以直接使用它，而不必受其包装器额外添加的 ADR 编写或工单定义的干扰。
 
-## Where it fits
+## 在系统中的位置
 
-`grilling` is the interview **primitive** under the main build chain: [grill-with-docs](https://aihero.dev/skills-grill-with-docs) runs it to sharpen context before [to-spec](https://aihero.dev/skills-to-spec) writes the spec. When you're unsure which entry point fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+`grilling` 是主构建链下的面试**原语**：[grill-with-docs](https://aihero.dev/skills-grill-with-docs) 会在 [to-spec](https://aihero.dev/skills-to-spec) 编写规范之前运行它以明确上下文。当你不确定哪个入口点合适时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指引方向。

@@ -8,29 +8,29 @@ npx skills add mattpocock/skills --skill=handoff
 npx skills update handoff
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff)
+[源码](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff)
 
-## What it does
+## 功能说明
 
-`handoff` compacts the current conversation into a **handoff document** — a single write-up a fresh agent can read to pick up the work where you left off.
+`handoff` 将当前对话压缩成一份 **交接文档** —— 一份新智能体可以阅读的摘要，以便在您离开的地方接手工作。
 
-It does **not** re-state what already lives elsewhere. Anything captured in a spec, plan, ADR, issue, commit, or diff is referenced by path or URL, never copied. The document carries only the live thread — what you were doing, why, and what's next — and it's saved to your OS's temporary directory, not into the workspace, so it never becomes another artifact to maintain.
+它**不会**重述已经存在于其他地方的内容。规范、计划、ADR、问题、提交或差异中捕获的任何内容都通过路径或 URL 引用，而不会复制。文档仅携带当前线程 —— 您在做什么、为什么以及接下来做什么 —— 并保存到操作系统的临时目录，而不是工作区，这样它就永远不会成为另一个需要维护的产物。
 
-## When to reach for it
+## 何时使用
 
-You invoke this by typing `/handoff` — the agent won't reach for it on its own. Pass a note about what the next session is for and the document is tailored to it.
+您通过输入 `/handoff` 来调用它 —— 代理不会自动使用它。传递关于下一会话用途的备注，文档会针对此内容进行定制。
 
-Reach for this when a conversation has gone long enough that its context is at risk — you're near a context limit, wrapping for the day, or deliberately handing the work to another agent — and you want the thread preserved without dragging the whole transcript along.
+当对话已经足够长，其上下文面临风险时使用它 —— 您接近上下文限制、结束当天工作，或有意将工作交给另一个智能体 —— 并且您希望保留对话线程而不拖拽整个记录。
 
-## What the document carries
+## 文档携带的内容
 
-- **The live thread** — what's in flight and why, in the conversation's own terms, minus anything already written down elsewhere.
-- **Suggested skills** — a pointer to the skills the next agent should reach for to continue.
-- **References, not copies** — links and paths to the specs, plans, ADRs, issues, and diffs that hold the settled detail.
-- **Redacted secrets** — API keys, passwords, and PII stripped before the document is written.
+* **当前线程** —— 进行中的内容和原因，用对话自身的术语表述，不包括已经记录在其他地方的内容。
+* **建议技能** —— 指向下一个智能体应该调用来继续工作的技能。
+* **引用而非副本** —— 指向包含已确定细节的规范、计划、ADR、问题和差异的链接和路径。
+* **已脱敏的秘密** —— 在写入文档之前剥离的 API 密钥、密码和个人身份信息。
 
-The idea to hold onto is **compaction**: a handoff is the conversation squeezed down to just its resumable core, so a fresh agent inherits the momentum, not the noise.
+要坚守的核心思想是 **压缩**：handoff（交接）是将对话挤压成仅剩可恢复的核心，因此新的智能体继承的是势头，而非噪音。
 
-## Where it fits
+## 在系统中的位置
 
-`handoff` is a reach-for-it-anytime standalone — it sits at the seam between two sessions rather than inside a build chain. It pairs naturally with the artifact-producing skills whose output it points at: [to-spec](https://aihero.dev/skills-to-spec), because a finished spec is exactly the kind of settled detail a handoff references instead of repeating. When you're unsure which skill fits the moment, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+`handoff` 是一个随时可用的独立工具 —— 它位于两个会话之间的连接处，而不是构建链内部。它与指向其输出的产物生成技能自然配合：[to-spec](https://aihero.dev/skills-to-spec)，因为定稿的规范正是 handoff 引用而非重复的那种 settled detail（定稿细节）。当您不确定哪个技能适合当下时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为您指路。

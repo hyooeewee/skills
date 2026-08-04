@@ -8,40 +8,40 @@ npx skills add mattpocock/skills --skill=teach
 npx skills update teach
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/productivity/teach)
+[源码](https://github.com/mattpocock/skills/tree/main/skills/productivity/teach)
 
-## What it does
+## 功能说明
 
-`teach` turns the current directory into a standing teaching workspace and teaches you one topic across many sessions — devising short, beautiful, interactive lessons tied to *why* you want to learn.
+`teach` 将当前目录转变为一个永久的备课空间，并在多个会话中教授你一个主题——设计简短、美观、互动的课程，紧扣你想要学习的*原因*。
 
-It does **not** teach from the model's own memory. Parametric knowledge is treated as untrusted; before it can teach, it gathers high-trust resources and grounds every claim in a citation. And it is stateful — the workspace remembers what you've learned, so each session picks up where the last left off rather than starting from scratch.
+它**不会**从模型的记忆中教学。参数化知识被视为不可信；在它开始教学之前，它会收集高可信度的资源，并将每个断言都建立在引用的基础上。而且它是“有状态”的——工作空间会记住你所学的内容，因此每个会话都会从上次中断的地方继续，而不是从头开始。
 
-## When to reach for it
+## 何时使用
 
-You invoke this by typing `/teach` — the agent won't reach for it on its own.
+你需要通过输入 `/teach` 来调用它——代理不会自动使用该技能。
 
-Reach for it when you want to *learn* a topic over time — a language, a framework, yoga, theoretical physics — and want the sessions to accumulate rather than evaporate. It is not for a one-off explanation; if you just need something clarified in the moment, ask directly. Reach for `teach` when the learning is a project.
+当你想*学习*一个主题一段时间——比如一门语言、一个框架、瑜伽或理论物理——并且希望学习内容能累积而非消散时，使用它。它不是用于一次性解释的；如果你只是需要即时澄清，直接提问即可。当学习是一个长期项目时，使用 `teach`。
 
-## Prerequisites
+## 前置条件
 
-`teach` builds a whole directory in place, so run it somewhere you're happy to keep as a dedicated workspace. Over time it writes:
+`teach` 会在原地构建一个完整的目录，因此请在你想将其作为专用工作空间的地方运行它。随着时间的推移，它会写入：
 
-- `MISSION.md` — the reason you're learning this, which grounds everything else. If it's empty, `teach`'s first job is to question you until it isn't.
-- `RESOURCES.md` — the vetted, high-trust sources it teaches from.
-- `./lessons/*.html` — the numbered, self-contained lessons (the primary unit of teaching).
-- `./reference/*.html` — compressed cheat-sheets, algorithms, glossaries you'll return to.
-- `./learning-records/*.md` — what you've learned, ADR-style, used to judge what to teach next.
-- `./assets/*` — reusable components (a shared stylesheet first) so the lessons look like one course.
-- `NOTES.md` — your teaching preferences.
+* `MISSION.md` — 你学习此内容的理由，这是其他一切的基础。如果它是空的，`teach` 的首要任务就是向你提问，直到它不再为空。
+* `RESOURCES.md` — 它用来授课的经过审查、高可信度的来源。
+* `./lessons/*.html` — 编号且独立的课程（教学的主要单位）。
+* `./reference/*.html` — 压缩版 Cheat Sheets（作弊表）、算法和词汇表，供你日后查阅。
+* `./learning-records/*.md` — 你所学到的内容（采用 ADR 风格），用于判断接下来该教授什么。
+* `./assets/*` — 可重用的组件（首先是共享的样式表），使课程看起来像是一门完整的课程。
+* `NOTES.md` — 你的教学偏好。
 
-## Mission, and the zone of proximal development
+## 任务，以及最近发展区
 
-Every lesson hangs off the **mission**. Without it, knowledge has nothing to attach to and lessons feel abstract — so the mission is the first thing `teach` pins down and keeps updating as you grow. From the mission and your learning records it computes your **zone of proximal development**: the next lesson should challenge you *just enough*, no more.
+每一课都**依附于任务**。没有任务，知识就失去了依附的基础，课程会显得空洞抽象——因此任务是 `teach` 首先确定并随着你的成长不断更新的内容。根据任务和学习记录，它计算出你的**最近发展区**：下一节课应该给你带来*恰到好处*的挑战，既不会太少也不会太多。
 
-## Storage strength, not fluency
+## 存储强度，而非流利度
 
-The word to think with is **storage strength** — long-term retention — as opposed to **fluency**, the in-the-moment recall that feels like mastery but isn't. `teach` deliberately builds the former through desirable difficulty: retrieval practice, spacing, and interleaving. Knowledge is taught first (where difficulty is the enemy), then skills are drilled through a tight feedback loop (where difficulty is the tool).
+思考的关键词是**存储强度**——即长期记忆——而不是**流利度**，那种感觉像精通但并非真正的即时回忆能力。`teach` 故意通过“有意的困难”来构建前者：检索练习、间隔重复和交错练习。知识首先被教授（此时困难是敌人），然后技能通过紧密的反馈循环被强化（此时困难是工具）。
 
-## Where it fits
+## 在系统中的位置
 
-`teach` is a reach-for-it-anytime standalone — a long-running learning project you drive session by session, not a step in a build chain. It shares no workflow with the other productivity skills; it simply owns its workspace directory and lives there. When you're unsure which skill or flow fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+`teach` 是一个随时可用的独立工具——一个你逐个会话推进的长期学习项目，而不是构建流程中的一环。它与其它生产力技能没有共享工作流；它只是拥有自己的工作空间目录并驻扎在那里。当你不确定哪个技能或流程适合时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指引方向。

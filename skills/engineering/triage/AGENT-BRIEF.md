@@ -1,42 +1,42 @@
-# Writing Agent Briefs
+# 撰写 Agent Brief
 
-An agent brief is a structured comment posted on a GitHub issue or PR when it moves to `ready-for-agent`. It is the authoritative specification that an AFK agent will work from. The original body and discussion are context — the agent brief is the contract.
+Agent Brief 是一种结构化注释，当 Issue 或 PR 进入 `ready-for-agent` 时发布。它是 AFK Agent 的工作规范。原始内容和讨论是背景信息 — Agent Brief 是契约。
 
-The brief states **what the agent should do**, which stretches to both surfaces: for an issue, that's building the change from nothing; for a PR, it's what's left to do *to the existing diff* — finish it, close gaps, address review points. Same principles either way; the PR example below shows the difference.
+Brief 说明了 **Agent 应该做什么**，这适用于两个层面：对于 Issue，是从零开始构建变更；对于 PR，是针对现有 diff 剩余的工作 — 完成它、填补空白、解决审查点。原理相同；下面的 PR 示例显示了区别。
 
-## Principles
+## 原则
 
-### Durability over precision
+### 耐用性优于精确性
 
-The issue may sit in `ready-for-agent` for days or weeks. The codebase will change in the meantime. Write the brief so it stays useful even as files are renamed, moved, or refactored.
+Issue 可能会在 `ready-for-agent` 中停留数天或数周。在此期间代码库会发生变化。编写 Brief 时要确保即使文件被重命名、移动或重构，它仍然有用。
 
-- **Do** describe interfaces, types, and behavioral contracts
-- **Do** name specific types, function signatures, or config shapes that the agent should look for or modify
-- **Don't** reference file paths — they go stale
-- **Don't** reference line numbers
-- **Don't** assume the current implementation structure will remain the same
+* **应该** 描述接口、类型和行为契约
+* **应该** 指定 Agent 应该查找或修改的具体类型、函数签名或配置形状
+* **不要** 引用文件路径 — 它们会过时
+* **不要** 引用行号
+* **不要** 假设当前的实现结构会保持不变
 
-### Behavioral, not procedural
+### 行为导向，而非过程导向
 
-Describe **what** the system should do, not **how** to implement it. The agent will explore the codebase fresh and make its own implementation decisions.
+描述系统 **应该做什么**，而不是 **如何实现**。Agent 将从头探索代码库并做出自己的实现决策。
 
-- **Good:** "The `SkillConfig` type should accept an optional `schedule` field of type `CronExpression`"
-- **Bad:** "Open src/types/skill.ts and add a schedule field on line 42"
-- **Good:** "When a user runs `/triage` with no arguments, they should see a summary of issues needing attention"
-- **Bad:** "Add a switch statement in the main handler function"
+* **好：** "`SkillConfig` 类型应该接受一个类型为 `CronExpression` 的可选 `schedule` 字段"
+* **坏：** "打开 src/types/skill.ts 并在第 42 行添加一个 schedule 字段"
+* **好：** "当用户不带参数运行 `/triage` 时，他们应该看到需要关注的 issues 摘要"
+* **坏：** "在主处理函数中添加一个 switch 语句"
 
-### Complete acceptance criteria
+### 完整的验收标准
 
 The agent needs to know when it's done. Every agent brief must have concrete, testable acceptance criteria. Each criterion should be independently verifiable.
 
-- **Good:** "Running `gh issue list --label needs-triage` returns issues that have been through initial classification"
-- **Bad:** "Triage should work correctly"
+* **好：** "运行 `gh issue list --label needs-triage` 返回经过初步分类的 issues"
+* **坏：** "Triage 应该正常工作"
 
-### Explicit scope boundaries
+### 明确的范围边界
 
 State what is out of scope. This prevents the agent from gold-plating or making assumptions about adjacent features.
 
-## Template
+## 模板
 
 ```markdown
 ## Agent Brief
@@ -67,9 +67,9 @@ Be specific about edge cases and error conditions.
 - Adjacent feature that might seem related but is separate
 ```
 
-## Examples
+## 示例
 
-### Good agent brief (bug)
+### 良好的 Agent Brief (bug)
 
 ```markdown
 ## Agent Brief
@@ -104,7 +104,7 @@ and append "..." to indicate truncation.
 - Multi-line description support
 ```
 
-### Good agent brief (enhancement)
+### 良好的 Agent Brief (enhancement)
 
 ```markdown
 ## Agent Brief
@@ -145,9 +145,9 @@ checked for matches.
 - Bug reports (only enhancement rejections go to `.out-of-scope/`)
 ```
 
-### Good agent brief (PR)
+### 良好的 Agent Brief (PR)
 
-For a PR, "Current behavior" describes the state of the diff, and the brief asks the agent to finish or fix it rather than build from scratch.
+对于 PR，"当前行为" 描述的是 diff 的状态，Brief 要求 Agent 完成或修复它，而不是从头开始构建。
 
 ```markdown
 ## Agent Brief
@@ -182,7 +182,7 @@ is untouched when the flag is absent.
 - Changing the JSON shape of the success payload the PR already defined
 ```
 
-### Bad agent brief
+### 糟糕的 Agent Brief
 
 ```markdown
 ## Agent Brief
@@ -198,10 +198,11 @@ The function around line 150 has the issue.
 - src/types.ts (line 42)
 ```
 
-This is bad because:
-- No category
-- Vague description ("the triage thing is broken")
-- References file paths and line numbers that will go stale
-- No acceptance criteria
-- No scope boundaries
-- No description of current vs desired behavior
+这很糟糕，因为：
+
+* 没有分类
+* 描述模糊 ("the triage thing is broken")
+* 引用了会过期的文件路径和行号
+* 没有验收标准
+* 没有范围边界
+* 没有描述当前与期望的行为

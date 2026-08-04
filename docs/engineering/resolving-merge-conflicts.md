@@ -8,33 +8,33 @@ npx skills add mattpocock/skills --skill=resolving-merge-conflicts
 npx skills update resolving-merge-conflicts
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/resolving-merge-conflicts)
+[源码](https://github.com/mattpocock/skills/tree/main/skills/engineering/resolving-merge-conflicts)
 
-## What it does
+## 功能说明
 
-`resolving-merge-conflicts` works through an in-progress git merge or rebase conflict, hunk by hunk, and finishes the operation — resolved, checked, and committed.
+`resolving-merge-conflicts` 逐个处理进行中的 git 合并或变基冲突，逐个补丁（hunk）进行，并完成操作——已解决、已检查并已提交。
 
-It resolves by **intent**, not by text. Before touching a hunk it traces each side back to its **primary source** — the commit message, the PR, the original issue — to understand why the change was made, then preserves both intents where they're compatible. It never invents new behaviour to paper over a clash, and it never reaches for `--abort`: the merge always gets finished.
+它通过**意图**而非文本解决。在处理补丁之前，它会追溯每一方回溯到其**主要来源**——提交信息、PR、原始 issue——以了解更改的原因，然后在兼容的情况下保留两种意图。它从不编造新行为来掩盖冲突，也从不使用 `--abort`：合并总是会被完成。
 
-## When to reach for it
+## 何时使用
 
-Type `/resolving-merge-conflicts`, or the agent reaches for it automatically when a task fits.
+输入 `/resolving-merge-conflicts`，或者当任务符合条件时，代理会自动调用它。
 
-Reach for this when you're mid-merge or mid-rebase and git has stopped on conflicts it can't resolve itself. It's for the conflict in front of you — not for planning the merge or for debugging behaviour that broke afterwards. If the merge is done but something's now failing for reasons you can't see, use [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs) instead.
+当你正在进行合并或变基且 git 停在它无法自行解决的冲突上时，使用此技能。这是为了解决你面前的冲突——而不是为了规划合并或调试之后出现的错误行为。如果合并已完成但某些东西现在失败且原因不明，请改用 [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs)。
 
-## Resolving by intent
+## 按意图解决
 
-The trap in a conflict is treating it as a text problem — picking "ours" or "theirs" to make the markers go away. This skill treats it as an **intent** problem. Each side of a hunk exists because someone wanted something; the resolution has to honour both wants where it can, and where they're genuinely incompatible, pick the one that matches the merge's stated goal and note the trade-off out loud.
+冲突中的陷阱在于将其视为文本问题——选择“ours”或“theirs”来让标记消失。此技能将其视为**意图**问题。补丁的每一侧之所以存在，是因为有人想要某样东西；解决方式必须在可能的地方尊重这两种需求，而在它们确实不兼容的地方，选择与合并既定目标相符的一方，并大声记录下权衡取舍。
 
-That's why the primary sources matter. You can't preserve an intent you haven't read, so the work starts in the history — commits, PRs, tickets — not in the diff.
+这就是为什么主要来源很重要。你无法保留你没读过的意图，所以工作始于历史——提交、PR、工单——而不是在差异（diff）中。
 
-## It's working if
+## 判断是否生效
 
-- Each resolved hunk keeps both sides' behaviour, or names the trade-off where it couldn't.
-- No new behaviour appears that wasn't on either branch.
-- The project's own checks — typecheck, tests, format — are found and run green before the commit.
-- The merge or rebase is carried all the way to a finished commit, never aborted.
+* 每个已解决的补丁都保留了两边的行为，或者无法保留时指出了权衡取舍。
+* 没有出现任何不在任一分支上的新行为。
+* 在提交之前，会找到并运行项目的自身检查——类型检查、测试、格式化——并且全部通过。
+* 合并或变基一直进行到完成提交，从未被中止。
 
-## Where it fits
+## 在系统中的位置
 
-A reach-for-it-anytime standalone: you invoke it at the moment a merge or rebase stalls, and it hands you back a clean, committed tree. Its natural neighbour is [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs), because a merge that resolves cleanly but misbehaves afterwards is a diagnosis problem, not a conflict one. When you're unsure which skill fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+一个随时可用的独立技能：你在合并或变基停滞的瞬间调用它，它会将一个干净、已提交的树交还给你。它的自然邻接技能是 [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs)，因为一个解决干净但之后表现异常的合并是一个诊断问题，而不是冲突问题。当你不确定哪个技能适合时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你路由。

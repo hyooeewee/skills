@@ -8,52 +8,52 @@ npx skills add mattpocock/skills --skill=to-spec
 npx skills update to-spec
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/to-spec)
+[源码](https://github.com/mattpocock/skills/tree/main/skills/engineering/to-spec)
 
-## What it does
+## 功能说明
 
-`to-spec` turns the current conversation and your codebase understanding into a spec (you may know this document as a PRD), then publishes it to your issue tracker.
+`to-spec` 将当前的对话和您对代码库的理解转换成规范（您可能知道这个文档被称为 PRD），然后将其发布到您的问题追踪器中。
 
-It does **not** interview you again. By the time you reach for it, the alignment work is done — `to-spec` synthesises what is already known rather than asking a fresh round of questions.
+它不会再次询问您。当您使用它时，对齐工作已经完成 —— `to-spec` 综合已有的已知信息，而不是提出新一轮的问题。
 
-## When to reach for it
+## 何时使用
 
-You invoke this by typing `/to-spec` — the agent won't reach for it on its own.
+您通过输入 `/to-spec` 来调用它 —— 代理不会自动调用它。
 
-Reach for it once a change has been talked through and the domain language is settled, and you want that shared understanding written down before any code is written. If you *haven't* aligned yet, grill first — for that, use [grill-with-docs](https://aihero.dev/skills-grill-with-docs). To split the finished spec into tickets, use [to-tickets](https://aihero.dev/skills-to-tickets).
+当变更讨论完毕且领域语言确定后，并且您希望在编写任何代码之前写下这种共同理解时，就使用它。如果您还没有对齐，请先“grill”——为此，请使用 [grill-with-docs](https://aihero.dev/skills-grill-with-docs)。要将完成的规范拆分为工单，请使用 [to-tickets](https://aihero.dev/skills-to-tickets)。
 
-## Prerequisites
+## 前置条件
 
-`to-spec` publishes into your issue tracker, so [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) must have configured the tracker and triage labels for this repo first. It applies the `ready-for-agent` label itself — no separate triage pass needed.
+`to-spec` 会发布到您的问题追踪器，因此 [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) 必须先为此仓库配置追踪器和分类标签。它会自己应用 `ready-for-agent` 标签 —— 不需要单独的分类流程。
 
-## What the spec includes
+## 规范包含的内容
 
-- **Problem statement** — what is broken or missing, and why it's worth solving, in the project's own vocabulary.
-- **Solution** — the shape of the fix at a high level, before any implementation detail.
-- **User stories** — an extensive, numbered list of the concrete behaviours the change must support, each one independently checkable.
-- **Implementation decisions** — the choices already settled during the conversation, so they aren't relitigated later.
-- **Testing decisions** — the seams the feature will be tested at, and what "done" looks like.
-- **Out-of-scope items** — what this change deliberately does *not* cover, to keep the ticket bounded.
-- **Further notes** — anything else worth carrying forward that doesn't fit the sections above.
+* **问题陈述** — 项目自己的术语中，什么是出问题或缺失的，以及为什么值得解决。
+* **解决方案** — 高层概览的修复方案，在任何具体实现细节之前。
+* **用户故事** — 变更必须支持的具体行为的广泛、编号列表，每一个都可以独立验证。
+* **实施决策** — 对话中已经确定的选项，以免日后重新讨论。
+* **测试决策** — 功能将被测试的接口，以及“完成”的样子。
+* **超出范围的项目** — 此变更刻意不覆盖的内容，以保持工单范围可控。
+* **进一步说明** — 其他值得保留但不适合上述章节的内容。
 
-## Deep modules
+## 深度模块
 
-Before writing the spec, `to-spec` sketches the **seams** at which the feature will be tested and looks for **deep module** opportunities — a lot of functionality hidden behind a small, stable interface. It prefers existing seams to new ones and the highest seam possible, ideally just one across the whole change.
+在编写规范之前，`to-spec` 会识别出将被测试的**接口**，并寻找**深度模块**的机会 —— 即隐藏在小型稳定接口背后的大量功能。它更倾向于现有的接口而非新的接口，以及尽可能高的接口，理想情况下在整个变更中只有一个接口。
 
-That matters for agentic development: a good interface gives tests something durable to target, so the code underneath can change without the tests moving.
+这对代理开发很重要：一个好的接口给了测试一个稳定的目标，因此底下的代码可以改变而不影响测试。
 
-## It's working if
+## 判断是否生效
 
-- It starts writing the spec instead of asking you a fresh round of questions.
-- It checks the seams with you before writing, and proposes as few as possible.
-- The spec comes back in your project's domain vocabulary, not generic boilerplate.
+* 它开始编写规范而不是向您提出新一轮的问题。
+* 它在编写前与您检查接口，并尽可能少地提出建议。
+* 规范以您的项目的领域语言返回，而不是通用的样板文本。
 
-## Where it fits
+## 在系统中的位置
 
-`to-spec` is a step in the main build chain:
+`to-spec` 是主构建链中的一个步骤：
 
 ```txt
 grill-with-docs → to-spec → to-tickets → implement → code-review
 ```
 
-Reach for it after the plan and domain language are resolved, and before you break the work into implementation tickets. Its key neighbours are [grill-with-docs](https://aihero.dev/skills-grill-with-docs), which sharpens the context so the spec is precise, and [to-tickets](https://aihero.dev/skills-to-tickets), which turns the spec into a set of tickets for [implement](https://aihero.dev/skills-implement) to build. When you're unsure which skill or flow fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+在计划和领域语言解决之后，并将工作拆分为实施工单之前，使用它。它的关键相邻技能是 [grill-with-docs](https://aihero.dev/skills-grill-with-docs)，它能精炼上下文使规范精确，以及 [to-tickets](https://aihero.dev/skills-to-tickets)，它将规范转换为一组工单供 [implement](https://aihero.dev/skills-implement) 构建。当您不确定哪个技能或流程适合时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为您指引。

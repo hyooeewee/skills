@@ -1,15 +1,16 @@
 ---
 name: batch-grill-me
-description: A relentless interview that asks every frontier question at once, round by round.
+description: 无情的面试，一次性询问每一个前沿问题，逐轮进行。
 disable-model-invocation: true
+
 ---
 
-Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
+无情地面试用户，直到达成共同理解。将其映射为一个**设计树**：每个决策分支都挂载着其他的决策。
 
-Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled — the questions you can ask *now* without guessing at answers you haven't heard yet. Ask the whole frontier in one round: number each question and give your recommended answer. Then wait for the user's answers before the next round.
+在**轮次**中处理这棵树。**前沿**是所有先决条件已经确定的决策——即你现在可以提出且无需猜测尚未听到答案的问题。在一轮中询问整个前沿：为每个问题编号并给出你的推荐答案。然后在下一轮之前等待用户的回答。
 
-Each round the user answers reshapes the tree — settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a *later* round, not this one.
+每轮用户的回答都会重塑这棵树——已确定的决策会将前沿向外推移并解除对依赖于它们的问题的限制。重新计算前沿并询问下一轮。如果一个问题的答案依赖于本轮中仍开放的其他问题，则该问题属于*后续*轮次，而不是本轮。
 
-Finding *facts* is your job, never the user's. When a frontier question needs a fact from the environment (filesystem, tools, etc.), dispatch a sub-agent to find it — don't ask the user for anything you could look up yourself. Don't block on it: a running exploration is an unsettled prerequisite, so only the questions downstream of it wait for the sub-agent to report — ask the rest of the frontier now. The *decisions* are the user's — put each to them and wait.
+寻找*事实*是你的工作，而不是用户的工作。当前沿问题需要来自环境（文件系统、工具等）的事实时，派遣子代理去查找——不要询问用户任何你可以自己查找的东西。不要阻塞：正在进行的探索是一个未确定的先决条件，因此只有下游的问题在等待子代理报告——现在询问前沿的其余部分。*决策*是用户的——把每个决策都抛给他们并等待。
 
-The session is done when the frontier is empty: every branch of the design tree visited, nothing left silently assumed. Do not act on it until the user confirms you have reached a shared understanding.
+当前沿为空时，会话结束：设计树的每个分支都已访问，没有留下任何静默假设。在用户确认你已达成共同理解之前，不要采取行动。

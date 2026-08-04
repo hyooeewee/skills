@@ -8,36 +8,36 @@ npx skills add mattpocock/skills --skill=codebase-design
 npx skills update codebase-design
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/codebase-design)
+[源码](https://github.com/mattpocock/skills/tree/main/skills/engineering/codebase-design)
 
-## What it does
+## 功能说明
 
-`codebase-design` gives you a shared, precise vocabulary for designing **deep modules** — a lot of behaviour hidden behind a small interface, placed at a clean seam, testable through that interface.
+`codebase-design` 为您提供了一套共享且精确的词汇，用于设计**深度模块**——即大量行为隐藏在小型接口背后、位于整洁的接缝处，并能通过该接口进行测试。
 
-It is a **language, not a procedure**. It doesn't restructure your code or hand you a refactor plan — it fixes the words (module, interface, depth, seam, adapter, leverage, locality) so that every design conversation and every other skill that touches design speaks the same way. Consistent language is the whole point; "component," "service," "API," and "boundary" are deliberately banned because they blur the distinctions that matter.
+它是一门**语言，而非一种流程**。它不会重组您的代码或提供一个重构计划——它只是规范了词汇（模块、接口、深度、接缝、适配器、杠杆作用、局部性），以确保每次设计对话以及所有涉及设计的其他技能都能使用相同的语言。一致的语言是关键所在；“组件”、“服务”、“API”和“边界”被故意禁用，因为它们模糊了重要的区别。
 
-## When to reach for it
+## 何时使用
 
-Type `/codebase-design`, or the agent reaches for it automatically when a task fits.
+输入 `/codebase-design`，或者当任务匹配时，代理会自动调用它。
 
-Reach for it when you're designing or improving a module's interface, hunting for deepening opportunities, deciding where a seam goes, or making code more testable and AI-navigable. Other skills pull it in whenever they need the deep-module vocabulary. If you want to sharpen the project's *domain* terms rather than its module design, use [domain-modeling](https://aihero.dev/skills-domain-modeling) instead; to run a whole architecture pass over an existing codebase, use [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture).
+当您设计或改进模块接口、寻找加深深度的机会、决定接缝位置，或使代码更易于测试和 AI 导航时，请使用它。其他技能在需要深度模块词汇时会将其引入。如果您想完善项目的*领域*术语而非其模块设计，请改用 \[domain-modeling]；若要对现有代码库进行架构审查，请使用 \[improve-codebase-architecture]。
 
 ## Deep, not shallow
 
-A module is **deep** when a large amount of behaviour sits behind a small interface, and **shallow** when the interface is nearly as complex as the implementation. Depth is measured as **leverage** — how much a caller (or a test) can exercise per unit of interface they have to learn. Crucially, depth is a property of the *interface*, not the implementation: a deep module can be internally composed of small, swappable parts that just never surface to callers.
+当大量行为隐藏在小型接口背后时，模块是**深度**的；而当接口几乎与实现一样复杂时，模块则是**浅度**的。深度以**杠杆作用**来衡量——调用者（或测试）每学习一个单位的接口，就能执行多少操作。关键在于，深度是*接口*的属性，而非实现的属性：深度模块可以在内部由小型、可互换的部分组成，只是这些部分从未暴露给调用者。
 
-Two checks do most of the work. The **deletion test**: imagine deleting the module — if complexity vanishes, it was a pass-through; if it reappears across N callers, it was earning its keep. And **one adapter means a hypothetical seam; two adapters means a real one** — don't cut a seam until something actually varies across it.
+两次检查完成了大部分工作。**删除测试**：想象删除该模块——如果复杂性随之消失，那它只是一个透传；如果复杂性在 N 个调用者处重新出现，那它就是名副其实的。而**一个适配器意味着一个假设的接缝；两个适配器意味着一个真实的接缝**——在某种东西真正穿过它发生变化之前，不要创建接缝。
 
 ## The interface is the test surface
 
-Callers and tests cross the same seam, so a well-placed interface gives tests something durable to aim at while the code underneath moves freely. That's why the vocabulary insists on **seam** (Feathers' term — a place you can change behaviour without editing there) over the overloaded "boundary," and why "interface" here means *every fact a caller must know*: signatures, yes, but also invariants, ordering, error modes, and performance — not just the type-level surface.
+调用者和测试都穿过同一个接缝，因此一个放置得当的接口能为测试提供一个持久的目标，同时底层的代码可以自由移动。这就是为什么该词汇强调使用**接缝**（Feathers 的术语——一个你可以在不编辑该处的情况下改变行为的地方），而不是滥用“边界”，以及为什么这里的“接口”意味着*调用者必须知道的每一条事实*：签名固然重要，但也包括不变量、顺序、错误模式和性能——而不仅仅是类型级别的表面。
 
-## Pulled out on purpose
+## 专门提取
 
-`codebase-design` is the **single source of truth** for the deep-module vocabulary, split out as its own model-invoked skill so anything can reach it. Other skills point at it rather than restating the words: [tdd](https://aihero.dev/skills-tdd) borrows it to place a seam before writing the test, [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) leans on it while restructuring existing code, and [to-spec](https://aihero.dev/skills-to-spec) speaks it when it sketches seams and deepening opportunities before writing a spec.
+`codebase-design` 是深度模块词汇的**单一事实来源**，被拆分为一个独立的模型调用技能，以便任何东西都能访问它。其他技能引用它而不是重新定义词汇：\[tdd] 借用它来在编写测试前放置接缝，\[improve-codebase-architecture] 在重组现有代码时依赖它，而 \[to-spec] 在编写规范前绘制接缝和加深机会时会使用该词汇。
 
-The point of keeping it standalone is that you can also reach for it on its own — as a **reference** for how to think about module design — without triggering the larger process any of those skills mandate. Fix the words once, in one place, and every design conversation inherits them.
+保持其独立的关键在于，您也可以单独使用它——作为关于如何思考模块设计的**参考**——而不会触发任何那些技能所强制执行的大型流程。统一词汇一次，在一个地方，每个设计对话都会继承它们。
 
-## Where it fits
+## 在系统中的位置
 
-`codebase-design` is a **reach-for-it-anytime standalone** — the shared vocabulary layer under the engineering skills. Its closest neighbour is [domain-modeling](https://aihero.dev/skills-domain-modeling), the parallel vocabulary skill for the problem domain rather than the module structure. When you're unsure which skill or flow fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+`codebase-design` 是一个**随时可用的独立技能**——工程技能之下的共享词汇层。它最近的邻居是 \[domain-modeling]，这是用于问题领域而非模块结构的并行词汇技能。当您不确定哪个技能或流程合适时，\[ask-matt] 会为您指引。

@@ -8,37 +8,37 @@ npx skills add mattpocock/skills --skill=wayfinder
 npx skills update wayfinder
 ```
 
-[Source](https://github.com/mattpocock/skills/tree/main/skills/engineering/wayfinder)
+[源码](https://github.com/mattpocock/skills/tree/main/skills/engineering/wayfinder)
 
-## What it does
+## 功能说明
 
-`wayfinder` takes an effort too big for one agent session — wrapped in fog, where the way from here to the goal isn't visible yet — and charts it as a **shared map** of **decision tickets** on your issue tracker, then resolves them one at a time until the way is clear. It **plans, it doesn't do**: every ticket resolves a decision — a question to settle, not a slice of a build to execute — and the map is done when nothing is left to decide before someone goes and builds the thing — so it produces decisions, not deliverables.
+`wayfinder` 接管一个超出单次会话处理能力的任务——它被笼罩在迷雾中，此时从起点到目标的路径尚不可见——并将其绘制成你问题追踪器上的 **共享地图** 和 **决策票据**，然后逐一解决它们，直到路径清晰。它 **制定计划，不执行操作**：每个票据都解决一个决策——一个需要解决的问题，而不是需要执行的一块构建切片——当在有人去构建它之前没有什么需要决定的时候，地图就完成了——因此它产生的是决策，而不是交付物。
 
-## When to reach for it
+## 何时使用
 
-You invoke this by typing `/wayfinder` — the agent won't reach for it on its own.
+你通过输入 `/wayfinder` 来调用它——代理不会自行调用它。
 
-Reach for it when an effort is **more than one agent session can hold** and the route to its **destination** is still foggy — you can feel the shape of the work but can't yet write it down as a spec or a plan. For turning an *already-clear* thread into a spec, use [to-spec](https://aihero.dev/skills-to-spec); for slicing an already-understood plan into buildable tickets, use [to-tickets](https://aihero.dev/skills-to-tickets). Wayfinder sits upstream of both: it's what you run when there's too much fog to spec directly.
+当一项工作 **超过单个代理会话的承载能力** 且其 **目的地** 的路线仍然模糊不清时——你可以感觉到工作的轮廓但还无法将其写下来作为规范或计划——请使用它。对于将 *已经清晰* 的线程转换为规范，请使用 [to-spec](https://aihero.dev/skills-to-spec)；对于将已理解的计划拆分为可构建的票据，请使用 [to-tickets](https://aihero.dev/skills-to-tickets)。Wayfinder 位于两者的上游：当迷雾太浓而无法直接制定规范时，你运行的就是它。
 
-## Prerequisites
+## 前置条件
 
-The map and its tickets live on the repo's issue tracker, so wayfinder needs the tracker wiring that [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) lays down — it seeds a "Wayfinding operations" section describing how the map, child tickets, blocking, and frontier queries are expressed for GitHub, GitLab, or local-markdown. Absent that doc, wayfinder defaults to a local-markdown map.
+地图及其票据存在于仓库的问题跟踪器上，因此 wayfinder 需要由 [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) 建立的跟踪器连接——它植入了一个“Wayfinding operations”部分，描述了地图、子票据、阻塞和前沿查询在 GitHub、GitLab 或本地 Markdown 中的表达方式。如果没有该文档，wayfinder 默认使用本地 Markdown 地图。
 
-## The map is an index, fog is the frontier
+## 地图是索引，迷雾是前沿
 
-The **map** is a single `wayfinder:map` issue whose tickets are its child issues — one shared URL the whole team can watch. It's an **index, not a store**: each decision lives in exactly one place (its ticket), and the map only gists and links, never restates. A session loads the map at low resolution and zooms into individual tickets on demand.
+**地图**是单个 `wayfinder:map` 问题，其票据是其子问题——一个整个团队都可以观看的共享 URL。它是一个 **索引，而不是存储**：每个决策都确切地存在于一个地方（它的票据），地图只进行摘要和链接，从不重复陈述。会话以低分辨率加载地图，并按需放大查看单个票据。
 
-Beyond the live tickets lies the **fog of war** — decisions you can tell are coming but can't yet pin down. The test for whether something is a ticket or still fog is whether you can *state the question precisely now*, not whether you can answer it. Resolving a ticket clears the fog ahead of it, **graduating** whatever's now specifiable into fresh tickets. The **frontier** is the open, unblocked, unclaimed tickets — the edge of the known — and it's what the tracker's native blocking renders visually, so you see what's takeable without opening the map. Fog only gathers *toward* the **destination**; work past it is ruled **out of scope**, closed, never graduating.
+在实时票据之外是 **战争迷雾**——你可以察觉到即将做出的决策，但还无法确定下来。判断某事是票据还是迷雾的测试是，你是否能 *现在就精确地陈述问题*，而不是能否回答它。解决票据会清除它前面的迷雾，将现在可以规范化的内容 **提升为** 新的票据。**前沿** 是开放的、未阻塞的、未认领的票据——已知事物的边缘——这是跟踪器原生阻塞功能在视觉上的呈现，因此你无需打开地图就能看到哪些是可执行的。迷雾只向 **目的地** 聚集；它之后的工作被判定为 **超出范围**、关闭，永远不会毕业。
 
-Every ticket is **HITL** (human in the loop — grilling, prototype) or **AFK** (agent alone — research); a HITL ticket only resolves through a live exchange, so the agent never answers its own questions. Research stays a real ticket — a shared blocker downstream decisions hang on — but because it's AFK, a session doesn't stop and read: it fires a `/research` **subagent** to burn the ticket down in parallel, keeping the frontier fast, and captures the findings on a throwaway `research/<name>` branch.
+每张票据都是 **HITL**（人在回路中——质询、原型）或 **AFK**（仅代理——研究）；HITL 票据只能通过实时交换解决，因此代理永远不会回答自己的问题。研究保持为真实的票据——下游决策依赖的共享阻塞器——但由于它是 AFK，会话不会停下来阅读：它会启动一个 `/research` **子代理** 并行烧毁票据，保持前沿快速，并将发现记录在一个一次性 `research/<name>` 分支上。
 
-## It's working if
+## 判断是否生效
 
-- Naming the **destination** is the first act — before any ticket exists — because it fixes the scope every ticket is measured against.
-- One map is one `wayfinder:map` issue; tickets are its child issues, referred to by **name**, never a bare `#42`.
-- A session resolves **at most one ticket** (research tickets excepted), records the answer as a resolution comment, closes the ticket, and appends a one-line pointer to *Decisions so far*.
-- If the opening grill surfaces **no fog**, it stops and tells you the journey is small enough to skip the map.
+* 命名 **目的地** 是第一项行动——在任何票据存在之前——因为它确定了每个票据衡量的范围。
+* 一个地图是一个 `wayfinder:map` 问题；票据是其子问题，通过 **名称** 引用，而不是裸露的 `#42`。
+* 会话最多解决 **一张票据**（研究票据除外），将答案记录为解决评论，关闭票据，并附加一行指向 *迄今为止的决策* 的指针。
+* 如果初始的 grilled 面板没有揭示迷雾，它就会停止并告诉你旅程足够小，可以跳过地图。
 
-## Where it fits
+## 在系统中的位置
 
-`wayfinder` is a big-idea **on-ramp**: an effort too large and foggy to spec in one sitting generates a cleared map of decisions, which then merges onto the main build flow. When the fog is pushed back and the way is clear, hand off to [to-spec](https://aihero.dev/skills-to-spec) to schedule the multi-session build (or, if the effort turned out small, implement directly). It leans on [grilling](https://aihero.dev/skills-grilling) and [domain-modeling](https://aihero.dev/skills-domain-modeling) to resolve individual tickets, and on [prototype](https://aihero.dev/skills-prototype) and [research](https://aihero.dev/skills-research) for the ticket types that need them. When you're unsure which skill or flow fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+`wayfinder` 是一个大型概念的 **入口**：一项太大且太模糊而无法一次完成的任务会生成一个清晰的决策地图，然后合并到主要的构建流程中。当迷雾被推回且路径清晰时，将其移交 [to-spec](https://aihero.dev/skills-to-spec) 以安排多会话构建（或者，如果任务结果很小，则直接实现）。它依赖 [grilling](https://aihero.dev/skills-grilling) 和 [domain-modeling](https://aihero.dev/skills-domain-modeling) 来解决单个票据，并依赖 [prototype](https://aihero.dev/skills-prototype) 和 [research](https://aihero.dev/skills-research) 来解决需要它们的票据类型。当你不确定哪个技能或流程适合时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指路。
