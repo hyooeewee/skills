@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - mirror
     paths:
       - "**/*.md"
       - "!.changeset/**"
@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -23,6 +24,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - run: |
+          git checkout mirror
+          if git checkout translation 2>/dev/null; then
+            git rebase mirror
+          else
+            git checkout -b translation mirror
+          fi
 
       - uses: actions/cache@v4
         with:
@@ -31,11 +42,28 @@ jobs:
           restore-keys: |
             continuous-translation-
 
+      - name: Pull remote changes (local wins)
+        run: |
+          git fetch origin translation || true
+          if git merge origin/translation --strategy-option=ours --no-commit 2>/dev/null; then
+            git commit -m "merge remote changes (local wins)" || echo "No changes to commit"
+          else
+            echo "No remote changes to merge"
+          fi
+          if git restore --source=main .github/workflows/*.yml 2>/dev/null; then
+            git add .github/workflows/*.yml 2>/dev/null
+            git commit -m "restore workflow files from main" || echo "No workflow changes"
+          else
+            echo "No workflow files to restore"
+          fi
+
       - uses: pelikhan/action-continuous-translation@v0
         with:
           lang: zh
           files: |
             **/*.md
+          # Overwrite the original files with the translated content
+          filename_template: "{{dirname}}/{{basename}}{{extname}}"
           model_alias: |
             translation: openai:${{ vars.OPENAI_MODEL_NAME }}
             validation: openai:${{ vars.OPENAI_MODEL_NAME }}
@@ -43,10 +71,18 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_API_BASE: ${{ vars.OPENAI_API_BASE }}
 
-      - run: git pull --ff-only
-
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Create/Update Pull Request
+        uses: peter-evans/create-pull-request@v6
         with:
-          file_pattern: "**.md* translations/**"
-          commit_message: "[cai] 🤖 translate docs to zh"
-          commit_user_name: genaiscript
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: translation
+          base: main
+          title: "[cai] 🤖 Translate docs to zh"
+          body: |
+            This PR automatically updates Chinese translations.
+            - Triggered by push to `mirror` branch.
+          commit-message: "[cai] 🤖 translate docs to zh"
+          delete-branch: false
+          add-paths: |
+            **.md*
+            translations/**
