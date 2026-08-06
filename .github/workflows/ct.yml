@@ -49,7 +49,7 @@ jobs:
         continue-on-error: true
         with:
           lang: zh
-          files: "**/*.md*"
+          files: "README.md"
           filename_template: "{{dirname}}/{{basename}}{{extname}}"
           model_alias: |
             translation: openai:${{ vars.OPENAI_MODEL_NAME }}
