@@ -31,6 +31,7 @@ jobs:
           git config --global push.autoSetupRemote true
           # UPSTREAM_REPOSITORY_URL is a public repository URL
           # like: https://github.com/username/repo.git
+          git remote remove upstream || true
           git remote add upstream ${{ vars.UPSTREAM_REPOSITORY_URL }}
           git fetch upstream --no-tags main
           git show-ref --verify --quiet refs/heads/mirror || git branch mirror
