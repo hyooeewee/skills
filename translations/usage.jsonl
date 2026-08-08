@@ -207,3 +207,5 @@
 {"filename":"skills/deprecated/design-an-interface/SKILL.md","lang":"zh","tokens":717,"stage":"translate","model":"openai:glm-4.7-flash","date":"2026-08-03T16:13:56.417Z","cost":0,"duration":80839.45182899944,"total":9115,"prompt":2510,"completion":6605}
 {"filename":"skills/deprecated/design-an-interface/SKILL.md","lang":"zh","tokens":717,"stage":"validate","model":"openai:glm-4.7-flash","date":"2026-08-03T16:14:47.245Z","cost":0,"duration":50650.427815999836,"total":2305,"prompt":1905,"completion":400}
 {"filename":"README.md","lang":"zh","tokens":3682,"stage":"translate","model":"openai:glm-4.7-flash","date":"2026-08-06T12:41:50.920Z","cost":0,"duration":27198.027944999998,"total":10125,"prompt":7672,"completion":2453}
+{"filename":"CLAUDE.md","lang":"zh","tokens":857,"stage":"translate","model":"openai:glm-4.7-flash","date":"2026-08-08T15:06:47.613Z","cost":0,"duration":67214.616645,"total":5813,"prompt":2276,"completion":3537}
+{"filename":"CLAUDE.md","lang":"zh","tokens":857,"stage":"validate","model":"openai:glm-4.7-flash","date":"2026-08-08T15:07:23.668Z","cost":0,"duration":35977.74422999998,"total":2582,"prompt":2182,"completion":400}

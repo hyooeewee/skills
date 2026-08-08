@@ -1897,5 +1897,10 @@
   "Don't let sub-agents produce similar designs - enforce radical difference": "不要让子代理产生相似的设计 - 强制追求根本差异",
   "Don't skip comparison - the value is in contrast": "不要跳过比较 - 价值在于对比",
   "Don't implement - this is purely about interface shape": "不要实现 - 这纯粹是关于接口形状",
-  "Don't evaluate based on implementation effort": "不要基于实现工作量进行评估"
+  "Don't evaluate based on implementation effort": "不要基于实现工作量进行评估",
+  "`in-progress/` — beta: public on purpose, feedback wanted, not shipped in the pl.6957F8A2A53E08323044": "`in-progress/` — beta：故意公开，寻求反馈，未包含在插件中",
+  "Every skill in `engineering/` or `productivity/` (the **promoted** buckets) must.9A712918646B75622F36": "`engineering/` 或 `productivity/` 中的每个技能（**推广**桶）必须在顶层 `README.md` 中有引用，并在 `.claude-plugin/plugin.json` 的 `skills` 数组中有一个条目（Claude Code 插件正好包含推广的那一组）。`misc/`、`in-progress/` 和 `deprecated/` 中的技能不得出现在这两个文件中。",
+  "Install commands are copied verbatim from [.agents/install-block.md](./.agents/i.3B47B364C9416B73FB2E": "安装命令直接从 [.agents/install-block.md](./.agents/install-block.md) 复制。`.claude-plugin/marketplace.json` 使该仓库成为其自己的单一插件市场 — 安装块解释了这是后备方案，而非文档化的路径。在修改任一清单文件后，运行 `claude plugin validate . --strict`。为什么是 Claude 插件而不是（尚未）Codex 插件，请参阅 [.agents/adr/0002-ship-as-a-claude-code-plugin.md](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)。",
+  "Each bucket folder has a `README.md` that lists every skill in the bucket with a.2B36A9CACB7FFEB5783D": "每个桶文件夹都有一个 `README.md`，列出该桶中的每个技能及其一行描述，并将技能名称链接到其 `SKILL.md`。推广桶的 `README.md` 和顶层 `README.md` 将条目分为 **User-invoked** 和 **Model-invoked**；非推广桶的 `README.md`（`misc/`、`in-progress/`）使用扁平列表。",
+  "Skills in `engineering/` and `productivity/` also have a human-facing docs page .8951C5F23E818D36C662": "`engineering/` 和 `productivity/` 中的技能在 `docs/<bucket>/<skill-name>.md` 处也有面向人类的文档页面（文档树镜像了 `skills/` 下的那两个桶文件夹）。发布的 URL 是 `https://aihero.dev/skills-<skill-name>`，无论桶是什么 — 文档路径仅用于仓库组织。当你在 `engineering/` 或 `productivity/` 中添加、重命名或更改技能的行为时，请按照 [.agents/writing-docs.md](./.agents/writing-docs.md) 创建或重新同步其文档页面。完成的页面包含四个部分 — **What it does**（它做什么）、**When to reach for it**（何时使用它）、**Common questions**（常见问题）、**It's working if**（工作成功的条件是）— 而 `writing-docs.md` 包含模板、部分顺序以及问题的来源。非推广桶（`misc/`、`in-progress/`、`deprecated/`）中的技能**没有**文档页面。"
 }
