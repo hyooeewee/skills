@@ -66,9 +66,4 @@ jobs:
             This PR automatically updates Chinese translations.
             - Triggered by push to `mirror` branch.
           commit-message: "[cai] 🤖 translate docs to zh"
-          delete-branch: true
-          add-paths: |
-            ./**/*.zh.md*
-            .github/workflows/*.yml
-            translations/**
-            .ctignore
+          delete-branch: false
