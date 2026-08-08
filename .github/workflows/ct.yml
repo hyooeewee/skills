@@ -1,15 +1,15 @@
 name: Continuous Translation
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - mirror
     paths:
-      - "**/*.md"
+      - "./**/*.md*"
       - "!.changeset/**"
       - "!CHANGELOG.md"
       - "!translations/**"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -24,16 +24,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - run: |
-          git checkout mirror
-          if git checkout translation 2>/dev/null; then
-            git rebase mirror
-          else
-            git checkout -b translation mirror
-          fi
+      - name: Make work branch
+        run: |
+          echo "$(git --no-pager remote -vv)"
+          git switch -C translation origin/mirror
+          git restore --source=origin/main .github/workflows/*.yml translations/ .ctignore 2>/dev/null || true
+          git push -u -f origin translation
+          git status
 
       - uses: actions/cache@v4
         with:
@@ -42,28 +40,12 @@ jobs:
           restore-keys: |
             continuous-translation-
 
-      - name: Pull remote changes (local wins)
-        run: |
-          git fetch origin translation || true
-          if git merge origin/translation --strategy-option=ours --no-commit 2>/dev/null; then
-            git commit -m "merge remote changes (local wins)" || echo "No changes to commit"
-          else
-            echo "No remote changes to merge"
-          fi
-          if git restore --source=main .github/workflows/*.yml 2>/dev/null; then
-            git add .github/workflows/*.yml 2>/dev/null
-            git commit -m "restore workflow files from main" || echo "No workflow changes"
-          else
-            echo "No workflow files to restore"
-          fi
-
       - uses: pelikhan/action-continuous-translation@v0
+        continue-on-error: true
         with:
           lang: zh
-          files: |
-            **/*.md
-          # Overwrite the original files with the translated content
-          filename_template: "{{dirname}}/{{basename}}{{extname}}"
+          files: "./**/*.md*"
+          # filename_template: "{{dirname}}/{{basename}}.zh{{extname}}"
           model_alias: |
             translation: openai:${{ vars.OPENAI_MODEL_NAME }}
             validation: openai:${{ vars.OPENAI_MODEL_NAME }}
@@ -72,7 +54,7 @@ jobs:
           OPENAI_API_BASE: ${{ vars.OPENAI_API_BASE }}
 
       - name: Create/Update Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: translation
@@ -82,7 +64,9 @@ jobs:
             This PR automatically updates Chinese translations.
             - Triggered by push to `mirror` branch.
           commit-message: "[cai] 🤖 translate docs to zh"
-          delete-branch: false
+          delete-branch: true
           add-paths: |
-            **.md*
+            ./**/*.zh.md*
+            .github/workflows/*.yml
             translations/**
+            .ctignore
