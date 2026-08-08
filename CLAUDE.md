@@ -3,19 +3,18 @@
 * `engineering/` — 日常代码工作
 * `productivity/` — 日常非代码工作流工具
 * `misc/` — 保留但很少使用，未推广
-* `personal/` — 与我自己的配置相关，未推广
-* `in-progress/` — 尚未准备好发布的草稿
+* `in-progress/` — beta：故意公开，寻求反馈，未包含在插件中
 * `deprecated/` — 不再使用
 
-`engineering/` 或 `productivity/` 中的每个技能（**promoted** 桶）必须在顶层 `README.md` 中有一个引用，并在 `.claude-plugin/plugin.json` 的 `skills` 数组中有一个条目（Claude Code 插件只发布推广的那一组技能）。`misc/`、`personal/`、`in-progress/` 和 `deprecated/` 中的技能不得出现在两者中。
+`engineering/` 或 `productivity/` 中的每个技能（**推广**桶）必须在顶层 `README.md` 中有引用，并在 `.claude-plugin/plugin.json` 的 `skills` 数组中有一个条目（Claude Code 插件正好包含推广的那一组）。`misc/`、`in-progress/` 和 `deprecated/` 中的技能不得出现在这两个文件中。
 
-该仓库也是其自己的单插件 Claude Code 市场：`.claude-plugin/marketplace.json` 列出了唯一的 `mattpocock-skills` 插件。在升级发布版本时，请保持 `.claude-plugin/plugin.json` 的 `version` 与 `package.json` 同步 — Claude 使用插件 `version` 来决定已安装的用户何时看到更新。在修改任一清单文件后，运行 `claude plugin validate . --strict`。为什么是 Claude 插件而不是（尚未）Codex 插件，请参阅 [.agents/adr/0002-ship-as-a-claude-code-plugin.md](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)。
+安装命令直接从 [.agents/install-block.md](./.agents/install-block.md) 复制。`.claude-plugin/marketplace.json` 使该仓库成为其自己的单一插件市场 — 安装块解释了这是后备方案，而非文档化的路径。在修改任一清单文件后，运行 `claude plugin validate . --strict`。为什么是 Claude 插件而不是（尚未）Codex 插件，请参阅 [.agents/adr/0002-ship-as-a-claude-code-plugin.md](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)。
 
 顶层 `README.md` 中的每个技能条目必须将技能名称链接到其 `SKILL.md`。
 
-每个桶文件夹都有一个 `README.md`，列出了桶中的每个技能及其一行描述，并将技能名称链接到其 `SKILL.md`。推广桶的 `README.md` 和顶层 `README.md` 将条目分为 **User-invoked** 和 **Model-invoked**；非推广桶的 `README.md`（`misc/`、`personal/`）使用扁平列表。
+每个桶文件夹都有一个 `README.md`，列出该桶中的每个技能及其一行描述，并将技能名称链接到其 `SKILL.md`。推广桶的 `README.md` 和顶层 `README.md` 将条目分为 **User-invoked** 和 **Model-invoked**；非推广桶的 `README.md`（`misc/`、`in-progress/`）使用扁平列表。
 
-`engineering/` 和 `productivity/` 中的技能在 `docs/<bucket>/<skill-name>.md` 处还有一个面向人类的文档页面（文档树在 `skills/` 下镜像了那两个桶文件夹）。发布的 URL 是 `https://aihero.dev/skills-<skill-name>`，无论属于哪个桶 — 文档路径仅用于仓库组织。当你在 `engineering/` 或 `productivity/` 中添加、重命名或更改技能的行为时，请按照 [.agents/writing-docs.md](./.agents/writing-docs.md) 创建或重新同步其文档页面。非推广桶（`misc/`、`personal/`、`in-progress/`、`deprecated/`）中的技能**没有**文档页面。
+`engineering/` 和 `productivity/` 中的技能在 `docs/<bucket>/<skill-name>.md` 处也有面向人类的文档页面（文档树镜像了 `skills/` 下的那两个桶文件夹）。发布的 URL 是 `https://aihero.dev/skills-<skill-name>`，无论桶是什么 — 文档路径仅用于仓库组织。当你在 `engineering/` 或 `productivity/` 中添加、重命名或更改技能的行为时，请按照 [.agents/writing-docs.md](./.agents/writing-docs.md) 创建或重新同步其文档页面。完成的页面包含四个部分 — **What it does**（它做什么）、**When to reach for it**（何时使用它）、**Common questions**（常见问题）、**It's working if**（工作成功的条件是）— 而 `writing-docs.md` 包含模板、部分顺序以及问题的来源。非推广桶（`misc/`、`in-progress/`、`deprecated/`）中的技能**没有**文档页面。
 
 每个 `SKILL.md` 要么是用户调用的（`disable-model-invocation: true` 加上 `agents/openai.yaml` 中的 `policy.allow_implicit_invocation: false`，仅人类可访问），要么是模型调用的（模型或用户可访问）。请参阅 [.agents/invocation.md](./.agents/invocation.md)。
 
