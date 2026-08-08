@@ -47,7 +47,7 @@ jobs:
         with:
           lang: zh
           files: CLAUDE.md
-          # filename_template: "{{dirname}}/{{basename}}.zh{{extname}}"
+          filename_template: "{{dirname}}/{{basename}}{{extname}}"
           model_alias: |
             translation: openai:${{ vars.OPENAI_MODEL_NAME }}
             validation: openai:${{ vars.OPENAI_MODEL_NAME }}
