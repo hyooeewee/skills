@@ -3612,5 +3612,21 @@
   "Write it for a non-developer. Every label is in **domain language**, not code — .C2739EAC9FAFDCE03299": "为非开发者编写。每个标签都在**领域语言**中，而不是代码——按钮和状态读起来像业务，而不是 reducer。用通俗的语言解释正在发生什么。",
   "Lay it out with a clean hierarchy, top to bottom:": "按照清晰的层级自上而下地布局：",
   "This skill has you show commands, outputs and captured artifacts. **Redact every.5AB4ACACC35DE70696D4": "这个技能要求你展示命令、输出和捕获的工件。**首先屏蔽所有敏感信息**——用 `<REDACTED>` 代替。根据环境变量构建循环，这样凭证会保留在环境中，而不是你展示的内容里。捕获的工件包含授权头：只引用包含信号的那几行。",
-  "If the redacted output is not enough to diagnose the bug, say so and ask the use.CBBC03DF15D79FD21455": "如果脱敏后的输出不足以诊断 Bug，就说明情况并询问用户。"
+  "If the redacted output is not enough to diagnose the bug, say so and ask the use.CBBC03DF15D79FD21455": "如果脱敏后的输出不足以诊断 Bug，就说明情况并询问用户。",
+  "It writes": "它写入",
+  "Where": "位置",
+  "All of it is committed markdown. There is no user-level or global mode: the conf.4DEA5F92939DBBC5D5D8": "全部都是提交的 Markdown。没有用户级或全局模式：配置存在于仓库中，因此每个仓库都有自己的副本。",
+  "Do I have to use GitHub?": "我必须使用 GitHub 吗？",
+  "No. GitHub, GitLab and local markdown under `.scratch/` all ship as ready-made t.D6914F14238182C2D40E": "不。GitHub、GitLab 和 `.scratch/` 下的本地 markdown 都作为现成的模板附带，其他任何内容都通过“其他”路径工作。这是记录中重复最多的问题，大致用这些话表达：“*硬锁定到 GitHub*”、“*我可以使用 GitLab / Jira 吗*”、“*那 Azure DevOps 呢*”。每次的答案都是：tracker 是一个设置答案，而不是技能属性。",
+  "Do I need to re-run it after updating the skills?": "更新技能后，我需要重新运行它吗？",
+  "Known gap, still open. The file-selection rule is \"edit `CLAUDE.md` if it exists.9A06F547BA496ABBCCD7": "已知缺口，仍在处理中。文件选择规则是“如果存在则编辑 `CLAUDE.md`，否则编辑 `AGENTS.md`”——它检查哪个文件存在，而不是检查哪个 [harness](https://www.aihero.dev/ai-coding-dictionary/harness) 正在运行。带有来自 Claude Code 的 `CLAUDE.md` 的仓库会在 Codex 从不读取的某个地方获得其 `## Agent skills` 块。两种变通方法正在流通：手动将块移动到 `AGENTS.md`，或者保持 `AGENTS.md` 的权威性，并使 `CLAUDE.md` 成为其的一行指针。如果两个文件都不存在，技能会询问你创建哪个而不是选择，这让期望它只是决定的人感到困惑。",
+  "It didn't create my triage labels.": "它没有创建我的优先级标签。",
+  "It doesn't. `docs/agents/triage-labels.md` is a *mapping* — it tells `/triage` w.4F475B0FF54408AE6309": "它不会。`docs/agents/triage-labels.md` 是一个 *映射*——它告诉 `/triage` 你的 tracker 中的哪些字符串对应五个标准角色。它不会运行 `gh label create`。在一个全新的 GitHub 仓库中，标签确实还不存在，这已经被多次作为错误提交。两个后续事项：",
+  "If your tracker already uses the canonical names, the mapping is an identity tab.47B963C5DE4BAD5527A1": "如果你的 tracker 已经使用了标准名称，映射就是一个恒等表，不需要配置。这是预期的常见情况，而不是缺失的步骤。",
+  "[wayfinder](https://aihero.dev/skills-wayfinder)'s `wayfinder:map` and `wayfinde.FB1E5F1BFD9869D113A6": "[wayfinder](https://aihero.dev/skills-wayfinder) 的 `wayfinder:map` 和 `wayfinder:<type>` 标签也不会在这里创建，并且 `gh issue create --label <missing>` 会直接失败而不是创建标签。在 GitHub 仓库上的第一次 wayfinder 运行之前，请手动创建它们。",
+  "Isn't it strange to have a skill that configures the other skills?": "有一个配置其他技能的技能，这难道不奇怪吗？",
+  "One long-standing complaint says yes, in these words: *\"having a skill to set up.9FE0DC85B0A48C4D60FB": "一个长期存在的抱怨说是的，措辞如下：“*对我来说，有一个设置其他技能的技能感觉不对——这意味着 LLM 正在配置它自己的技能。*”这种权衡是真实且被承认的：设置步骤的替代方案是将 tracker 指令复制到每个接触问题的技能中。输出是可检查、可编辑的 markdown，这是缓解措施——你可以阅读它写的每个文件并手动更改它，日常调整正是如此，而不是另一次运行。",
+  "None up front. The skill writes into two places and creates both lazily:": "无前置要求。该技能写入两个位置，并都延迟创建：",
+  "**`CONTEXT.md`** at the repo root, created by the first resolved term. In a repo.65B2698E75892E229F80": "仓库根目录下的 **`CONTEXT.md`**，由第一个已解决的术语创建。如果在根目录有 `CONTEXT-MAP.md`，术语会进入地图指向的特定上下文的 `CONTEXT.md` 中。",
+  "**`docs/adr/`**, created by the first ADR that clears the bar.": "**`docs/adr/`**，由第一个通过门槛的 ADR 创建。"
 }
