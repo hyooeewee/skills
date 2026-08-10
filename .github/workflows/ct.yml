@@ -29,11 +29,19 @@ jobs:
 
       - name: Make work branch
         run: |
-          echo "$(git --no-pager remote -vv)"
+          git config --global core.pager cat
+          git remote -v
           git switch -C translation origin/mirror
-          git restore --source=origin/main .github/workflows/*.yml translations/ .ctignore 2>/dev/null || true
+          echo "${{ vars.RESTORE_PATHS }}"
+          if [ -n "${{ vars.RESTORE_PATHS }}" ]; then
+            git restore --source=origin/main .github/workflows/*.yml 2>/dev/null || true
+            while IFS= read -r path; do
+              git restore --source=origin/main "$path" 2>/dev/null || true
+            done <<< "${{ vars.RESTORE_PATHS }}"
+          fi
           git push -u -f origin translation
-          git status
+          # git branch -C translation main && git push -u -f origin main
+          git status && git branch -v
 
       - uses: actions/cache@v4
         with:
@@ -47,7 +55,7 @@ jobs:
         with:
           lang: zh
           files: "./**/*.md*"
-          # filename_template: "{{dirname}}/{{basename}}{{extname}}"
+          filename_template: "{{dirname}}/{{basename}}{{extname}}"
           model_alias: |
             translation: openai:${{ vars.OPENAI_MODEL_NAME }}
             validation: openai:${{ vars.OPENAI_MODEL_NAME }}
