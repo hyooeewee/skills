@@ -1,8 +1,8 @@
-# GLOSSARY.md Format
+# GLOSSARY.md 格式
 
-`GLOSSARY.md` is the canonical language for this teaching workspace. All explainers, exercises, and learning records should adhere to its terminology. Building it is itself part of learning: compressing a concept into a tight definition is evidence the user understands it.
+`GLOSSARY.md` 是本教学工作区的标准语言。所有解释说明、练习和学习记录都应遵循其术语。构建它本身就是学习的一部分：将一个概念压缩成简洁的定义，是用户理解该概念的证明。
 
-## Structure
+## 结构
 
 ```md
 # {Topic} Glossary
@@ -24,12 +24,12 @@ A 1–10 self-rating of how hard a set felt, where 10 is failure and 8 means two
 _Avoid_: Effort score, intensity rating
 ```
 
-## Rules
+## 规则
 
-- **Add a term only when the user understands it.** The glossary is a record of compressed knowledge, not a dictionary the user reads to learn. If the user has just been introduced to a concept, wait until they can use it correctly before promoting it here.
-- **Be opinionated.** When several words exist for the same concept, pick the best one and list the rest as aliases to avoid. This is how language compresses.
-- **Keep definitions tight.** One or two sentences. Define what the term IS, not what it does or how to do it.
-- **Use the glossary's own terms inside definitions.** Once a term is in the glossary, prefer it everywhere — including inside other definitions. This is what makes complex terms easier to grasp later.
-- **Group under subheadings** when natural clusters emerge (e.g. `## Anatomy`, `## Programming`). A flat list is fine when terms cohere.
-- **Flag ambiguities explicitly.** If a term is used loosely in the wider field, note the resolution: "In this workspace, 'set' always means a working set — warm-ups are tracked separately."
-- **Revise as understanding deepens.** A definition the user wrote in week one may be wrong by week six. Update in place; do not leave stale entries.
+* 仅在用户理解该术语时才添加。词汇表是压缩知识的记录，而不是用户阅读以学习的新词典。如果用户刚刚接触到一个概念，请等待他们能正确使用它，然后再将其收录于此。
+* 要有自己的观点。当同一个概念有多个词时，选择最好的一个，并将其他词列为应避免的别名。这就是语言压缩的方式。
+* 保持定义简洁。一两句话。定义术语“是什么”，而不是它“做什么”或“怎么做”。
+* 在定义中使用词汇表自身的术语。一旦某个术语在词汇表中，就应在所有地方优先使用它——包括在其他定义内部。这就是让复杂术语更容易被理解的方式。
+* 当出现自然分组时，将其归类到小标题下（例如 `## Anatomy`，`## Programming`）。当术语紧密相关时，使用扁平列表也可以。
+* 明确标记歧义。如果一个术语在更广泛的领域中被宽泛使用，请注明其解决方式：“在此工作区中，'set' 始终指有效组——热身单独记录。”
+* 随着理解的加深进行修订。用户在一周时写的定义可能在第六周时就是错误的。原地更新；不要留下过时的条目。
