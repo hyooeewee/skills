@@ -1,11 +1,8 @@
 ---
 name: code-review
-description: Review the changes since a fixed point (commit, branch, tag, or
-  merge-base) along two axes — Standards (does the code follow this repo's
-  documented coding standards?) and Spec (does the code match what the
-  originating issue/spec asked for?). Runs both reviews in parallel sub-agents
-  and reports them side by side. Use when the user wants to review a branch, a
-  PR, work-in-progress changes, or asks to "review since X".
+description: 审查自固定点（提交、分支、标签或合并基准）以来的变更，沿两个轴进行 —— 标准（代码是否遵循此仓库的文档化编码标准？）和
+  Spec（代码是否匹配原始问题/规格的要求？）。在并行子代理中运行两次审查，并在旁边报告结果。当用户想要审查分支、PR、进行中的更改，或要求“审查自 X
+  以来”时使用。
 
 ---
 

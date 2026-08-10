@@ -1,6 +1,6 @@
 ---
 name: writing-fragments
-description: Writing, explore — mine raw fragments, no structure yet.
+description: 写作，探索 —— 挖掘原始片段，暂无结构。
 disable-model-invocation: true
 
 ---
@@ -21,7 +21,7 @@ disable-model-invocation: true
 
 <supporting-info>
 
-## What is a fragment
+## 什么是片段
 
 片段是任何可能存留到最终文章中的文本。它必须是*作者可读的*——作者能理解其含义——但它不需要定义其术语或对陌生读者来说是可理解的。门槛是“这是好的写作吗？”，而不是“这是完整的论点吗？”
 

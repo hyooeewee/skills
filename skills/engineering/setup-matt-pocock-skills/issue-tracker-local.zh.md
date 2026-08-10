@@ -1,6 +1,6 @@
 # Issue tracker: 本地 Markdown
 
-Issues and specs for this repo live as markdown files in `.scratch/`.
+此仓库的问题和规范以 Markdown 文件的形式存在于 `.scratch/` 中。
 
 ## 约定
 

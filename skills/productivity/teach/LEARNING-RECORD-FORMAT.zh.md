@@ -16,7 +16,7 @@
 
 ## 可选部分
 
-Only include these when they add genuine value. Most records won't need them.
+仅在它们真正增加价值时才包含。大多数记录都不需要它们。
 
 * **状态** 元数据 (`active | superseded by LR-NNNN`) —— 当早期的理解被证明是错误的并被替换时很有用。
 * **证据** —— 用户如何展示理解（回答了一个问题、完成了一个练习、引用了先验经验）。当声明可能被重新审视时很有用。

@@ -22,7 +22,7 @@ claude plugins install mattpocock-skills
 
 </canonical-block>
 
-## Codex, and other agents — skills.sh
+## Codex 及其他代理 — skills.sh
 
 该插件仅适用于 Claude Code。在其他地方，[skills.sh](https://skills.sh/mattpocock/skills) 会将可编辑的技能文件复制到项目中。在 `README.md` 上使用整套形式：
 

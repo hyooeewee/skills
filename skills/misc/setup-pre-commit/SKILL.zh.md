@@ -29,7 +29,7 @@ description: 在当前仓库中设置 Husky pre-commit hooks（配合
 husky lint-staged prettier
 ```
 
-### 3. Initialize Husky
+### 初始化 Husky
 
 ```bash
 npx husky init
@@ -37,7 +37,7 @@ npx husky init
 
 这将创建 `.husky/` 目录，并在 package.json 中添加 `prepare: "husky"`。
 
-### 4. Create `.husky/pre-commit`
+### 创建 `.husky/pre-commit`
 
 编写此文件（Husky v9+ 不需要 shebang）：
 
@@ -49,7 +49,7 @@ npm run test
 
 **调整**：将 `npm` 替换为检测到的包管理器。如果 package.json 中没有 `typecheck` 或 `test` 脚本，则省略这些行并告知用户。
 
-### 5. Create `.lintstagedrc`
+### 创建 `.lintstagedrc`
 
 ```json
 {
@@ -57,7 +57,7 @@ npm run test
 }
 ```
 
-### 6. Create `.prettierrc` (if missing)
+### 创建 `.prettierrc`（如果缺失）
 
 仅在没有 Prettier 配置时创建。使用这些默认值：
 

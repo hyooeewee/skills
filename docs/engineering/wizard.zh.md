@@ -6,7 +6,7 @@
 
 ## 何时使用
 
-You can type `/wizard`, and the agent can also reach for it on its own. When it hits a step you have to take — a key it can't mint, a dashboard it can't click — it builds you a wizard instead of writing the instructions into the chat, where they scroll away.
+你可以输入 `/wizard`，agent 也可以主动调用它。当遇到你必须采取的步骤——一个它无法生成的密钥，一个它无法点击的仪表盘——它会为你生成一个 wizard，而不是将指令写入聊天中，因为它们会被滚动掉。
 
 当阻碍你的下一步是穿过仪表盘时，使用它：
 
@@ -82,7 +82,7 @@ You can type `/wizard`, and the agent can also reach for it on its own. When it 
 
 **以前在 `in-progress/`—— 现在在哪里？**
 
-`engineering/`, as of v1.2. It graduated out of the beta bucket and now ships in the plugin, so it arrives with the rest of the promoted set rather than needing an individual install. Its behaviour didn't change on graduation.
+`engineering/`，自 v1.2 起。它从 beta 阶段毕业并现在随插件一起发布，所以它随推广集的其他部分一起到达，而不是需要单独安装。它在毕业时行为没有改变。
 
 ## 判断是否生效
 
@@ -95,4 +95,4 @@ You can type `/wizard`, and the agent can also reach for it on its own. When it 
 
 ## 在系统中的位置
 
-`wizard` is a reach-for-it-anytime standalone, sitting at the line where automation stops and a human has to click. Its nearest neighbour is [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills), because both exist to get a repo into a working state — that one configures this skill set, while `wizard` generates a setup path for everything else. It also pairs with [implement](https://aihero.dev/skills-implement): when a build lands a feature that needs credentials or a manual cutover, a wizard is how the human half gets done. When you're unsure which skill fits the moment, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+`wizard` 是一个随时可用的独立工具，位于自动化停止而人类必须点击的那条界线上。它最近的邻居是 [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills)，因为两者都是为了将仓库置于工作状态——那个配置这套技能集，而 `wizard` 为其他所有内容生成设置路径。它还与 [implement](https://aihero.dev/skills-implement) 配对：当构建发布一个需要凭据或手动切换的功能时，wizard 是如何完成人工部分的。当你不确定哪个技能适合当下时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指引。

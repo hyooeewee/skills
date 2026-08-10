@@ -5,7 +5,7 @@ disable-model-invocation: true
 
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user — just synthesize what you already know.
+此技能利用当前的对话上下文和代码库理解来生成规范。请勿采访用户——只需综合您已知的内容。
 
 问题跟踪器和分类标签词汇表应该已经提供给你了——如果没有，请运行 `/setup-matt-pocock-skills`。
 

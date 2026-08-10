@@ -6,7 +6,7 @@
 
 ## 何时使用
 
-You invoke this by typing `/to-questionnaire` — the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) won't reach for it on its own.
+你通过输入 `/to-questionnaire` 来调用它——[agent](https://www.aihero.dev/ai-coding-dictionary/agent) 不会主动调用它。
 
 当某个决定因存在于另一个人脑中的知识而被阻碍时，使用它：客户、领域专家、拥有业务规则的执行层、你不坐在一起的那个团队的同事。你想使用哪个技能取决于答案实际上在哪里：
 
@@ -30,7 +30,7 @@ You invoke this by typing `/to-questionnaire` — the [agent](https://www.aihero
 
 ## 文档
 
-It is framed as a **discovery questionnaire** — you lack the context, the recipient holds it — and that framing drives its shape:
+它被设计为一个**发现问卷**——你缺乏上下文，接收者掌握它——而这种框架决定了它的结构：
 
 * 一个指明其承载的决策的目的行，以及为从未进入你脑海的接收者提供的简短背景部分。
 * 问题按**最重要在前**排序并归类在主题标题下，因为异步意味着你可能只能有一次机会。
