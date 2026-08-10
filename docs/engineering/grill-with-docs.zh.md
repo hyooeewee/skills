@@ -71,7 +71,7 @@ Scope 决定它。对于任何你可以在一个会话中解决的事情，使�
 
 ## 判断是否生效
 
-* `CONTEXT.md` changes *during* the session, term by term, rather than appearing in one lump at the end.
+* CONTEXT.md 在会话*期间*逐项发生变化，而不是在最后一次性出现。
 * 词汇表读起来纯粹是词汇——你项目的词汇，定义严谨——并且不包含实现细节或类似规格的散文。
 * 代码库可以回答的问题通过阅读代码库来回答，而不是问你。
 * 你得到的 ADR 很少或没有，而且你得到的那些是你不想不得不重新争论的决策。

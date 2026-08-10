@@ -49,7 +49,7 @@
 
 **它
 \`\`\`T004
-与 Claude Code 自带的 \`/code-review\` 冲突。我该怎么做？ `/code-review`. What do I do?**
+与 Claude Code 自带的 \`/code-review\` 冲突。我该怎么做？ `/code-review`我该怎么做？**
 
 这是该技能报告最多的一个问题，且尚未修复。Claude Code 自带了 `/code-review`，它的功能不同——它在差异中查找 bug，而这个技能检查的是规范合规性和仓库规范。安装这个库意味着其中之一会胜出，而哪个胜出取决于你如何安装。通过插件市场，所有内容都在 `mattpocock-skills:` 前缀下进行别名处理，内置版本在未限定名称时很难访问；通过普通的技能安装，本地文件胜出，而这个技能会覆盖内置版本。一个干净的解决方案是完全删除 Claude Code 的内置技能：这能节省大量[上下文](https://www.aihero.dev/ai-coding-dictionary/context)，且冲突不再重要。这种覆盖本身可以说是一个 Claude Code [框架](https://www.aihero.dev/ai-coding-dictionary/harness) 的 bug——技能作者应该可以自由地将技能命名为任何东西——所以另一个答案是重命名本地副本。编辑前置信息或重命名目录会被 `npx skills update` 撤销；用户报告的持久性变通方法是 fork 这个技能到一个新名称，并从受管理的集合中移除 `code-review`，保留你 fork 的提交记录，以便你可以手动重新同步。
 
@@ -57,7 +57,7 @@
 \`\`\`T007
 &#x20;\`/code-review\`
 \`\`\`T007
-&#x20;并生成更多代理。 `/code-review` again and spawn more agents.**
+&#x20;并生成更多代理。 `/code-review`并生成更多代理。**
 
 已知是一个开放的 bug，被多个人在不同框架中复现。标准和规格提示并未禁止委托，因此子代理可以重新发现该技能并再次扩散——一份报告显示涉及的代理超过 50 个。人们在 fork 版本上应用的修复方法是在两个子代理的简报中各添加一行：“不要调用 `/code-review` 或生成额外的代理——直接执行此审查。”有些人更喜欢在框架层面处理，以便每个技能都继承该防护。目前尚未包含在已发布的技能中。如果你在无人值守的情况下运行，请留意代理的数量。
 
