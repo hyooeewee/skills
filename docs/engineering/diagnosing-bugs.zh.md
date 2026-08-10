@@ -1,12 +1,12 @@
 ## 功能说明
 
-`diagnosing-bugs` runs a six-phase diagnosis on a hard bug or a performance regression: build a repro, minimise it, rank hypotheses, instrument, fix with a regression test, clean up.
+它不会让代理在存在**紧密**反馈循环之前形成理论 —— 一个已命名的命令，已经运行过一次，在此错误上会变红，修复后会变绿。交给错误报告的编码代理的默认行为是阅读代码并猜测；此技能会阻止这种情况。如果不存在能变红的命令，就没有第 2 阶段。这个单一的门就是该技能的目的。之后的一切 —— 二分查找、假设测试、工具化 —— 一旦信号存在就是机械的。
 
-It will not let the agent form a theory until a **tight** feedback loop exists — one named command, already run once, that goes red on *this* bug and green when it is fixed. The default behaviour of a coding agent handed a bug report is to read code and guess; this skill blocks that. If no red-capable command exists, there is no Phase 2. That single gate is what the skill is for. Everything after it — bisection, hypothesis-testing, instrumentation — is mechanical once the signal exists.
+输入 `/diagnosing-bugs`，或者当任务合适时代理会自动调用它 —— 它是模型触发的，在“诊断” / “调试此问题”或报告某些东西已损坏、抛出、失败或缓慢时触发。
 
 ## 何时使用
 
-类型`/diagnosing-bugs`, or the agent reaches for it on its own when a task fits — it is model-invoked, and fires on "diagnose" / "debug this" or on a report that something is broken, throwing, failing, or slow.
+输入 `/diagnosing-bugs`，或者当任务合适时代理会自动调用它 —— 它是模型触发的，在“诊断” / “调试此问题”或报告某些东西已损坏、抛出、失败或缓慢时触发。
 
 在棘手的问题上使用它：一种经不起初步审视的错误，间歇性故障，或潜入两个已知良好状态之间的回归。它设计得很重，对于你希望在一句话中得到答案的问题来说，是错误的工具。
 

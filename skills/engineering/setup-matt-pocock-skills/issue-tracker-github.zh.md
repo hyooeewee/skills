@@ -1,6 +1,6 @@
 # Issue 追踪器: GitHub
 
-Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all operations.
+此仓库的 Issues 和规范以 GitHub Issues 的形式存在。使用 `gh` CLI 执行所有操作。
 
 ## 约定
 

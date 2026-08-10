@@ -10,7 +10,7 @@
 
 输入 `/writing-for-agents`，或者当您正在创建或编辑技能，或修改 `AGENTS.md` 或 `CLAUDE.md` 时，代理会自行调用它。
 
-Reach for it by hand for everything else an agent reads: your docs, specs and [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket), system and [AFK](https://www.aihero.dev/ai-coding-dictionary/afk) prompts. The test is one question — does an agent read this? — and it does not matter how the document gets in front of it, whether a pointer names it, a human pastes it, or it simply sits in the repo. For working out what a codebase actually contains in the first place, use [grill-with-docs](https://aihero.dev/skills-grill-with-docs) — this reference governs how a document reads, not what it knows.
+对于代理阅读的其他内容，请手动使用它：您的文档、规范和 [工单](https://www.aihero.dev/ai-coding-dictionary/ticket)，以及系统和 [AFK](https://www.aihero.dev/ai-coding-dictionary/afk) 提示。测试只有一个问题——代理会读这个吗？——文档如何出现在它面前并不重要，无论是指针命名了它、有人粘贴了它，还是它只是存放在仓库中。为了弄清楚代码库实际包含的内容，请使用 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) —— 这个参考决定文档如何阅读，而不是它知道什么。
 
 ## 两种负载
 

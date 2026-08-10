@@ -6,7 +6,7 @@
 
 ## 何时使用
 
-类型`/resolving-merge-conflicts`, or the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) reaches for it automatically when a task fits.
+输入 "/resolving-merge-conflicts"，或者当任务匹配时，[代理](https://www.aihero.dev/ai-coding-dictionary/agent)会自动调用它。
 
 当 git 已经在它无法自行解决的冲突处停止时，使用此技能。它的作用范围仅限于你面前的冲突，而不是它两侧的任何内容：
 
@@ -36,7 +36,7 @@
 
 **为什么从不使用 \`--abort\`？ `--abort`\`/do-work\`？**
 
-Aborting throws away the resolution work and returns you to the same conflict, unchanged, the next time you try. The skill is written for the case where the merge is going to happen. If you have decided it should not happen, that is a decision to make before invoking, not a branch inside the loop.
+中止会丢弃解决工作，并在下次尝试时将你带回到相同的冲突，且未做更改。该技能是为合并即将发生的情况编写的。如果你已经决定它不应该发生，那是在调用之前做出的决定，而不是循环内的分支。
 
 ## 判断是否生效
 
