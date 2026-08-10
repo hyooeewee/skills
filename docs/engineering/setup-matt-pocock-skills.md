@@ -1,94 +1,94 @@
-## What it does
+## 功能说明
 
-`setup-matt-pocock-skills` answers three questions about one repo — where issues live, what the triage labels are called, and where the domain docs sit — and records the answers as markdown files under `docs/agents/`.
+`setup-matt-pocock-skills` 询问一个仓库的三个问题——问题存放在哪里、优先级标签叫什么名字、以及领域文档位于何处——并将答案记录为 `docs/agents/` 下的 markdown 文件。
 
-Those files are the only thing that varies between repos. The skills themselves are identical everywhere; they read `docs/agents/issue-tracker.md` at run time and do what it says. That is why the set is not tied to GitHub, and why no skill file ever needs editing to point it somewhere else. Invoking it with "link the skills to a custom issue tracker" works with anything you can connect to programmatically, with zero changes to the skills.
+这些文件是唯一在仓库间变化的东西。技能本身到处都是一样的；它们在运行时读取 `docs/agents/issue-tracker.md` 并照其所述执行。这就是为什么该集合不绑定于 GitHub，为什么任何技能文件都不需要编辑来指向别处。通过“将技能链接到自定义问题追踪器”来调用它，可以适用于任何你可以编程连接的东西，且无需对技能进行任何更改。
 
-It is a prompt-driven skill, not a deterministic script. It reads your `git remote`, your existing `CLAUDE.md`, your existing `CONTEXT.md`, proposes what it found, and waits for you to confirm before writing anything.
+它是一个基于提示的技能，而不是确定性脚本。它读取你的 `git remote`、你现有的 `CLAUDE.md`、你现有的 `CONTEXT.md`，提出它发现的内容，并在写入任何内容之前等待你确认。
 
-## When to reach for it
+## 何时使用
 
-You invoke this by typing `/setup-matt-pocock-skills` — the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) won't reach for it on its own. It is deliberately marked non-invokable, so no other skill can fire it for you.
+你通过输入 `/setup-matt-pocock-skills` 来调用它——[agent](https://www.aihero.dev/ai-coding-dictionary/agent) 不会自动去调用它。它被故意标记为不可调用，因此其他技能无法为你触发它。
 
-Reach for it once per repo, before the first use of any other engineering skill. If [triage](https://aihero.dev/skills-triage), [to-spec](https://aihero.dev/skills-to-spec), [to-tickets](https://aihero.dev/skills-to-tickets) or [wayfinder](https://aihero.dev/skills-wayfinder) start guessing where your issues go, or apply labels your tracker doesn't have, they have not been set up here yet. A repo already halfway through a project is a fine place to run it; the skill reads what is already there and no earlier work is wasted.
+每个仓库调用一次，在任何其他工程技能使用之前。如果 [triage](https://aihero.dev/skills-triage)、[to-spec](https://aihero.dev/skills-to-spec)、[to-tickets](https://aihero.dev/skills-to-tickets) 或 [wayfinder](https://aihero.dev/skills-wayfinder) 开始猜测你的问题去哪里，或者应用你 tracker 中没有的标签，说明它们还没有在这里设置好。一个已经进行到项目一半的仓库是运行它的好地方；该技能会读取已有的内容，且不会浪费之前的工作。
 
-## Prerequisites
+## 前置条件
 
-It writes into the repo you run it in:
+它写入你运行它的仓库中：
 
-| It writes | Where |
-| --- | --- |
-| `issue-tracker.md` | `docs/agents/` |
-| `domain.md` | `docs/agents/` |
-| `triage-labels.md` | `docs/agents/`, only when the `triage` skill is installed |
-| An `## Agent skills` block | whichever of `CLAUDE.md` / `AGENTS.md` already exists |
+| 它写入                                         | 位置                                                                  |
+| ------------------------------------------- | ------------------------------------------------------------------- |
+| `issue-tracker.md`                          | `docs/agents/`                                                      |
+| `domain.md`                                 | `docs/agents/`                                                      |
+| `triage-labels.md`                          | `docs/agents/`仅当安装了 \`triage\` 技能时 `triage`技能已安装                    |
+| 一个 \`## Agent skills\` 块 `## Agent skills`块 | 任意一个 \`CLAUDE.md\` / \`AGENTS.md\` 已存在 `CLAUDE.md` / `AGENTS.md`已存在 |
 
-All of it is committed markdown. There is no user-level or global mode: the config lives in the repo, so every repo gets its own copy.
+全部都是提交的 Markdown。没有用户级或全局模式：配置存在于仓库中，因此每个仓库都有自己的副本。
 
-## The three decisions
+## 三个决策
 
-It leads each section with the recommended answer, and skips whatever exploration already settled. Most runs are two confirmations and done.
+它在每个部分以推荐答案开头，并跳过已经确定的任何探索。大多数运行只需要两次确认即可完成。
 
-| Decision | What it proposes | When it actually asks |
-| --- | --- | --- |
-| **Issue tracker** | the one matching your `git remote` | always — this is the one real choice |
-| **Triage labels** | keep the five canonical names (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`) | only if the `triage` skill is installed |
-| **Domain docs** | single-context: one `CONTEXT.md` plus `docs/adr/` at the root | only if it spots monorepo signals, and then it offers a multi-context `CONTEXT-MAP.md` |
+| 决策        | 它建议的内容                                                                                                                                                                           | 它实际提问的时候                                 |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| **问题追踪器** | 与你的 \`git remote\` 匹配的那个 `git remote`                                                                                                                                            | 总是 — 这是唯一真实的选择                           |
+| **优先级标签** | 保留五个标准名称 (\`needs-triage\`, \`needs-info\`, \`ready-for-agent\`, \`ready-for-human\`, \`wontfix\`)`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`) | 仅当安装了 \`triage\` 技能时 `triage`技能已安装       |
+| **领域文档**  | single-context: one `CONTEXT.md`加上 `docs/adr/`在根目录                                                                                                                               | 多上下文 \`CONTEXT-MAP.md\` `CONTEXT-MAP.md` |
 
-The tracker options:
+追踪器选项：
 
-| Option | Where issues live | Needs |
-| --- | --- | --- |
-| **GitHub** | the repo's GitHub Issues | the `gh` CLI |
-| **GitLab** | the repo's GitLab Issues | the `glab` CLI |
-| **Local markdown** | files under `.scratch/<feature>/` in this repo | nothing — no remote at all |
-| **Other** | wherever you say | one paragraph from you describing the workflow |
+| 选项              | 问题存放位置                                                   | 需求                     |
+| --------------- | -------------------------------------------------------- | ---------------------- |
+| **GitHub**      | 仓库的 GitHub Issues                                        | \`glab\` CLI `gh`CLI   |
+| **GitLab**      | 仓库的 GitLab Issues                                        | \`glab\` CLI `glab`CLI |
+| **本地 markdown** | \`.scratch/\<feature>/\` 下的文件 `.scratch/<feature>/`在此仓库中 | 无需任何东西 —— 完全没有远程仓库     |
+| **其他**          | 随你指定                                                     | 你描述工作流程的一段话            |
 
-The first three ship as templates in the skill and work out of the box. Local markdown is a first-class option, not a fallback: a solo project with no remote is fully supported. One caveat is worth repeating: don't use local markdown if you're using GitHub. They are alternatives, not layers.
+前三个作为技能中的模板附带并提供开箱即用的功能。本地 markdown 是一等选项，而不是备选方案：没有远程仓库的独立项目得到完全支持。一个值得重复的注意事项：如果你使用 GitHub，就不要使用本地 markdown。它们是替代方案，而不是分层。
 
-"Other" is not a stub either. It is the reason Jira, Linear, Azure DevOps and Beads all work: you describe the workflow, the skill records your prose in `docs/agents/issue-tracker.md`, and the downstream skills follow the prose. The community has already done this — a Jira-over-[MCP](https://www.aihero.dev/ai-coding-dictionary/mcp) variant, a Gitea CLI shaped like `gh`, a hand-built local dashboard.
+"Other" 也不是一个占位符。这是 Jira、Linear、Azure DevOps 和 Beads 都能工作的原因：你描述工作流程，技能将你的文字记录在 `docs/agents/issue-tracker.md` 中，下游技能遵循这些文字。社区已经这样做了——一个基于 [MCP](https://www.aihero.dev/ai-coding-dictionary/mcp) 的 Jira 变体，一个形状像 `gh` 的 Gitea CLI，一个手工构建的本地仪表板。
 
-## Common questions
+## 常见问题
 
-**Do I have to use GitHub?**
+**我必须使用 GitHub 吗？**
 
-No. GitHub, GitLab and local markdown under `.scratch/` all ship as ready-made templates, and anything else works through the "other" path. This is the most-repeated question in the record, in roughly these words: *"hard locked to github"*, *"can I use GitLab / Jira"*, *"what about Azure DevOps"*. The answer every time is that the tracker is a setup answer, not a skill property.
+不。GitHub、GitLab 和 `.scratch/` 下的本地 markdown 都作为现成的模板附带，其他任何内容都通过“其他”路径工作。这是记录中重复最多的问题，大致用这些话表达：“*硬锁定到 GitHub*”、“*我可以使用 GitLab / Jira 吗*”、“*那 Azure DevOps 呢*”。每次的答案都是：tracker 是一个设置答案，而不是技能属性。
 
-**Do I need to re-run it after updating the skills?**
+**更新技能后，我需要重新运行它吗？**
 
-Asked directly after v1.1, Matt said yes. The skill's own closing message is softer — it tells you re-running is only needed to switch trackers or start over. Both are defensible and the reason for the gap is real: the seed templates change between versions, so a `docs/agents/issue-tracker.md` written by an older release can go stale against the skills now reading it. If a downstream skill starts doing something the docs describe differently, re-running is the cheap fix.
+它写入到了 `CLAUDE.md`，但我使用的是 Codex。
 
-**It wrote to `CLAUDE.md`, but I'm on Codex.**
+**它写入了 \`CLAUDE.md\`，但我使用的是 Codex。 `CLAUDE.md`但我使用的是 Codex。**
 
-Known gap, still open. The file-selection rule is "edit `CLAUDE.md` if it exists, else `AGENTS.md`" — it checks which file exists, not which [harness](https://www.aihero.dev/ai-coding-dictionary/harness) is running. A repo with a `CLAUDE.md` left over from Claude Code will get its `## Agent skills` block somewhere Codex never reads. Two workarounds are in circulation: move the block to `AGENTS.md` by hand, or keep `AGENTS.md` canonical and make `CLAUDE.md` a one-line pointer at it. If neither file exists, the skill asks you which to create rather than picking, which has confused people who expected it to just decide.
+已知缺口，仍在处理中。文件选择规则是“如果存在则编辑 `CLAUDE.md`，否则编辑 `AGENTS.md`”——它检查哪个文件存在，而不是检查哪个 [harness](https://www.aihero.dev/ai-coding-dictionary/harness) 正在运行。带有来自 Claude Code 的 `CLAUDE.md` 的仓库会在 Codex 从不读取的某个地方获得其 `## Agent skills` 块。两种变通方法正在流通：手动将块移动到 `AGENTS.md`，或者保持 `AGENTS.md` 的权威性，并使 `CLAUDE.md` 成为其的一行指针。如果两个文件都不存在，技能会询问你创建哪个而不是选择，这让期望它只是决定的人感到困惑。
 
-**It didn't create my triage labels.**
+**它没有创建我的优先级标签。**
 
-It doesn't. `docs/agents/triage-labels.md` is a *mapping* — it tells `/triage` which strings in your tracker correspond to the five canonical roles. It does not run `gh label create`. On a fresh GitHub repo the labels genuinely do not exist yet, and this has been filed as a bug more than once. Two follow-ons:
+它不会。`docs/agents/triage-labels.md` 是一个 *映射*——它告诉 `/triage` 你的 tracker 中的哪些字符串对应五个标准角色。它不会运行 `gh label create`。在一个全新的 GitHub 仓库中，标签确实还不存在，这已经被多次作为错误提交。两个后续事项：
 
-- If your tracker already uses the canonical names, the mapping is an identity table and there is nothing to configure. That is the intended common case, not a missing step.
-- [wayfinder](https://aihero.dev/skills-wayfinder)'s `wayfinder:map` and `wayfinder:<type>` labels are not created here either, and `gh issue create --label <missing>` fails outright rather than creating the label. Create them by hand before the first wayfinder run on a GitHub repo.
+* 如果你的 tracker 已经使用了标准名称，映射就是一个恒等表，不需要配置。这是预期的常见情况，而不是缺失的步骤。
+* [wayfinder](https://aihero.dev/skills-wayfinder) 的 `wayfinder:map` 和 `wayfinder:<type>` 标签也不会在这里创建，并且 `gh issue create --label <missing>` 会直接失败而不是创建标签。在 GitHub 仓库上的第一次 wayfinder 运行之前，请手动创建它们。
 
-**Can I configure the other skills' behaviour here — [grilling](https://www.aihero.dev/ai-coding-dictionary/grilling) cadence, question format, tone?**
+**我能否在这里配置其他技能的行为 —— \[grill-me]\(...) 频率、问题格式、语调？ [grill-me](https://www.aihero.dev/ai-coding-dictionary/grilling)频率、问题格式、语调？**
 
-No. It configures three things: tracker, labels, doc layout. There have been direct requests to make it the home for per-user preferences, and the standing answer is that skills stay opinionated: *"Config is death."* Preferences belong in your `CLAUDE.md` as plain instructions, which every skill already reads.
+我能否在这里配置其他技能的行为 —— \[grilling] 的频率、问题格式、语调？
 
-**Can I keep the config in `~/.claude` instead of committing it to every repo?**
+**我可以将配置保存在 \~/.claude 中，而不是提交到每个仓库吗？ `~/.claude`而不是提交到每个仓库吗？**
 
-Not today. There is an open request for exactly this from someone running the skills across many repos, and no user-level mode exists. Every repo carries its own `docs/agents/`.
+我可以将配置保存在 `~/.claude` 中，而不是提交到每个仓库吗？
 
-**Isn't it strange to have a skill that configures the other skills?**
+**有一个配置其他技能的技能，这难道不奇怪吗？**
 
-One long-standing complaint says yes, in these words: *"having a skill to set up the other skill does not feel right to me — that means the LLM is configuring its own skills."* The trade is real and acknowledged: the alternative to a setup step is duplicating tracker instructions into every skill that touches issues. The output is inspectable, editable markdown, which is the mitigation — you can read every file it wrote and change it by hand, and day-to-day tweaks are exactly that, not another run.
+一个长期存在的抱怨说是的，措辞如下：“*对我来说，有一个设置其他技能的技能感觉不对——这意味着 LLM 正在配置它自己的技能。*”这种权衡是真实且被承认的：设置步骤的替代方案是将 tracker 指令复制到每个接触问题的技能中。输出是可检查、可编辑的 markdown，这是缓解措施——你可以阅读它写的每个文件并手动更改它，日常调整正是如此，而不是另一次运行。
 
-## It's working if
+## 判断是否生效
 
-- `docs/agents/issue-tracker.md` and `docs/agents/domain.md` exist, plus `triage-labels.md` if `triage` is installed.
-- An `## Agent skills` section appears in the instruction file your harness actually reads, with a one-line summary pointing at each of those files.
-- The tracker it proposed matches the remote you really use, and the label strings match labels that really exist in your tracker.
-- Afterwards, `/to-tickets` publishes without asking you where issues live, and `/triage` applies labels rather than inventing them.
-- Nothing in the skill files themselves changed. If setup edited a `SKILL.md`, something went wrong.
+* `docs/agents/issue-tracker.md` 和 `docs/agents/domain.md` 存在，此外如果已安装 `triage`，还会有 `triage-labels.md`。
+* 在你实际使用的框架指令文件中会出现一个 `## Agent skills` 部分，其中包含一行摘要，指向这些文件中的每一个。
+* 它建议的 tracker 与你实际使用的远程仓库匹配，且标签字符串与你 tracker 中实际存在的标签相匹配。
+* 之后，`/to-tickets` 会发布而不询问问题存放在哪里，而 `/triage` 会应用标签而不是生成标签。
+* skill 文件本身没有任何更改。如果 setup 编辑了 `SKILL.md`，说明出错了。
 
-## Where it fits
+## 在系统中的位置
 
-`setup-matt-pocock-skills` is the **run-once setup** for the engineering flow, the precondition everything else assumes rather than a step in the chain. Its neighbours are its readers: [triage](https://aihero.dev/skills-triage), which applies the label vocabulary written here; [to-spec](https://aihero.dev/skills-to-spec) and [to-tickets](https://aihero.dev/skills-to-tickets), which publish into the tracker named here; and [wayfinder](https://aihero.dev/skills-wayfinder), which reads the "Wayfinding operations" section of the same tracker file to know how maps and child [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket) are stored. The domain-doc layout it records is the one [domain-modeling](https://aihero.dev/skills-domain-modeling) fills in later — it creates `CONTEXT.md` and ADRs lazily, when a term or decision actually gets resolved, so an empty repo after setup is the expected state. For which skill to reach for next, [ask-matt](https://aihero.dev/skills-ask-matt) routes the whole set.
+`setup-matt-pocock-skills` 是工程流程的 **run-once setup**，它是其他操作的前提条件，而非流程链中的一个步骤。它的邻居即是它的读取者：[triage](https://aihero.dev/skills-triage)，它应用此处定义的标签词汇；[to-spec](https://aihero.dev/skills-to-spec) 和 [to-tickets](https://aihero.dev/skills-to-tickets)，它们发布到此处命名的 tracker 中；以及 [wayfinder](https://aihero.dev/skills-wayfinder)，它读取同一个 tracker 文件的“Wayfinding operations”部分，以了解地图和子 [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket) 是如何存储的。它记录的 domain-doc 布局是 [domain-modeling](https://aihero.dev/skills-domain-modeling) 稍后填充的内容——它会在术语或决策实际解决时才惰性地创建 `CONTEXT.md` 和 ADRs，因此 setup 后仓库为空是预期状态。至于下一个应该使用哪个 skill，[ask-matt](https://aihero.dev/skills-ask-matt) 会负责路由整个集合。

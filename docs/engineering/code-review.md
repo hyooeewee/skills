@@ -1,94 +1,100 @@
-## What it does
+## 功能说明
 
-`code-review` reviews the diff between `HEAD` and a fixed point you name — a commit, a branch, a tag, `main`, `HEAD~5` — along two axes. **Standards** asks whether the code follows how this repo writes code. **Spec** asks whether the code does what the originating issue or [spec](https://www.aihero.dev/ai-coding-dictionary/spec) asked for. Each axis runs in its own [sub-agent](https://www.aihero.dev/ai-coding-dictionary/subagent) so neither sees the other's reasoning.
+`code-review` 会审查 `HEAD` 与你指定的固定点之间的差异——一个提交、一个分支、一个标签、`main`、`HEAD~5`——沿着两个维度进行。**标准** 询问代码是否遵循了本仓库的编写规范。**规格** 询问代码是否执行了原始问题或 [规范](https://www.aihero.dev/ai-coding-dictionary/spec) 所要求的操作。每个维度都在其自己的 [子代理](https://www.aihero.dev/ai-coding-dictionary/subagent) 中运行，因此彼此看不到对方的推理过程。
 
-The two axes are never merged and never re-ranked. The report ends with a worst issue *per axis* and refuses to name a single winner across them, because a change can pass one axis and fail the other: code that follows every convention while implementing the wrong thing passes Standards and fails Spec; code that does exactly what the [ticket](https://www.aihero.dev/ai-coding-dictionary/ticket) asked while breaking the repo's conventions does the reverse. A blended verdict lets the passing axis hide the failing one.
+这两个维度从不合并，也从不重新排序。报告以每个维度最严重的问题结束，并拒绝在整个过程中指定唯一的获胜者，因为一个变更可能在一个维度上通过，而在另一个维度上失败：代码在实现错误的东西时遵循了所有约定，通过标准审查但未能通过规格审查；代码在破坏仓库约定的情况下正好完成了 [工单](https://www.aihero.dev/ai-coding-dictionary/ticket) 要求的任务，则反之。混合裁决让通过的那个维度掩盖了失败的那个维度。
 
-## When to reach for it
+## 何时使用
 
-Type `/code-review`, or the agent reaches for it automatically when you ask to review a branch, a PR, work in progress, or anything "since X".
+键入 "/code-review"\` or the agent reaches for it automatically when you ask to review a branch, a PR, work in progress, or anything "since X".
 
-| Your situation | Reach for |
-| --- | --- |
-| A diff exists and you want to know if it is built right *and* is the right thing | `code-review` |
-| You want bugs hunted in the diff — null paths, races, off-by-one | Claude Code's own built-in review, not this one (see the name clash below) |
-| Nothing is written yet and you want it written test-first | [tdd](https://aihero.dev/skills-tdd) |
-| A whole spec needs building, review included | [implement](https://aihero.dev/skills-implement), which calls this skill itself |
-| The whole codebase has drifted, not one diff | [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) |
-| Something is broken and you do not know why | [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs) |
+| 你的情况                                       | 使用                                                                 |
+| ------------------------------------------ | ------------------------------------------------------------------ |
+| 差异已存在，你想知道它构建是否正确 *和&#x20;*&#x5E76;且是正确的事情 | `code-review`                                                      |
+| 你想在差异中查找 bug —— 空指针路径、竞态条件、越界错误            | Claude Code 自带的功能审查，不是这个（见下方的命名冲突）                                 |
+| 尚未编写任何内容，且你想先编写测试                          | [tdd](https://aihero.dev/skills-tdd)                               |
+| 需要构建完整的规范，包括审查                             | [implement](https://aihero.dev/skills-implement)，它本身会调用此技能         |
+| 整个代码库已漂移，没有单个差异                            | [改进代码库架构](https://aihero.dev/skills-improve-codebase-architecture) |
+| 某些东西坏了，且你不知道原因                             | [诊断 bug](https://aihero.dev/skills-diagnosing-bugs)                |
 
-You must supply the fixed point. If you do not, the skill asks for one rather than guessing; it then checks the ref resolves and the diff is non-empty before spawning anything, so a typo'd branch name fails in front of you instead of inside two sub-agents.
+你必须提供固定点。如果你不提供，技能会询问你而不是进行猜测；它随后会检查引用是否解析以及差异是否为空，然后再启动任何操作，因此拼写错误的分支名称会在你面前失败，而不是在两个子代理内部失败。
 
-## Prerequisites
+## 前置条件
 
-The Standards axis needs nothing. It reads whatever the repo documents (`CODING_STANDARDS.md`, `CONTRIBUTING.md`, and the like) and falls back on a built-in baseline when the repo documents nothing.
+标准维度不需要任何东西。它会读取仓库文档中的任何内容（`CODING_STANDARDS.md`、`CONTRIBUTING.md` 等），并在仓库没有文档时回退到内置基准。
 
-The Spec axis needs a spec to exist and be findable. It looks in this order:
+规格维度需要一个规范存在且可被找到。它按以下顺序查找：
 
-1. Issue references in the commit messages (`#123`, `Closes #45`, a GitLab `!67`), fetched through `docs/agents/issue-tracker.md`.
-2. A path you pass in as an argument.
-3. A spec file under `docs/`, `specs/`, or `.scratch/` matching the branch or feature name.
-4. Asking you.
+1. 提交消息中的工单引用（`#123`、`Closes #45`、GitLab 的 `!67`），通过 `docs/agents/issue-tracker.md` 获取。
+2. 你作为参数传递的路径。
+3. 位于 `docs/`、`specs/` 或 `.scratch/` 下，与分支或功能名称匹配的规范文件。
+4. 询问你。
 
-Step 1 depends on `docs/agents/issue-tracker.md`, which [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) writes. Without it the axis still works if you hand it a path. With no spec at all, the Spec sub-agent is skipped and the report says "no spec available" rather than inventing requirements.
+第一步依赖于 `docs/agents/issue-tracker.md`，该文件由 [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) 编写。如果没有它，如果你手动提供路径，该维度仍然可以工作。如果没有规范，将跳过规范子代理，报告会说“没有可用的规范”，而不是编造需求。
 
-## The two axes
+## 两个维度
 
-| | Standards | Spec |
-| --- | --- | --- |
-| Question | Is it built right? | Is it the right thing? |
-| Reads | The repo's documented standards, plus the smell baseline | The originating issue or spec |
-| Reports | Documented breaches (can be hard), and smells (always judgement calls) | Missing or partial requirements, scope creep, requirements implemented wrongly |
-| Every finding cites | The standards file and the rule, or the named smell plus the hunk | The line of the spec |
+|         | 标准                          | 规格                  |
+| ------- | --------------------------- | ------------------- |
+| 问题      | 构建是否正确？                     | 是正确的事情吗？            |
+| 读取      | 仓库记录的规范，加上气味基准              | 原始问题或规范             |
+| 报告      | 记录的违规情况（可能很难），以及气味（总是判断性决策） | 缺失或部分需求，范围蔓延，需求实现错误 |
+| 每个发现都引用 | 规范文件和规则，或命名的气味加上代码块         | 规范的那一行              |
 
-A generic review skill that does not know your standards is the thing this design is trying to avoid — it flags what is deliberate in your codebase and misses the invariants your codebase actually depends on. So the repo's own documentation is the [primary source](https://www.aihero.dev/ai-coding-dictionary/primary-source) on the Standards axis, and **the repo always overrides**.
+一个不了解你规范的通用审查技能正是这种设计试图避免的——它标记了代码库中有意为之的部分，却遗漏了代码库实际依赖的不变量。因此，仓库自己的文档是标准维度上的[主要来源](https://www.aihero.dev/ai-coding-dictionary/primary-source)，并且**仓库总是覆盖**。
 
-The **smell baseline** is the floor underneath it: twelve Fowler code smells from _Refactoring_ ch.3 — Mysterious Name, Duplicated Code, Feature Envy, Data Clumps, Primitive Obsession, Repeated Switches, Shotgun Surgery, Divergent Change, Speculative Generality, Message Chains, Middle Man, Refused Bequest. Each is a labelled heuristic ("possible Feature Envy"), never a hard violation, and each is stated as *what it is* → *how to fix*, so a finding arrives with a move attached rather than a complaint. Anything your linter already enforces is skipped by both axes.
+**气味基准** 是其下的基础：来自《重构》第 3 章的 12 种 Fowler 代码气味——神秘名称、重复代码、特征依恋、数据团、原始痴迷、重复的 Switch 语句、 shotgun 手术、发散变化、推测一般性、消息链、中间人、拒绝继承。每个都是带标签的启发式规则（“可能的特征依恋”），从来不是硬性违规，并且每个都表述为*它是什么* → *如何修复*，因此发现结果会附带一个解决方案，而不是抱怨。你使用的 Linter 已经强制执行的任何内容都会被两个维度跳过。
 
-## Common questions
+## 常见问题
 
-**It collides with Claude Code's own `/code-review`. What do I do?**
+**它
+\`\`\`T004
+与 Claude Code 自带的 \`/code-review\` 冲突。我该怎么做？ `/code-review`我该怎么做？**
 
-This is the most reported problem with the skill, and it is not fixed. Claude Code ships its own `/code-review`, which does something different — it hunts bugs in the diff, where this one checks spec compliance and repo standards. Installing this library means one of them wins, and which one wins depends on how you installed. Via the plugin marketplace, everything is aliased under a `mattpocock-skills:` prefix and the built-in becomes hard to reach at the unqualified name; via a plain skills install, the local file wins and this skill shadows the built-in. One clean answer is to remove Claude Code's built-in skills entirely: a large [context](https://www.aihero.dev/ai-coding-dictionary/context) saving, and the collision stops mattering. The shadowing itself is arguably a Claude Code [harness](https://www.aihero.dev/ai-coding-dictionary/harness) bug — a skill author should be free to name a skill anything — so the other answer is to rename the local copy. Editing the frontmatter or renaming the directory gets undone by `npx skills update`; the durable workaround reported by users is to fork the skill to a new name and drop `code-review` from the managed set, keeping a note of the commit you forked from so you can re-sync by hand.
+这是该技能报告最多的一个问题，且尚未修复。Claude Code 自带了 `/code-review`，它的功能不同——它在差异中查找 bug，而这个技能检查的是规范合规性和仓库规范。安装这个库意味着其中之一会胜出，而哪个胜出取决于你如何安装。通过插件市场，所有内容都在 `mattpocock-skills:` 前缀下进行别名处理，内置版本在未限定名称时很难访问；通过普通的技能安装，本地文件胜出，而这个技能会覆盖内置版本。一个干净的解决方案是完全删除 Claude Code 的内置技能：这能节省大量[上下文](https://www.aihero.dev/ai-coding-dictionary/context)，且冲突不再重要。这种覆盖本身可以说是一个 Claude Code [框架](https://www.aihero.dev/ai-coding-dictionary/harness) 的 bug——技能作者应该可以自由地将技能命名为任何东西——所以另一个答案是重命名本地副本。编辑前置信息或重命名目录会被 `npx skills update` 撤销；用户报告的持久性变通方法是 fork 这个技能到一个新名称，并从受管理的集合中移除 `code-review`，保留你 fork 的提交记录，以便你可以手动重新同步。
 
-**Its sub-agents keep invoking `/code-review` again and spawn more agents.**
+**它的子代理不断调用
+\`\`\`T007
+&#x20;\`/code-review\`
+\`\`\`T007
+&#x20;并生成更多代理。 `/code-review`并生成更多代理。**
 
-Known open bug, reproduced by several people and in more than one harness. The Standards and Spec prompts do not forbid delegation, so a sub-agent can rediscover the skill and fan out again — one report reached 50-plus agents. The fix people have applied on forks is one line appended to both sub-agent briefs: "Do not invoke `/code-review` or spawn additional agents — perform this review directly." Some prefer to handle it at the harness level so every skill inherits the guard. Neither is in the shipped skill yet. If you run this unattended, watch the agent count.
+已知是一个开放的 bug，被多个人在不同框架中复现。标准和规格提示并未禁止委托，因此子代理可以重新发现该技能并再次扩散——一份报告显示涉及的代理超过 50 个。人们在 fork 版本上应用的修复方法是在两个子代理的简报中各添加一行：“不要调用 `/code-review` 或生成额外的代理——直接执行此审查。”有些人更喜欢在框架层面处理，以便每个技能都继承该防护。目前尚未包含在已发布的技能中。如果你在无人值守的情况下运行，请留意代理的数量。
 
-**Should I run it in the same [session](https://www.aihero.dev/ai-coding-dictionary/session) that wrote the code?**
+**&#x20;[会话](https://www.aihero.dev/ai-coding-dictionary/session)编写代码的会话吗？**
 
-Prefer a fresh one. As one reader put it: "Same context reviewing itself isn't review, it's confirmation bias with a slash command." The reviewing agent in the authoring session holds every assumption that shaped the code, which is exactly the context an independent reviewer would not have. This is also why people ask for [implement](https://aihero.dev/skills-implement) without its built-in review step — it runs the review inside the session that just wrote the diff. Invoking `/code-review` yourself from a clean session is the honest version.
+最好使用一个新的会话。正如一位读者所说：“同样的上下文审查自己不是审查，而是带有斜杠命令的确认偏见。”编写会话中的审查代理持有塑造代码的所有假设，这正是独立审查者所不具备的上下文。这也是人们要求使用不带内置审查步骤的 [implement](https://aihero.dev/skills-implement) 的原因——它会在刚刚编写差异的会话中运行审查。从干净的会话中自己调用 `/code-review` 是更诚实的版本。
 
-**After every ticket, or once at the end?**
+**每个工单之后，还是最后一次性？**
 
-Both work, and the skill does not decide for you. Per-ticket keeps each diff small enough that the Spec axis has one clear spec to check against, which is the mode `implement` uses. Batching to the end of a branch catches interactions between tickets that the per-ticket passes each miss. If you are unsure, review per ticket and run one final pass against the branch point.
+两种方式都有效，技能不会替你决定。每个工单的审查保持每个差异足够小，以便规格轴有一个清晰的规范可供检查，这是 `implement` 模式使用的。批量到分支末尾可以捕获每个工单审查遗漏的工单之间的交互。如果你不确定，按工单审查，然后针对分支点运行一次最终检查。
 
-**Can I trust the findings?**
+**我可以信任这些发现吗？**
 
-Not without checking. Sub-agent output is a hypothesis, not evidence — one team reported a dozen breaking changes that prose-based reviews had waved through. The skill aggregates the two reports verbatim or lightly cleaned rather than re-verifying each claim against the files, so a finding can cite the wrong location or overstate an impact. Read the citation on each finding before acting on it. That every finding is required to carry one — a standards rule, a smell plus its hunk, or a spec line — is what makes this checkable at all.
+除非进行检查，否则不能信任。子代理的输出是一个假设，而不是证据——一个团队报告了十几个被基于文本的审查放过的破坏性变更。该技能将两个报告逐字或轻度清理后汇总，而不是重新验证每个主张与文件，因此一个发现可能会引用错误的位置或夸大影响。在采取行动之前，请阅读每个发现中的引用。每个发现都必须携带一个引用——一条标准规则、一种气味及其代码块或规范行——这就是为什么这可以检查的原因。
 
-**Why does it find new problems every single time I run it?**
+**为什么每次运行它都会发现新问题？**
 
-Because fixes create new surface, and because the judgement-call half of the Standards axis is not deterministic between runs. One reader described the loop plainly: "/code-review and /improve-code-architecture always find new stuff every time. I implement fixes, rerun these skills, and again and again." There is no convergence guarantee. Treat a pass as a list of leads, act on the ones with a cited rule behind them, and stop — do not run it in a loop until it comes back clean, because it will not.
+由于修复会创造新的表面，而且 Standards 轴的判断性一半在运行之间不是确定性的。一位读者直白地描述了这个循环：“/code-review 和 /improve-code-architecture 总是每次都能发现新东西。我实施修复，重新运行这些技能，然后一次又一次。”没有收敛保证。将一次通过视为一个线索列表，对那些背后有引用规则的问题采取行动，然后停止——不要在它变干净之前在循环中运行它，因为它不会。
 
-**Does it review my uncommitted work?**
+**\*\*它会审查我的未提交工作吗？\*\***
 
-No. It diffs `<fixed-point>...HEAD`, three-dot, which is measured from the merge-base and excludes staged and working-tree changes. If `implement` has not made an interim commit, the work about to be committed is invisible to the review. Commit first, then review, then amend or add a fixup.
+不会。它比较 `<fixed-point>...HEAD`（三点语法），这是从合并基点开始测量的，排除了暂存区和工作树的变化。如果 `implement` 没有进行中间提交，即将提交的工作对审查来说是不可见的。先提交，再审查，然后修改提交或添加 fixup。
 
-## It's working if
+## 判断是否生效
 
-- It refuses to start on a bad ref or an empty diff, before any sub-agent is spawned.
-- The report arrives as two separate blocks under `## Standards` and `## Spec`, not one merged list.
-- Every Standards finding names either a rule in one of your repo's files or one of the twelve smells, with the hunk quoted; every Spec finding quotes a line of the spec.
-- The closing summary gives a worst issue per axis and declines to pick an overall winner.
-- With no spec available, the Spec block says so instead of listing requirements it inferred from the code.
+* 在生成任何子代理之前，它会拒绝在坏的引用或空差异上启动。
+* 报告以 `## Standards` 和 `## Spec` 下的两个独立块的形式出现，而不是一个合并的列表。
+* 每个 Standards 发现都命名了一个规则（在您的仓库文件之一中）或十二种异味之一，并引用了代码块；每个 Spec 发现都引用了规范中的一行。
+* 最终总结给出了每个轴上的最差问题，并拒绝选择一个整体赢家。
+* 如果没有规范可用，Spec 块会说明这一点，而不是列出它从代码中推断出的要求。
 
-## Where it fits
+## 在系统中的位置
 
-`code-review` is the review step at the tail of the build chain — `grill-with-docs → to-spec → to-tickets → implement → code-review` — and also stands alone on any branch or PR you point it at.
+`code-review` 是构建链末尾的审查步骤 —— `grill-with-docs → to-spec → to-tickets → implement → code-review` —— 并且也可以在任何您指向的分支或 PR 上独立运行。
 
-- [implement](https://aihero.dev/skills-implement) is the closest neighbour: it drives the build and calls this skill as its own closing review before committing.
-- [to-spec](https://aihero.dev/skills-to-spec) and [to-tickets](https://aihero.dev/skills-to-tickets) produce the document the Spec axis checks against; a vague spec makes that axis vague.
-- [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) is the whole-codebase counterpart — this skill only ever looks at one diff.
+* [implement](https://aihero.dev/skills-implement) 是最近的邻居：它驱动构建，并在提交前调用此技能作为自己的最终审查。
+* [to-spec](https://aihero.dev/skills-to-spec) 和 [to-tickets](https://aihero.dev/skills-to-tickets) 生成规范轴检查的文档；一个模糊的规范会让那个轴变得模糊。
+* [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) 是整个代码库的对应技能 —— 此技能只看一个差异。
 
-[ask-matt](https://aihero.dev/skills-ask-matt) routes across the whole set when you are unsure which skill the situation wants.
+当您不确定情况需要哪个技能时，[ask-matt](https://aihero.dev/skills-ask-matt) 会遍历整个技能集。

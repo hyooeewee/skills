@@ -1,3 +1,3 @@
-# Deprecated
+# 已弃用
 
-Skills I no longer use. This bucket is currently empty — a retired skill is deleted, and the changeset that removes it names whatever replaced it.
+我不再使用的技能。此分类目前为空——一项被弃用的技能会被删除，而删除它的变更集会注明取而代之的是何种技能。

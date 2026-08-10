@@ -1,67 +1,67 @@
-# Logic Prototype
+# 逻辑原型
 
-A single, self-contained HTML file — a **shareable demo** — that lets anyone drive a state model by clicking buttons. Use this when the question is about **business logic, state transitions, or data shape** — the kind of thing that looks reasonable on paper but only feels wrong once you push it through real cases.
+一个独立的 HTML 文件——一个**可分享的演示**——它允许任何人通过点击按钮来驱动一个状态模型。当问题涉及**业务逻辑、状态转换或数据形状**时使用这个——那种在纸上看起来合理，但一旦通过真实案例推演就会感觉很不对劲的东西。
 
-Because it's one file with nothing to install, you can hand it to a non-developer — a designer, a PM, a domain expert — and let them feel the model for themselves. So it speaks their language, not the code's.
+因为它是一个单文件且无需安装，你可以把它交给非开发者——设计师、产品经理或领域专家——让他们自己去感受模型。所以它说的是他们的语言，而不是代码的语言。
 
-## When this is the right shape
+## 何时采用此形态
 
-- "I'm not sure if this state machine handles the edge case where X then Y."
-- "Does this data model actually let me represent the case where..."
-- "I want to feel out what the API should look like before writing it."
-- Anything where someone wants to **press buttons and watch state change**.
+* 我不确定这个状态机是否处理了 X 然后 Y 的边缘情况。
+* 这个数据模型实际上是否允许我表示这种情况……
+* 我想在编写之前摸索一下 API 应该长什么样。
+* 任何有人想**点击按钮并观察状态变化**的地方。
 
-If the question is "what should this look like" — wrong branch. Use [UI.md](UI.md).
+如果问题是“这应该长什么样”——那就选错分支了。使用 [UI.md](UI.md)。
 
-## Process
+## 流程
 
-### 1. State the question
+### 1. 陈述问题
 
-Before writing code, write down what state model and what question you're prototyping. One paragraph, at the top of the demo (in a visible intro, not just a comment). A logic prototype that answers the wrong question is pure waste — make the question explicit so it can be checked later, whether the user is watching now or returning to it AFK.
+在编写代码之前，写下你要原型化的状态模型和问题。一段话，放在演示的顶部（在可见的介绍中，而不仅仅是一个注释）。一个回答了错误问题的逻辑原型纯粹是浪费——明确问题，以便稍后检查，无论用户现在是否在看，或者稍后回来。
 
-### 2. Isolate the logic in a portable module
+### 2. 将逻辑隔离在可移植的模块中
 
-Put the actual logic — the bit that's answering the question — in a single `<script>` block written as a small, pure module that could be lifted out and dropped into the real codebase later. The page around it is throwaway; this module isn't.
+将实际的逻辑——那个回答问题的部分——放在一个单独的 `<script>` 块中，写成一个小的、纯模块，以便稍后可以提取出来并放入真正的代码库。周围的页面是可以丢弃的；这个模块不是。
 
-The right shape depends on the question:
+正确的形态取决于问题：
 
-- **A pure reducer** — `(state, action) => state`. Good when actions are discrete events and state is a single value.
-- **A state machine** — explicit states and transitions. Good when "which actions are even legal right now" is part of the question.
-- **A small set of pure functions** over a plain data type. Good when there's no implicit current state — just transformations.
-- **A class or module with a clear method surface** when the logic genuinely owns ongoing internal state.
+* **一个纯 reducer**——`(state, action) => state`。当动作是离散事件且状态是单一值时很好用。
+* **一个状态机**——明确的状态和转换。当“此刻哪些动作是合法的”是问题的一部分时很好用。
+* **一组纯函数**，作用于普通数据类型。当没有隐含的当前状态——只有转换时很好用。
+* **一个具有清晰方法接口的类或模块**，当逻辑真正拥有持续存在的内部状态时。
 
-Pick whichever shape best fits the question being asked, *not* whichever is easiest to wire to a page. Keep it pure: no DOM, no `document`, no button handlers reaching inside it. The page calls into it; nothing flows the other direction. This is what makes the prototype useful past its own lifetime: once the question's answered, the validated reducer / machine / function set lifts into the real module on its own.
+选择最适合所问问题的形状，而不是最容易连接到页面的那个形状。保持纯粹：没有 DOM，没有 `document`，没有按钮处理程序深入到里面。页面调用它；没有东西从另一方向流过来。这就是原型在其自身生命周期之外仍有用的原因：一旦问题得到回答，经过验证的 reducer / 机器 / 函数集就会自动提升到真正的模块中。
 
-### 3. Build the shareable HTML file
+### 3. 构建可分享的 HTML 文件
 
-One file, plain HTML/CSS/JS — no framework, no bundler, no server, everything inline so it opens by double-click and survives being emailed around. Anyone should be able to run it by opening it.
+一个文件，纯 HTML/CSS/JS——没有框架，没有打包器，没有服务器，所有内容内联，以便双击打开并通过邮件发送而存活。任何人应该都能通过打开它来运行它。
 
-Write it for a non-developer. Every label is in **domain language**, not code — buttons and state read like the business, not the reducer. Explain in plain words what's happening.
+为非开发者编写。每个标签都在**领域语言**中，而不是代码——按钮和状态读起来像业务，而不是 reducer。用通俗的语言解释正在发生什么。
 
-Lay it out with a clean hierarchy, top to bottom:
+按照清晰的层级自上而下地布局：
 
-1. **Title and one-line explanation** of what this demo lets you explore (the question from step 1).
-2. **Current state** — the full relevant state, rendered as a readable panel (labelled fields, not a raw JSON dump), re-rendered after every click so the change is visible. Where it helps a non-developer follow, call out what just changed.
-3. **Free-play buttons** — one button per action, always available, so anyone can poke at the model in any order. Each click dispatches its action and re-renders the state.
-4. **Guided walkthroughs** — a set of **scenarios**, one per tab. Each tab holds a short plain-language description of the scenario — the situation it sets up and what to watch for — and underneath it, the ordered **buttons to press** for that scenario. Each step is a real button: clicking it performs that action and moves to the next step. Starting a walkthrough resets to a known initial state so the scenario runs the same way every time.
+1. 此演示允许你探索的内容（步骤 1 中的问题）的**标题和一行解释**。
+2. **当前状态**——完整的、相关的状态，渲染为可读的面板（标注了字段，而非原始的 JSON 转储），每次点击后重新渲染，以便看到变化。在有助于非开发者理解的地方，指出刚刚发生了什么变化。
+3. **自由操作按钮**——每个动作一个按钮，始终可用，以便任何人都可以按任意顺序试探模型。每次点击都会触发其动作并重新渲染状态。
+4. **引导式演练**——一组**场景**，每个选项卡一个。每个选项卡包含场景的简短通俗描述——它设置的情况以及需要注意什么——在其下方是按顺序排列的该场景的**要按下的按钮**。每个步骤都是一个实按钮：点击它执行该动作并进入下一步。开始演练会重置为已知的初始状态，以便每次运行场景的方式都相同。
 
-Choose scenarios that demonstrate the awkward cases — the happy path, a tricky edge case, an attempt at something that should be illegal — the ones hard to reason about on paper.
+选择能展示棘手情况的场景——常规路径、棘手的边缘情况、尝试做本应非法的事情——那些在纸上难以推理的情况。
 
-Keep it beautiful but restrained: clean typography, generous spacing, one accent colour. No animations, no gimmicks — nothing that competes with the state and the buttons.
+保持美观但克制：干净的排版，充足的间距，一种强调色。没有动画，没有噱头——没有任何与状态和按钮争夺注意力的东西。
 
-### 4. Hand it over
+### 4. 交付 / 交给他们
 
-Send them the file, or open it for them. They'll click through the walkthroughs and free-play whenever they get to it; the interesting moments are when they say "wait, that shouldn't be possible" or "huh, I assumed X would be different" — those are the bugs in the _idea_, which is the whole point. If they want new actions or a new scenario, add them. Prototypes evolve.
+把文件发给他们，或者帮他们打开。他们会在有空的时候点击演练和自由操作；有趣的时刻是他们说“等等，那不应该可能”或者“嗯，我假设 X 会不同”——那些是*想法*中的 bug，这就是全部要点。如果他们想要新的动作或场景，就添加它们。原型会不断演进。
 
-### 5. Capture the answer and the prototype
+### 5. 捕获答案和原型
 
-Once the prototype has answered its question, capture the answer, then capture the prototype the way the [SKILL](SKILL.md) describes. The logic-specific mapping: the validated reducer / machine / function set lifts into the real module (the decision, absorbed); the HTML shell rides along to the throwaway branch that keeps the prototype as a primary source — and being one self-contained file, it stays trivially re-runnable there.
+一旦原型回答了它的问题，捕获答案，然后按照 [SKILL](SKILL.md) 描述的方式捕获原型。逻辑特定的映射：经过验证的 reducer / 机器 / 函数集提升到真正的模块（决策，被吸收）；HTML 外壳随之进入保留原型作为主要来源的丢弃分支——而且作为一个自包含文件，它在那里保持可重新运行。
 
-## Anti-patterns
+## 反模式
 
-- **Don't add tests.** A prototype that needs tests is no longer a prototype.
-- **Don't wire it to the real database.** Use in-memory state unless the question is specifically about persistence.
-- **Don't generalise.** No "what if we wanted to support X later." The prototype answers one question.
-- **Don't blur the logic and the page together.** If the pure module references the DOM, `document`, or button handlers, it's no longer liftable. Keep the page as a thin shell over a pure module.
-- **Don't reach for a framework, bundler, or server.** One file the recipient double-clicks; a React app or a dev server defeats "shareable".
-- **Don't ship the HTML shell into production.** The page is optimised for being clicked through by hand. The logic module behind it is the bit worth keeping.
+* **不要添加测试。** 需要测试的 prototype 就不再是原型了。
+* **不要将其连接到真正的数据库。** 使用内存状态，除非问题专门关于持久性。
+* **不要泛化。** 没有“如果我们以后想支持 X 会怎样”。原型回答一个问题。
+* **不要混淆逻辑和页面。** 如果纯模块引用了 DOM、`document` 或按钮处理程序，它就不再可提升了。将页面保持为纯模块的薄外壳。
+* **不要伸手去拿框架、打包器或服务器。** 一个人双击的文件；React 应用或开发服务器会破坏“可分享”的特性。
+* **不要将 HTML 外壳投入生产。** 页面是为手动点击浏览而优化的。它背后的逻辑模块才是值得保留的部分。
