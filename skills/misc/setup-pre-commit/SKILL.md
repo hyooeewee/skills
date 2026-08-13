@@ -8,7 +8,7 @@ description: 在当前仓库中设置 Husky pre-commit hooks（配合
 
 # 设置 Pre-Commit Hooks
 
-## What This Sets Up
+## 此设置包含的内容
 
 * **Husky** pre-commit hook
 * **lint-staged** 对所有暂存文件运行 Prettier
