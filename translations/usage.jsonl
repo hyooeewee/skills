@@ -1,0 +1,6 @@
+{"filename":"README.md","lang":"zh","tokens":3794,"stage":"translate","model":"openai:deepseek-v4-flash","date":"2026-08-15T10:53:22.225Z","cost":0,"duration":36440.534385,"total":11884,"prompt":5638,"completion":6246}
+{"filename":"README.md","lang":"zh","tokens":3794,"stage":"translate","model":"openai:deepseek-v4-flash","date":"2026-08-15T10:54:04.147Z","cost":0,"duration":41870.349041,"total":11609,"prompt":4494,"completion":7115}
+{"filename":"README.md","lang":"zh","tokens":3794,"stage":"validate","model":"openai:deepseek-v4-flash","date":"2026-08-15T10:54:09.697Z","cost":0,"duration":5272.306599000003,"total":3058,"prompt":2658,"completion":400}
+{"filename":"README.md","lang":"zh","tokens":3794,"stage":"validate","model":"openai:deepseek-v4-flash","date":"2026-08-15T10:54:11.919Z","cost":0,"duration":2191.313638000007,"total":3354,"prompt":3272,"completion":82}
+{"filename":"README.md","lang":"zh","tokens":3794,"stage":"validate","model":"openai:deepseek-v4-flash","date":"2026-08-15T10:54:14.466Z","cost":0,"duration":2519.809525000004,"total":3109,"prompt":2966,"completion":143}
+{"filename":"README.md","lang":"zh","tokens":3794,"stage":"validate","model":"openai:deepseek-v4-flash","date":"2026-08-15T10:54:16.747Z","cost":0,"duration":2257.793218999999,"total":951,"prompt":798,"completion":153}

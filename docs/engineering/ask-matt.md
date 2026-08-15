@@ -1,90 +1,90 @@
-## 功能说明
+## What it does
 
-`ask-matt` 是本仓库中技能的路由器。你描述你当前的情况——一个无法开始的想法、一堆收到的 bug 报告、一个已经运行很久的 [会话](https://www.aihero.dev/ai-coding-dictionary/session)——它会指出适合的技能或技能序列，以及在该序列中需要做出人类决策的位置。
+`ask-matt` is the router over the skills in this repo. You describe the situation you are in — an idea you cannot start, a pile of incoming bug reports, a [session](https://www.aihero.dev/ai-coding-dictionary/session) that has run long — and it names the skill or the sequence of skills that fits, plus where the human decisions in that sequence sit.
 
-它会推荐并停止。它不会盘问、撰写 [规范](https://www.aihero.dev/ai-coding-dictionary/spec)、打开文件或触发它刚刚命名的技能；你得到的是要输入的下一个内容，你输入它。它也是本仓库中技能的手写映射，而不是对你已安装内容的扫描，因此它不会将你引导到你自己的技能或另一位作者的技能上。
+It recommends and stops. It does not grill, write a [spec](https://www.aihero.dev/ai-coding-dictionary/spec), open a file or fire the skill it just named; what you get back is the next thing to type, and you type it. It is also a hand-written map of the skills in this repo rather than a scan of what you have installed, so it will not route you over your own skills or another author's.
 
-## 何时使用
+## When to reach for it
 
-你通过输入 `/ask-matt` 来调用它——代理不会主动调用它。
+You invoke this by typing `/ask-matt` — the agent won't reach for it on its own.
 
-| 你的情况                                                                 | 路由器给出的建议                                                                                                                                                                                                                                                                                                                                                                                                   |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 有一个想法，但不知道从何开始                                                       | 主流程的开头，以及构建是否足够小以至于可以跳过规范                                                                                                                                                                                                                                                                                                                                                                                  |
-| 来自其他人的 bug 和请求                                                       | 领域的\*词汇\* [优先级评估](https://aihero.dev/skills-triage)入口路径，以及原因 [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket)你自己生成的工单不属于这里                                                                                                                                                                                                                                                                    |
-| 两个看起来可以互换的技能                                                         | 它们之间的界限，而且通常是一个具体的测试，而不是品味问题。 [grill-me](https://aihero.dev/skills-grill-me)\[规范]\(https\://www\.aihero.dev/ai-coding-dictionary/spec) [grill-with-docs](https://aihero.dev/skills-grill-with-docs)取决于你是否在项目目录中； [grill-with-docs](https://aihero.dev/skills-grill-with-docs)\[规范]\(https\://www\.aihero.dev/ai-coding-dictionary/spec) [wayfinder](https://aihero.dev/skills-wayfinder)取决于工作量是否适合在一个会话中完成 |
-| 一个长会话以及关于 [上下文](https://www.aihero.dev/ai-coding-dictionary/context) | 阶段边界处五个选项的有序树                                                                                                                                                                                                                                                                                                                                                                                              |
-| 你已经选定的技能                                                             | 没有有用的建议。直接调用该技能。                                                                                                                                                                                                                                                                                                                                                                                           |
+| Your situation | What the router gives back |
+| --- | --- |
+| An idea, and no idea where to start | The head of the main flow, and whether the build is small enough to skip the spec |
+| Bugs and requests arriving from other people | The [triage](https://aihero.dev/skills-triage) on-ramp, and why [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket) you generated yourself don't belong on it |
+| Two skills that look interchangeable | The line between them, and it is usually one concrete test rather than a matter of taste. [grill-me](https://aihero.dev/skills-grill-me) or [grill-with-docs](https://aihero.dev/skills-grill-with-docs) turns on whether you are in a working directory; [grill-with-docs](https://aihero.dev/skills-grill-with-docs) or [wayfinder](https://aihero.dev/skills-wayfinder) turns on whether the effort fits one session |
+| A long session and a decision about the [context](https://www.aihero.dev/ai-coding-dictionary/context) | The ordered tree over the five options at a phase boundary |
+| A skill you have already picked | Nothing useful. Invoke that skill directly. |
 
-## 前置条件
+## Prerequisites
 
-路由器命名技能；它不会安装它们。它指向的一切都必须已安装，建议才具有可操作性，而且它只知道本仓库中已推广的技能。
+The router names skills; it does not install them. Everything it points at has to be installed for the recommendation to be actionable, and it only knows the promoted skills in this repo.
 
-依赖追踪器的路由——`triage`、`to-spec`、`to-tickets`、`implement`——假设 [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) 已经在仓库中配置了问题追踪器。在此之前，路由器会乐意推荐它们。
+The tracker-dependent routes — triage, `to-spec`, `to-tickets`, `implement` — assume [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) has already configured an issue tracker in the repo. The router will happily recommend them before that has happened.
 
-## 流程，而非技能
+## Flows, not skills
 
-技能给你的思考词汇是 **flow**（流程）：一条*穿过*技能的路径，而不是单一的技能。命名你的情况会将你置于流程的某个步骤上，这与“这是匹配你关键词的技能”这个答案不同。存在四种类型的路由，技能本身完整地承载了它们：
+The word the skill gives you to think with is **flow**: a path *through* the skills, not a single one. Naming your situation places you on a flow at a step, which is a different answer from "here is the skill that matches your keywords". Four kinds of route exist, and the skill itself carries them in full:
 
-* **主流程**，从想法到发布。Grill（盘问）、spec（规范）、tickets（工单）、implement（实现）、review（审查），内部有两个分支：当一个问题需要可运行的代码来定论时的原型绕行，以及 spec-and-tickets（规范与工单）的拆分，这只有当构建跨越多个会话时才值得其成本。
-* **入口路径**，用于产生工作并汇入主流程的情况：收到的 bug 报告、某处坏了的东西，或者工作量太大且太模糊，无法在一个会话中处理。
-* **独立技能**，脱离所有流程，按其自身条件调用——原型、问卷、你正身陷其中的合并冲突。
-* **底层的词汇层**，当问题在于词汇而非流程时，其他技能会引用的两个参考。
+- **The main flow**, idea to ship. Grill, spec, tickets, implement, review, with two branches inside it: a prototype detour when a question needs runnable code to settle, and the spec-and-tickets split, which only earns its cost when the build spans more than one session.
+- **On-ramps**, for a situation that generates work and then merges onto the main flow: incoming bug reports, something broken, or an effort too foggy and too large to hold in one session.
+- **Standalones**, off every flow, reached for on their own terms — the prototype, the questionnaire, the merge conflict you are already sitting in.
+- **A vocabulary layer underneath**, the two references the other skills pull in when the words rather than the process are the problem.
 
-## 阶段边界
+## The phase boundary
 
-它给你的另一个想法是 **阶段边界**。一个阶段是会话内的一段工作——[grilling（盘问）](https://www.aihero.dev/ai-coding-dictionary/grilling)、实现、QA（质量保证）——而它们之间的边界是唯一属于问题“我该如何处理这个上下文？”的地方。在阶段中途没有什么可决定的：继续，或者将剩余部分拆分为 [子代理](https://www.aihero.dev/ai-coding-dictionary/subagent)。
+The other idea it hands you is the **phase boundary**. A phase is a chunk of work inside a session — the [grilling](https://www.aihero.dev/ai-coding-dictionary/grilling), the implementation, the QA — and the boundary between two of them is the only place the question "what do I do with this context?" belongs. Mid-phase there is nothing to decide: continue, or split what is left into [subagents](https://www.aihero.dev/ai-coding-dictionary/subagent).
 
-| 选项                                               | 在什么情况下使用                                                                                                                                                                      |
-| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **继续**                                           | 下一阶段想要原样保留这个，或者你还有 [智能区域](https://www.aihero.dev/ai-coding-dictionary/smart-zone)剩余。这是唯一能保持会话作为 [主要来源](https://www.aihero.dev/ai-coding-dictionary/primary-source)的移动，所以首先排除它 |
-| **`/clear`**                                     | 你身后的一切都是可丢弃的。棋盘上最便宜的移动，如果你错了，那就是单向的                                                                                                                                           |
-| **[handoff](https://aihero.dev/skills-handoff)** | 必须要有东西传递：一个新的 [工具箱](https://www.aihero.dev/ai-coding-dictionary/harness)，一个新目录，一位同事，一个在阶段中途分叉的侧边任务                                                                            |
-| **子代理**                                          | 任务的范围足够紧密，可以随你 [离开键盘](https://www.aihero.dev/ai-coding-dictionary/afk)                                                                                                        |
-| **`/compact`**                                   | 以上都不是。默认选项，而且经常落在这里                                                                                                                                                           |
+| Option | Take it when |
+| --- | --- |
+| **Continue** | The next phase wants this one verbatim, or you have [smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone) left. It is the only move that keeps the session as a [primary source](https://www.aihero.dev/ai-coding-dictionary/primary-source), so rule it out first |
+| **`/clear`** | Everything behind you is disposable. Cheapest move on the board, and one-way if you were wrong |
+| **[handoff](https://aihero.dev/skills-handoff)** | Something has to travel: a new [harness](https://www.aihero.dev/ai-coding-dictionary/harness), a new directory, a colleague, a side task forked mid-phase |
+| **Subagent** | The task is scoped tightly enough to run with you [away from the keyboard](https://www.aihero.dev/ai-coding-dictionary/afk) |
+| **`/compact`** | None of the above. The default, and it lands here often |
 
-其中两个经常被做错，这就是为什么路由器携带的是顺序而不是列表。`/handoff` 看起来像是窗口间的通用桥梁，但并非如此：可移植性是它的全部价值所在。`/compact` 是树底，而不是第一次触及，因为它上方的四个问题各自都更便宜或更精确。
+Two of those are routinely got wrong, which is why the router carries the order rather than the list. `/handoff` reads like the general bridge between windows and is not: portability is the whole of what it buys. `/compact` is the bottom of the tree rather than the first reach, because the four questions above it are each cheaper or more precise.
 
-## 常见问题
+## Common questions
 
-**难道不能直接有一个按正确顺序排列的技能列表吗？**
+**Isn't there just a list of the skills in the right order?**
 
-人们一直在 README 中请求一个列表。这个技能就是这个列表——它存在的目的就是这个。一个静态表格会说 `wayfinder → to-spec → to-tickets → implement → code-review`，但这对于大多数情况都是错误的，因为有趣的部分在于分支——是否有代码库，构建是否跨越会话，这个问题能否通过讨论解决。诚实的代价是路由器是手动维护的，并且滞后于仓库。`/grilling` 和 `/resolving-merge-conflicts` 都在路由器命名它们之前很久就发布了。
+People keep asking for one in the README. This skill is that list — it is what it exists for. A static table would say `wayfinder → to-spec → to-tickets → implement → code-review` and be wrong for most situations, because the interesting parts are the branches — is there a codebase, does the build span sessions, can this question be settled by talking. The honest cost is that the router is hand-maintained and lags the repo. `/grilling` and `/resolving-merge-conflicts` both shipped long before the router named them.
 
-**它告诉我一半的技能没有安装。**
+**It told me half the skills aren't installed.**
 
-这是一个已知的、未修复的 bug。路由器引导你经过的大部分技能都设置了 `disable-model-invocation: true`，这意味着工具箱将其排除在注入到代理上下文中的技能列表之外。代理将该列表视为详尽的，并报告它们缺失。一个报告的会话曾使其声明整个 spec-and-tickets（规范与工单）流程不存在，并重定向到裸 `/grilling` 和 `/tdd`。插件 22 个技能中有 13 个携带该标志，因此这是常见情况而非边缘情况。它们是已安装的。无论如何请输入斜杠命令，或者检查 `.claude-plugin/plugin.json`，这是关于存在哪些内容的权威依据。
+A known bug, unfixed. Most of the skills the router routes you through set `disable-model-invocation: true`, which means the harness leaves them out of the skill list it injects into the agent's context. The agent reads that list as exhaustive and reports them missing. One reported session had it declare the whole spec-and-tickets flow absent and reroute to bare `/grilling` and `/tdd`. Thirteen of the plugin's twenty-two skills carry the flag, so this is the common case rather than an edge. They are installed. Type the slash command anyway, or check `.claude-plugin/plugin.json`, which is the authority on what is present.
 
-**它描述了一个技能的行为，但该技能并没有这样做。**
+**It described a skill's behaviour, and the skill doesn't do that.**
 
-这也是真实存在的，也未修复。路由器根据它自己对每个技能的一行总结来回答，而不是根据技能本身。一份详细的报告在一个会话中追踪了三个实例，包括建议跳过 [to-spec](https://aihero.dev/skills-to-spec)，理由是“将线程转化为规范”这个短语——`to-spec/SKILL.md` 从未被打开。在所有情况下，它都是在用户反驳后才进行验证的，而不是主动发起。在那里跳过 `to-spec` 导致了一次真正的接缝检查，而由此产生的工单低估了工作量。当路由器断言关于另一个技能的关键事项时，先要求它打开那个 `SKILL.md`。同样适用于地图完全没有覆盖的问题，例如是否使用 [计划模式](https://www.aihero.dev/ai-coding-dictionary/agent-mode)：那个答案是 [模型](https://www.aihero.dev/ai-coding-dictionary/model) 的推断，而不是这里写下来的内容。
+Also real, also unfixed. The router answers from its own one-line summary of each skill rather than from the skill. One detailed report tracked three instances in a single session, including a recommendation to skip [to-spec](https://aihero.dev/skills-to-spec) on the strength of the gloss "turn the thread into a spec" — `to-spec/SKILL.md` was never opened. In every case it verified only after the user pushed back, and never on its own initiative. Skipping `to-spec` there cost a real seam check, and the tickets that came out undercounted the work. When the router asserts something load-bearing about another skill, ask it to open that `SKILL.md` first. The same applies to questions the map does not cover at all, such as whether to use [plan mode](https://www.aihero.dev/ai-coding-dictionary/agent-mode): that answer is the [model](https://www.aihero.dev/ai-coding-dictionary/model)'s inference, not something written down here.
 
-**为什么它是散文而不是编号的检查清单？**
+**Why is it prose instead of a numbered checklist?**
 
-这是一个合理的抱怨，作为公开问题提出，论证了大部分路由是确定性的，而且行文使得难以快速浏览。没有什么能阻止你要求压缩形式——“只给我序列”就能得到序列。文本所承载的是条件部分：分支、预期做出人类决策的地方，以及在步骤之间清除或压缩的地方。一份扁平的检查清单正好提供了这些。
+A fair complaint, filed as an open issue arguing that most of the routing is deterministic and the narrative makes it hard to scan. Nothing stops you asking for the compressed form — "just give me the sequence" gets you the sequence. What the prose is carrying is the conditional half: the branches, where a human decision is expected, and where to clear or compact between steps. A flat checklist drops exactly that.
 
-**它能基于我自己的技能，或另一位作者的技能进行路由吗？**
+**Can it route over my own skills, or another author's?**
 
-不。三个独立的提案曾要求一个能读取本地 `skills/` 目录并根据已安装内容推荐的路由器。`ask-matt` 不是那个。它是一组由手动维护的映射，它对你编写的或从其他地方安装的技能一无所知。
+No. Three separate proposals have asked for a router that reads your local `skills/` directory and recommends from whatever is installed. `ask-matt` is not that. It is a map of one set, maintained by hand, and it knows nothing about skills you wrote or installed from elsewhere.
 
-**它让我编辑一个 SKILL.md。**
+**It told me to edit a SKILL.md.**
 
-这个建议通常是正确的，但很少持久有效。有人问它如何让 [implement](https://aihero.dev/skills-implement) 关闭工单，被告知在技能中添加一行，并立即发现了问题：`npx skills update` 会覆盖文件，且插件安装是只读的。请将持续行为放在你自己的 `CLAUDE.md` 或 `AGENTS.md` 中，或在调用时说明。提示级别的适配能经受更新——将流程指向 Linear 而不是 GitHub，或询问它哪些开放工单可以并行运行，都是人们这样做的。
+That advice is often correct and rarely durable. Someone asked it how to make [implement](https://aihero.dev/skills-implement) close tickets, got told to add a line to the skill, and immediately spotted the problem: `npx skills update` overwrites the file, and the plugin install is read-only. Put standing behaviour in your own `CLAUDE.md` or `AGENTS.md`, or say it in the invocation. Prompt-level adaptations survive updates — pointing the flow at Linear instead of GitHub, or asking it which open tickets could run in parallel, are both things people do this way.
 
-**它列出了我没有的技能，或者漏掉了我有的一项。**
+**It named a skill I don't have, or missed one I do.**
 
-在假设它已消失之前，请先查看变更日志以确认重命名。`writing-great-skills` 变成了 [writing-for-agents](https://aihero.dev/skills-writing-for-agents) 且没有别名，`to-prd` 变成了 [to-spec](https://aihero.dev/skills-to-spec)，`pathfinder` 变成了 [wayfinder](https://aihero.dev/skills-wayfinder)。四个技能被直接停用并合并到了吸收它们的技能中：`ubiquitous-language`、`design-an-interface`、`qa` 和 `request-refactor-plan`。相反的情况则是路由器自身的滞后，如上所述。
+Check the changelog for a rename before assuming it is gone. `writing-great-skills` became [writing-for-agents](https://aihero.dev/skills-writing-for-agents) with no alias, `to-prd` became [to-spec](https://aihero.dev/skills-to-spec), and `pathfinder` became [wayfinder](https://aihero.dev/skills-wayfinder). Four skills were retired outright into the skills that absorbed them: `ubiquitous-language`, `design-an-interface`, `qa` and `request-refactor-plan`. The reverse case is the router's own lag, above.
 
-## 判断是否生效
+## It's working if
 
-* 它以指出要输入的内容结束并停在那里，而不是自己开始执行工作。
-* 它给出的路由提到了在何处清除或压缩上下文以及你被期望审查的地方，而不仅仅是技能名称列表。
-* 当两个技能相近时，它会指出哪一个，并解释为什么另一个不适合你。
-* 它关于另一个技能行为的任何主张都会出现在追踪日志中，作为它正在读取该技能的 `SKILL.md` 的证据。
-* 你能在它返回的内容中认出自己的情况，而不是最近的通用场景。
+- It ends by naming what to type and stops there, instead of starting the work itself.
+- The route it gives back mentions where to clear or compact context and where you are expected to review, not just a list of skill names.
+- Where two skills are close, it says which one and why the other is wrong for you.
+- Any claim it makes about another skill's behaviour shows up in the trace as it reading that skill's `SKILL.md`.
+- You recognise your own situation in what it hands back, rather than the nearest generic scenario.
 
-## 在系统中的位置
+## Where it fits
 
-`ask-matt` 是一个覆盖整个集合的**独立路由器**。它从来不是链中的一个步骤；它指向每条链，并且它是其他文档页面链接回的节点，这样它们都不必重绘图表。从这里你通常进入 [grill-with-docs](https://aihero.dev/skills-grill-with-docs)，即主流程的起点，或 [triage](https://aihero.dev/skills-triage)，即到达的工作的入口，而不是你开始的工作。
+`ask-matt` is a **standalone router** that sits over the whole set. It is never a step in a chain; it points into every chain, and it is the node the other docs pages link back to so none of them has to redraw the graph. From here you most often land on [grill-with-docs](https://aihero.dev/skills-grill-with-docs), the head of the main flow, or [triage](https://aihero.dev/skills-triage), the on-ramp for work that arrived rather than work you started.
 
-它是它所描述的技能的[次要来源](https://www.aihero.dev/ai-coding-dictionary/secondary-source)。当路由器和 `SKILL.md` 发生冲突时，`SKILL.md` 是正确的。
+It is a [secondary source](https://www.aihero.dev/ai-coding-dictionary/secondary-source) over the skills it describes. Where the router and a `SKILL.md` disagree, the `SKILL.md` is right.

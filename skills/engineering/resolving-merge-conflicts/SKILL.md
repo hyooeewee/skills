@@ -1,15 +1,14 @@
 ---
 name: resolving-merge-conflicts
-description: 当需要解决正在进行的 git 合并/变基冲突时使用。
-
+description: "Use when you need to resolve an in-progress git merge/rebase conflict."
 ---
 
-1. **查看当前状态**。检查 git 历史，以及冲突的文件。
+1. **See the current state** of the merge/rebase. Check git history, and the conflicting files.
 
-2. **找到每个冲突的原始来源**。深入理解做出每个更改的原因以及原始意图。阅读提交信息，检查 PR，检查原始问题/工单。
+2. **Find the primary sources** for each conflict. Understand deeply why each change was made, and what the original intent was. Read the commit messages, check the PRs, check original issues/tickets.
 
-3. **解决每个代码块**。尽可能保留两种意图。如果不兼容，选择符合合并既定目标的那个并注明权衡。不要**发明**新行为。始终解决；永远不要 `--abort`。
+3. **Resolve each hunk.** Preserve both intents where possible. Where incompatible, pick the one matching the merge's stated goal and note the trade-off. Do **not** invent new behaviour. Always resolve; never `--abort`.
 
-4. 发现项目的**自动化检查**并运行它们——通常是类型检查，然后是测试，最后是格式化。修复合并破坏的任何内容。
+4. Discover the project's **automated checks** and run them — typically typecheck, then tests, then format. Fix anything the merge broke.
 
-5. **完成合并/变基**。暂存所有内容并提交。如果是变基，请继续变基过程，直到所有提交都已完成变基。
+5. **Finish the merge/rebase.** Stage everything and commit. If rebasing, continue the rebase process until all commits are rebased.

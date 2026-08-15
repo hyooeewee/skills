@@ -1,6 +1,6 @@
-# CONTEXT.md 格式
+# CONTEXT.md Format
 
-## 结构
+## Structure
 
 ```md
 # {Context Name}
@@ -22,18 +22,18 @@ A person or organization that places orders.
 _Avoid_: Client, buyer, account
 ```
 
-## 规则
+## Rules
 
-* 保持有主见。当同一个概念存在多个词时，选择最好的一个，并将其他的列在 `_Avoid_` 下。
-* 保持定义简洁。最多一两句话。定义它*是*什么，而不是它*做*什么。
-* 只包含特定于本项目上下文的术语。通用编程概念（超时、错误类型、工具模式）不属于此列，即使项目广泛使用了它们。在添加术语之前，请自问：这是一个特定于该上下文的概念，还是一个通用编程概念？只有前者才属于此列。
-* 当自然出现分组时，将术语归类到子标题下。如果所有术语都属于一个连贯的领域，则使用扁平列表即可。
+- **Be opinionated.** When multiple words exist for the same concept, pick the best one and list the others under `_Avoid_`.
+- **Keep definitions tight.** One or two sentences max. Define what it IS, not what it does.
+- **Only include terms specific to this project's context.** General programming concepts (timeouts, error types, utility patterns) don't belong even if the project uses them extensively. Before adding a term, ask: is this a concept unique to this context, or a general programming concept? Only the former belongs.
+- **Group terms under subheadings** when natural clusters emerge. If all terms belong to a single cohesive area, a flat list is fine.
 
-## 单个上下文仓库 vs 多个上下文仓库
+## Single vs multi-context repos
 
-单个上下文（大多数仓库）：仓库根目录有一个 `CONTEXT.md`。
+**Single context (most repos):** One `CONTEXT.md` at the repo root.
 
-多个上下文：仓库根目录有一个 `CONTEXT-MAP.md`，列出了上下文、它们所在的位置以及它们之间的关系：
+**Multiple contexts:** A `CONTEXT-MAP.md` at the repo root lists the contexts, where they live, and how they relate to each other:
 
 ```md
 # Context Map
@@ -51,10 +51,10 @@ _Avoid_: Client, buyer, account
 - **Ordering ↔ Billing**: Shared types for `CustomerId` and `Money`
 ```
 
-该技能会推断适用的结构：
+The skill infers which structure applies:
 
-* 如果存在 `CONTEXT-MAP.md`，请阅读它以查找上下文
-* 如果仅存在根目录的 `CONTEXT.md`，则为单个上下文
-* 如果两者都不存在，则在解析第一个术语时延迟创建根目录的 `CONTEXT.md`
+- If `CONTEXT-MAP.md` exists, read it to find contexts
+- If only a root `CONTEXT.md` exists, single context
+- If neither exists, create a root `CONTEXT.md` lazily when the first term is resolved
 
-当存在多个上下文时，推断当前主题与哪个上下文相关。如果不清楚，请询问。
+When multiple contexts exist, infer which one the current topic relates to. If unclear, ask.

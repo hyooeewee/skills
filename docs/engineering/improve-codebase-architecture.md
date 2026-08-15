@@ -1,101 +1,101 @@
-## 功能说明
+## What it does
 
-`improve-codebase-architecture` 会调查代码库中的 **加深机会** —— 那些原本浅层的模块（接口几乎和它隐藏的内部实现一样复杂）可以变成深层模块的地方 —— 将它们写成一个独立的 HTML 报告，然后 [grill](https://www.aihero.dev/ai-coding-dictionary/grilling) 你挑选的任何一个。
+`improve-codebase-architecture` surveys a codebase for **deepening opportunities** — places where a shallow module (an interface nearly as complex as the thing it hides) could become a deep one — writes them up as a self-contained HTML report, and then [grills](https://www.aihero.dev/ai-coding-dictionary/grilling) you through whichever one you pick.
 
-它绝不会改变代码。整个运行过程会在你的操作系统临时目录中生成一个 HTML 文件和一段对话；重构本身会在稍后的单独 [会话](https://www.aihero.dev/ai-coding-dictionary/session) 中，通过正常的构建流程进行。这就是它被称为“调查”而非“重构工具”的原因，也是为什么这个技能值得在你尚未准备好触碰的代码库上运行的原因。
+It never changes the code. The whole run produces one HTML file in your OS temp directory and a conversation; the refactor itself happens later, in a separate [session](https://www.aihero.dev/ai-coding-dictionary/session), through the normal build flow. That is what makes it a survey rather than a refactoring tool, and it is why the skill is worth running on a codebase you are not ready to touch yet.
 
-两个过滤器防止报告变成通用的清理建议。每个候选者都必须通过 **删除测试** —— 移除这个模块是否将复杂性集中在一个更小的接口后面，还是只是将其分散到调用者身上？只有“集中”的情况才会获得一张卡片。除非你指向特定区域，否则它会先读取最近的提交历史，并将扫描偏向于那些正在积极变更的路径，理由是针对无人触碰代码的加深是一个你永远无法兑现的重构。
+Two filters keep the report from becoming generic cleanup advice. Every candidate has to pass the **deletion test** — would removing this module concentrate complexity behind a smaller interface, or just spread it across callers? Only the "concentrates" cases earn a card. And unless you point it at a specific area, it reads recent commit history first and biases the scan toward paths that are actively changing, on the grounds that a deepening in code nobody touches is a refactor you will never cash in.
 
-## 何时使用
+## When to reach for it
 
-你通过输入 `/improve-codebase-architecture` 来调用它 —— [代理](https://www.aihero.dev/ai-coding-dictionary/agent) 不会自动调用它。
+You invoke this by typing `/improve-codebase-architecture` — the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) will not reach for it on its own.
 
-它位于构建循环之外 —— 它不是主循环中的步骤，而是你定期运行以排队更多工作来改进代码库的东西。它用于以下四种情况：
+It sits outside the build loop — it is not a step in the main loop but something you run periodically to queue up more work to improve the codebase. The four situations it gets used in:
 
-| 情况     | 如何使用                                                                                       |
-| ------ | ------------------------------------------------------------------------------------------ |
-| 日常维护   | 每隔几天运行一次，或者只要有空隙就运行，以防止功能之间的结构腐烂。                                                          |
-| 大型构建之前 | 将其指向 [规范](https://www.aihero.dev/ai-coding-dictionary/spec)规范                              |
-| 现场审计   | 在大型、无结构或 [凭感觉编码](https://www.aihero.dev/ai-coding-dictionary/vibe-coding)仓库，以了解它实际上处于什么状态。 |
-| 遗留测试工作 | 在针对不可测试代码编写测试之前，用它来先找到缺失的接缝。                                                               |
+| Situation | How it is used |
+| --- | --- |
+| Routine upkeep | Run it every few days, or whenever a spare moment appears, to stop structure rotting between features. |
+| Before a big build | Point it at the [spec](https://www.aihero.dev/ai-coding-dictionary/spec): "how can we make this change easy?" This is the most effective prompt for it. |
+| Brownfield audit | Run it on a large, unstructured or [vibe-coded](https://www.aihero.dev/ai-coding-dictionary/vibe-coding) repo to find out what shape it is actually in. |
+| Legacy test work | Use it to find the missing seams first, before writing tests against untestable code. |
 
-在哪里容易与同类混淆：
+Where it is confusable with siblings:
 
-* 对于设计你已经选定的一个模块，使用 [codebase-design](https://aihero.dev/skills-codebase-design) —— 那是长椅（基准），这是找到要放在上面的东西的调查。
-* 对于一个太大的努力无法在一次会话中完成，使用 [wayfinder](https://aihero.dev/skills-wayfinder)。
-* 对于“这个具体的东西坏了”，使用 [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs)。当真正的发现是没有好的接缝来锁定 bug 时，它会退回到这里。
+- For designing one module you have already chosen, use [codebase-design](https://aihero.dev/skills-codebase-design) — that is the bench, this is the survey that finds what to put on it.
+- For a whole effort too big to hold in one session, use [wayfinder](https://aihero.dev/skills-wayfinder).
+- For "this specific thing is broken," use [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs). It hands back here when the real finding is that there is no good seam to lock the bug down.
 
-## 前置条件
+## Prerequisites
 
-运行它不需要任何前置条件。它会读取 `CONTEXT.md` 和 `docs/adr/` 中的任何 ADR（如果存在），并使用你领域的专有名词进行交流 —— 候选者读起来像是“加深订单受理模块”，而不是“重构 FooBarHandler”。
+None to run it. It reads `CONTEXT.md` and any ADRs in `docs/adr/` if they exist, and speaks in your domain's own nouns when they do — a candidate reads as "deepen the Order intake module," not "refactor the FooBarHandler."
 
-它会写入两个地方。报告会去到 `<tmpdir>/architecture-review-<timestamp>.html`，在仓库之外。在 grilling 循环期间，它会在 `CONTEXT.md` 中添加或完善术语，如果该文件不存在则创建它，并提议将一个被拒绝的候选者记录为 ADR，以便未来的运行不会再次建议它。
+It writes in two places. The report goes to `<tmpdir>/architecture-review-<timestamp>.html`, outside the repo. During the grilling loop it will add or sharpen terms in `CONTEXT.md`, creating that file if it does not exist, and offer to record a rejected candidate as an ADR so a future run does not re-suggest it.
 
-## 深度，以及寻找深度的报告
+## Depth, and the report that hunts for it
 
-这个技能基于一个概念：**深度**。深层模块将大量行为隐藏在一个小而稳定的接口后面。浅层模块则通过一个几乎与其下方代码一样宽的接口泄漏其实现。报告是对浅陋的追猎 —— 纯函数仅为了可测试性而被提取，而真正的 bug 存在于它们如何被调用（缺乏 **局部性**），模块泄漏穿过它们的 **接缝**，一个你必须打开五个文件才能理解的概念 —— 以及一个关于加深以修复它的提案。
+The skill turns on one idea: **depth**. A deep module puts a lot of behaviour behind a small, stable interface. A shallow one leaks its implementation through an interface nearly as wide as the code beneath it. The report is a hunt for shallowness — pure functions extracted only for testability while the real bugs live in how they are called (no **locality**), modules leaking across their **seams**, a concept you cannot understand without opening five files — and a proposal for the deepening that fixes it.
 
-每个候选者都是一张卡片：涉及的文件、摩擦力、一个简单的英文解决方案、用 **局部性** 和 **杠杆** 表示的好处、前后对比图以及一个强度徽章。
+Each candidate is a card: the files involved, the friction, a plain-English solution, the benefit stated in terms of **locality** and **leverage**, a before/after diagram, and a strength badge.
 
-| 徽章                | 对你的意义                    |
-| ----------------- | ------------------------ |
-| `Strong`          | 删除测试明确通过，且摩擦是真实的。认真对待这些。 |
-| `Worth exploring` | 有可能的加深，但回报取决于代码下一步走向何处。  |
-| `Speculative`     | 为了完整性而展示。大多数这些都可以忽略。     |
+| Badge | What it means for you |
+| --- | --- |
+| `Strong` | The deletion test passes clearly and the friction is real. Take these seriously. |
+| `Worth exploring` | Plausible deepening, but the payoff depends on where the code is going next. |
+| `Speculative` | Surfaced for completeness. Most of these are safe to ignore. |
 
-报告以 **首要推荐** 结束 —— 即它将首先解决的问题 —— 然后技能停止并询问你想探索哪个候选者。此时还没有做出任何决定，也没有代码发生移动。
+The report ends with a **Top recommendation** — the one it would tackle first — and then the skill stops and asks which candidate you want to explore. Nothing has been decided at that point, and no code has moved.
 
-## 选择一个之后会发生什么
+## What happens after you pick one
 
-选择一个候选者会开始一次 [grilling](https://aihero.dev/skills-grilling) 会话：约束条件、接缝后面有什么、哪些测试存活、加深后的接口应该长什么样。该会话的输出是一个决策，而不是一个差异。从那里开始正常流程适用 —— 将决策带入 [to-spec](https://aihero.dev/skills-to-spec)，然后 [to-tickets](https://aihero.dev/skills-to-tickets)，然后 [implement](https://aihero.dev/skills-implement)。
+Picking a candidate starts a [grilling](https://aihero.dev/skills-grilling) session over it: constraints, what sits behind the seam, which tests survive, what the deepened interface should look like. The output of that session is a decision, not a diff. From there the normal flow applies — take the decision into [to-spec](https://aihero.dev/skills-to-spec), then [to-tickets](https://aihero.dev/skills-to-tickets), then [implement](https://aihero.dev/skills-implement).
 
-## 常见问题
+## Common questions
 
-**它针对一个想法 grilling 了我一个小时，而不是向我展示选项。我可以把它关掉吗？**
+**It grilled me for an hour about one idea instead of showing me options. Can I turn that off?**
 
-是的 —— 在调用时说明（“不要 grilling 我，只显示报告”）。这是该技能最大的抱怨。一位用户直言不讳地说：他们喜欢它作为“获得改进的全面分析的一种方便方式”，但在添加 grilling 循环后，发现它“几乎无法使用”，报告的会话是它提出一个解决方案然后问“10 个或 100 个问题”。设计意图是报告优先，grilling 只在你选择的候选者上开始，但较弱的 [模型](https://www.aihero.dev/ai-coding-dictionary/model) 会跳过直接开始采访你关于他们有的第一个想法。该线程中的报告根据模型差异很大，这是一个开放问题 —— 该技能还没有记录的 no-grill 模式。
+Yes — say so when you invoke it ("don't grill me, just show the report"). This is the loudest complaint the skill has. One user put it bluntly: they liked it as "a convenient way to get a thorough analysis of improvements," and after the grilling loop was added found it "borderline unusable," reporting sessions where it proposed a single solution and then asked "10's or 100's of questions." The design intent is that the report comes first and the grill only starts on a candidate you chose, but weaker [models](https://www.aihero.dev/ai-coding-dictionary/model) skip straight to interviewing you about the first idea they had. Reports in that thread vary sharply by model, and it is an open issue — the skill does not yet have a documented no-grill mode.
 
-**报告以未样式化的原始 HTML 打开，没有图表。发生了什么？**
+**The report opened as unstyled raw HTML with no diagrams. What happened?**
 
-报告从 CDN 加载 Tailwind 和 Mermaid，因此打开时需要网络访问，当有东西阻止这些脚本时它会静默崩溃。报告的案例是一个安全钩子要求 SRI 哈希值：代理添加了它们，CDN 向浏览器提供的字节与用于计算哈希的 `curl` 不同，浏览器阻止了脚本。离线和锁定环境遇到了同样的墙。代理无法看到这一点，因为它从不渲染页面。变通方法是要求内联 CSS 和手工构建的 SVG 图表，而不是 CDN 脚手架。这是一个开放问题，也是一个真正的粗边缘。
+The report loads Tailwind and Mermaid from CDNs, so it needs network access when you open it, and it breaks silently when something blocks those scripts. The filed case was a security hook demanding SRI hashes: the agent added them, the CDN served different bytes to the browser than to the `curl` used to compute the hash, and the browser blocked the script. Offline and locked-down environments hit the same wall. The agent cannot see this, because it never renders the page. The workaround is to ask for inline CSS and hand-built SVG diagrams instead of the CDN scaffold. This is an open issue and a real rough edge.
 
-**它给了我十二个候选者。我是应该在同一个会话中处理它们，还是开始一个新的会话？**
+**It gave me twelve candidates. Do I work through them in the same session or start a new one?**
 
-每个会话一个候选者。在一个对话中处理几个会填满 [上下文窗口](https://www.aihero.dev/ai-coding-dictionary/context-window)，同时包含报告、grilling、领域模型编辑和代码更改。报告只存在于临时文件中，所以携带候选者本身而不是文件：选择一个，grilling 它，将决策带入 `/to-spec`，并将其余的变成 [工单](https://www.aihero.dev/ai-coding-dictionary/ticket)，你可以在以后独立处理。将选定的改进放入规范，而不是直接进入实现。这是一个反复出现的问题，在技能本身中没有记录的工作流程。
+One candidate per session. Working through several in one conversation fills the [context window](https://www.aihero.dev/ai-coding-dictionary/context-window) with the report, the grilling, the domain-model edits and the code changes all at once. The report only lives in a temp file, so carry the candidate itself rather than the file: pick one, grill it, take the decision into `/to-spec`, and turn the rest into [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket) you can pick up independently later. Put the chosen improvement into a spec rather than going straight to implementation. This is a recurring question with no documented workflow in the skill itself.
 
-**我应该如何提示它？**
+**How should I prompt it?**
 
-以你正在构建的下一个东西为思路。当即将进行大型构建时，将其指向规范并问“我们如何让这个更改更容易？”。未提示的运行会自行扫描热点，这对于日常维护是可以的，但命名方向是使报告可操作的原因。
+With the next thing you are building in mind. Where a big build is coming up, point it at the spec and ask "how can we make this change easy?" An unprompted run scans for hot spots on its own, which is fine for routine upkeep, but naming a direction is what makes the report actionable.
 
-**它适用于大型遗留代码库吗？**
+**Does it work on a large legacy codebase?**
 
-部分适用。它在缺乏一致结构的大型现有代码库上很强，并且是任何一次性结构设置后的推荐维护机制。诚实的反例：拥有真正失控项目的用户报告它“帮助了一点但似乎还是不够”，而一位拥有八年遗留代码库的开发人员报告模型陷入循环，同样的技能在整洁的仓库上产生干净的图表。对于这种情况，还没有专门的 `/refactor` 技能。如果代码库根本没有共享词汇，先使用 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) 建立一个 tends to make this skill's output much better（倾向于让这个技能的输出好得多）。
+Partly. It is strong on big existing codebases lacking consistent structure, and it is the recommended upkeep mechanism after any one-time structural setup. The honest counterweight: users with genuinely out-of-control projects report it "helped a little but still doesn't seem to cut it," and one developer with an eight-year legacy codebase reported the model going in circles where the same skill produces a clean graph on a tidy repo. There is no dedicated `/refactor` skill for that case yet. If the codebase has no shared vocabulary at all, [grill-with-docs](https://aihero.dev/skills-grill-with-docs) to establish one first tends to make this skill's output much better.
 
-**这与 \`/codebase-design\` 有何不同？ `/codebase-design`\`/do-work\`？**
+**How is this different from `/codebase-design`?**
 
-`/codebase-design` 是一个参考，而不是会话驱动器。它提供词汇 —— 模块、接口、深度、接缝、适配器、杠杆、局部性 —— 这个技能借用了它。将一个新的代理指向 `/codebase-design` 作为要“做”的事情是一个已知的失败：因为没有自己的流程可遵循，代理会编造一个流程，重新探索代码并运行很长时间后才问你任何事情。用这个技能驱动；使用那个技能。
+`/codebase-design` is a reference, not a session driver. It supplies the vocabulary — module, interface, depth, seam, adapter, leverage, locality — and this skill borrows it. Pointing a fresh agent at `/codebase-design` as the thing to "do" is a known failure: with no process of its own to follow, the agent invents one, re-explores code and runs for a very long time before asking you anything. Drive with this skill; consume that one.
 
-**它会告诉我代码库没有问题吗？**
+**Will it ever tell me the codebase is fine?**
 
-很少，你应该在开始前就知道这一点。该技能的设计目的是输出发现结果，因此其框架推动它生成候选方案，而不是得出“没有任何问题”的结论。强度徽章是防御手段 —— 一个所有内容都是 `Speculative` 的报告是该技能告诉你它什么都没找到的唯一方式。
+Rarely, and you should know that going in. The skill is built to output findings, so the framing pushes it toward producing candidates rather than concluding that nothing is wrong. The strength badges are the defence — a report where everything is `Speculative` is the skill telling you it found nothing, in the only way it knows how.
 
-**它在 Codex 或其他工具中有效吗？**
+**Does it work in Codex or another harness?**
 
-部分适用。探索步骤直接将 Claude Code 的 `Agent` 工具命名为 `subagent_type=Explore`，因此没有该工具的 harness 可能会跳过并行探索，而不是替换它自己的。该技能仍然运行；扫描只是不太彻底。已经提出了一个与 harness 无关的重写版本，但尚未合并。
+Partially. The exploration step names Claude Code's `Agent` tool with `subagent_type=Explore` directly, so a [harness](https://www.aihero.dev/ai-coding-dictionary/harness) without that tool may skip the parallel exploration rather than substitute its own. The skill still runs; the scan is just less thorough. A harness-neutral rewrite has been proposed but is not merged.
 
-**我如何在 TypeScript 中实际实现深度模块？**
+**How do I actually implement deep modules in TypeScript?**
 
-该技能没有附带好的答案。反复的请求是希望有一个 `TYPESCRIPT.md` 为这些原则提供具体的文件和模块布局，但它不存在。该技能会告诉你加深应该属于哪里以及什么应该位于接缝后面；将其翻译成包或目录结构目前需要你自己完成。
+There is no good answer shipped with the skill. The recurring request is for a `TYPESCRIPT.md` giving concrete file and module layouts for the principles, and it does not exist. The skill will tell you where a deepening belongs and what should sit behind the seam; translating that into a package or directory structure is currently on you.
 
-## 判断是否生效
+## It's working if
 
-* 候选者使用的是你领域的概念，而不是编造的类名 —— “订单受理模块”，而不是“FooBarHandler”。
-* 候选者聚集在你最近编辑过的文件中，而不是仓库的休眠角落。
-* 运行期间没有代码更改。唯一的新文件是你临时目录中的 HTML 报告。
-* 它在报告后停止，并询问你想选择哪个候选者，而不是自行继续。
-* 每张卡片将收益解释为局部性或杠杆，并说明哪些测试会变得更简单 —— 不仅仅是“这样更整洁”。
-* 因持久的原因拒绝候选者会得到一个记录 ADR 的提议，以便下一次运行不会再次建议它。
+- The candidates name your domain's concepts, not invented class names — "the Order intake module," not "the FooBarHandler."
+- The candidates cluster in files you have edited recently, not in dormant corners of the repo.
+- No code changed during the run. The only new file is the HTML report in your temp directory.
+- It stops after the report and asks which candidate you want, rather than continuing on its own.
+- Each card explains the payoff as locality or leverage, and says which tests get simpler — not just "this is cleaner."
+- Rejecting a candidate for a durable reason gets you an offer to record an ADR, so the next run does not re-suggest it.
 
-## 在系统中的位置
+## Where it fits
 
-`improve-codebase-architecture` 是 **定期维护** —— 每隔几天运行一次，在任何链之外，以排队工作而不是去执行工作。它的邻居是 \[codebase-design]，它拥有每个候选者所写的深度和接缝词汇，\[grilling]，它在你选择候选者后遍历决策树，以及 \[domain-modeling]，它随着决策的确定保持 `CONTEXT.md` 和 ADR 的最新状态。它产生的是一个想法，该想法在 \[grill-with-docs] 或 \[to-spec] 重新进入主构建流程。对于哪种技能适合某种情况，\[ask-matt] 是整个集合的路由器。
+`improve-codebase-architecture` is **periodic maintenance** — run it every few days, outside any chain, to queue up work rather than to do it. Its neighbours are [codebase-design](https://aihero.dev/skills-codebase-design), which owns the depth-and-seam vocabulary every candidate is written in, [grilling](https://aihero.dev/skills-grilling), which walks the decision tree once you have chosen a candidate, and [domain-modeling](https://aihero.dev/skills-domain-modeling), which keeps `CONTEXT.md` and the ADRs current as the decision settles. What it produces is an idea, which re-enters the main build flow at [grill-with-docs](https://aihero.dev/skills-grill-with-docs) or [to-spec](https://aihero.dev/skills-to-spec). For which skill fits a situation, [ask-matt](https://aihero.dev/skills-ask-matt) is the router over the whole set.
