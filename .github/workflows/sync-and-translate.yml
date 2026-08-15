@@ -1,10 +1,6 @@
-name: Sync and Translate
+name: Continuous Translation
 
-# Mirror upstream into a Chinese-translated branch, then open an update PR to main.
-# - Non-doc assets (scripts/config/CI) are copied as-is from upstream.
-# - Markdown docs are translated in-place to Chinese at the same path.
-# - Two jobs: detect runs always; sync+pr only when upstream changed.
-# - Never pushes to the upstream repo, so upstream's release workflow never fires.
+# Sync upstream, translate docs to zh, open/update a PR to main.
 
 on:
   schedule:
@@ -20,33 +16,25 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Public upstream repository URL, e.g. https://github.com/mattpocock/skills.git
   UPSTREAM_REPOSITORY_URL: ${{ vars.UPSTREAM_REPOSITORY_URL }}
-  # Branch of the upstream repo to follow.
   UPSTREAM_BRANCH: ${{ vars.UPSTREAM_BRANCH || 'main' }}
-  # Glob patterns to keep from OUR repo instead of translating (space-separated).
-  # .github/workflows is excluded so upstream's release workflow is never imported.
-  KEEP_FROM_ORIGIN: ".github .changeset CHANGELOG.md translations .genaiscript"
-  # Files that must never enter translation (tailored for the translation action).
-  TRANSLATE_EXCLUDE: ".changeset/** CHANGELOG.md translations/** .genaiscript/** .github/workflows/release.yml"
+  # Files re-imported from our repo (not translated, not from upstream).
+  KEEP_FROM_ORIGIN: ".github translations .ctignore"
 
 jobs:
-  # Always runs: decides whether any downstream work is needed.
-  detect:
+  sync:
     runs-on: ubuntu-latest
     outputs:
-      changed: ${{ steps.detect.outputs.changed }}
-      doc: ${{ steps.detect.outputs.doc }}
+      changed: ${{ steps.sync.outputs.changed }}
+      doc: ${{ steps.sync.outputs.doc }}
     steps:
       - uses: actions/checkout@v4
-
       - name: Fetch upstream
         run: |
           git remote add upstream "$UPSTREAM_REPOSITORY_URL"
           git fetch upstream "$UPSTREAM_BRANCH" --no-tags
-
       - name: Detect changes
-        id: detect
+        id: sync
         run: |
           if git diff --quiet "upstream/$UPSTREAM_BRANCH" origin/main; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -54,60 +42,54 @@ jobs:
           fi
           echo "changed=true" >> "$GITHUB_OUTPUT"
           git diff --name-only "upstream/$UPSTREAM_BRANCH" origin/main > /tmp/changed.txt
-          # Non-doc files (scripts/config/CI) that changed -> sync raw, not translated.
+          # Not markdown -> sync raw; markdown -> translation candidates.
           grep -v -E '\.md$' /tmp/changed.txt |
             grep -v -E '^\.github/|^\.changeset/|^CHANGELOG\.md$|^translations/' |
             sort -u > /tmp/non_doc.txt || true
-          # Doc files (markdown) that changed -> translation candidates.
           grep -E '\.md$' /tmp/changed.txt | sort -u > /tmp/doc.txt || true
           echo "doc=$(wc -l < /tmp/doc.txt)" >> "$GITHUB_OUTPUT"
-          echo "--- non-doc changed ---"
           cat /tmp/non_doc.txt
-          echo "--- docs changed ---"
           cat /tmp/doc.txt
 
-  # Only runs when upstream actually changed.
-  sync_and_translate:
-    needs: detect
-    if: needs.detect.outputs.changed == 'true'
+  translation:
+    needs: sync
+    if: needs.sync.outputs.changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Fetch upstream
         run: |
           git remote add upstream "$UPSTREAM_REPOSITORY_URL"
           git fetch upstream "$UPSTREAM_BRANCH" --no-tags
-
-      # Build work branch from the upstream snapshot, then re-import ours so
-      # translation runs from English with our translation memory present.
-      - name: Prepare work branch from upstream
+      # Prepare content on the origin/main worktree WITHOUT creating the PR branch:
+      # a pre-created branch tracking upstream breaks create-pull-request.
+      - name: Prepare content from upstream
         run: |
-          git switch -C sync-upload "upstream/$UPSTREAM_BRANCH"
+          git checkout "upstream/$UPSTREAM_BRANCH" -- .
+          # Delete files removed upstream.
+          git ls-tree -r --name-only origin/main | while read -r f; do
+            git cat-file -e "upstream/$UPSTREAM_BRANCH:$f" 2>/dev/null || echo "$f"
+          done | xargs -r git rm -q --ignore-unmatch || true
+          # Re-import our files (workflows, translations memory, ctignore).
           for p in $KEEP_FROM_ORIGIN; do
             git checkout origin/main -- "$p" 2>/dev/null || true
           done
-          # Drop upstream's release workflow imported by the checkout above.
           git rm -q --ignore-unmatch .github/workflows/release.yml 2>/dev/null || true
 
       - uses: actions/cache@v4
-        if: needs.detect.outputs.doc != '0'
+        if: needs.sync.outputs.doc != '0'
         with:
           path: .genaiscript/cache/**
-          key: sync-translate-${{ github.run_id }}
+          key: continuous-translation-${{ github.run_id }}
           restore-keys: |
-            sync-translate-
-
-      # Translates only when a doc changed; uses translations/zh.json to translate
-      # incrementally and keep terminology stable.
+            continuous-translation-
       - name: Translate docs to zh
-        if: needs.detect.outputs.doc != '0'
+        if: needs.sync.outputs.doc != '0'
         continue-on-error: true
         uses: pelikhan/action-continuous-translation@v0
         with:
           lang: zh
           files: "./**/*.md*"
-          exclude: "${{ env.TRANSLATE_EXCLUDE }}"
           filename_template: "{{dirname}}/{{basename}}{{extname}}"
           model_alias: |
             translation: openai:${{ vars.OPENAI_MODEL_NAME }}
@@ -115,15 +97,11 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_API_BASE: ${{ vars.OPENAI_API_BASE }}
-
-      # Open/update a PR into main from the prepared branch instead of committing
-      # directly. Reuses a persistent branch so the PR updates across runs.
       - name: Create/Update Pull Request
         uses: peter-evans/create-pull-request@v8
-        continue-on-error: true
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: sync-upload
+          branch: workspace
           base: main
           title: "[cai] sync upstream + translate docs to zh"
           body: |
