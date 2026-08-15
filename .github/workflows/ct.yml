@@ -5,7 +5,7 @@ on:
     branches:
       - mirror
     paths:
-      - "./**/*.md*"
+      - "**/*.md*"
       - "!.changeset/**"
       - "!CHANGELOG.md"
       - "!translations/**"
