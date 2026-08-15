@@ -100,6 +100,11 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_API_BASE: ${{ vars.OPENAI_API_BASE }}
+
+      - name: Fix ownership of generated files
+        if: needs.sync.outputs.changed == 'true'
+        run: sudo chown -R runner:runner . 2>/dev/null || true
+
       - name: Create/Update Pull Request
         uses: peter-evans/create-pull-request@v8
         with:
