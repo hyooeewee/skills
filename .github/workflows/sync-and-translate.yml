@@ -91,7 +91,7 @@ jobs:
         uses: pelikhan/action-continuous-translation@v0
         with:
           lang: zh
-          files: "**/*.md*"
+          files: "README.md"
           debug: true
           filename_template: "{{dirname}}/{{basename}}{{extname}}"
           model_alias: |
