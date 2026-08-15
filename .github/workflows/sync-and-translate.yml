@@ -91,7 +91,8 @@ jobs:
         uses: pelikhan/action-continuous-translation@v0
         with:
           lang: zh
-          files: "./**/*.md*"
+          files: "**/*.md*"
+          debug: true
           filename_template: "{{dirname}}/{{basename}}{{extname}}"
           model_alias: |
             translation: openai:${{ vars.OPENAI_MODEL_NAME }}
