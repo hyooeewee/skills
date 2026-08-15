@@ -1,11 +1,11 @@
-# 超出范围知识库
+# Out-of-Scope Knowledge Base
 
-仓库中的 `.out-of-scope/` 目录存储了被拒绝的功能请求的持久化记录。它有两个用途：
+The `.out-of-scope/` directory in a repo stores persistent records of rejected feature requests. It serves two purposes:
 
-1. **制度记忆** — 之所以拒绝某个功能，以便在问题关闭时不会丢失推理过程
-2. **去重** — 当出现与之前拒绝记录匹配的新问题时，技能可以展示之前的决定，而不是重新争论
+1. **Institutional memory** — why a feature was rejected, so the reasoning isn't lost when the issue is closed
+2. **Deduplication** — when a new issue comes in that matches a prior rejection, the skill can surface the previous decision instead of re-litigating it
 
-## 目录结构
+## Directory structure
 
 ```
 .out-of-scope/
@@ -14,13 +14,13 @@
 └── graphql-api.md
 ```
 
-每个**概念**一个文件，而不是每个问题一个文件。请求同一事物的多个问题会被归在同一个文件下。
+One file per **concept**, not per issue. Multiple issues requesting the same thing are grouped under one file.
 
-## 文件格式
+## File format
 
-文件应采用轻松、可读的风格编写——更像是一份简短的设计文档，而不是数据库条目。使用段落、代码示例和例子来使推理过程清晰明了，并对首次遇到它的人有用。
+The file should be written in a relaxed, readable style — more like a short design document than a database entry. Use paragraphs, code samples, and examples to make the reasoning clear and useful to someone encountering it for the first time.
 
-````markdown
+```markdown
 # Dark Mode
 
 This project does not support dark mode or user-facing theming.
@@ -44,14 +44,13 @@ interface ThemeConfig {
   colors: ColorPalette; // single palette, resolved at build time
   fonts: FontStack;
 }
-````
+```
 
-## 先前的请求
+## Prior requests
 
-* \#42 — "添加深色模式支持"
-* \#87 — "无障碍夜间主题"
-* \#134 — "深色主题选项"
-
+- #42 — "Add dark mode support"
+- #87 — "Night theme for accessibility"
+- #134 — "Dark theme option"
 ```
 
 ### Naming the file
@@ -104,4 +103,3 @@ If the maintainer changes their mind about a previously rejected concept:
 - Delete the `.out-of-scope/` file
 - The skill does not need to reopen old issues — they're historical records
 - The new issue that triggered the reconsideration proceeds through normal triage
-```

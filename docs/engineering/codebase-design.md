@@ -1,88 +1,88 @@
-## 功能说明
+## 它做什么
 
-`codebase-design` 修正你在设计模块时使用的词汇：**模块**、**接口**、**深度**、**缝合点**、**适配器**、**杠杆效应**、**局部性**。它精确地定义了每一个词，禁止松散的替代词（"组件"、"服务"、"API"、"边界"），并陈述了由此产生的少数几条原则。
+`codebase-design` 界定了你设计模块时所用的词汇：**module**（模块）、**interface**（接口）、**depth**（深度）、**seam**（接缝）、**adapter**（适配器）、**leverage**（杠杆）、**locality**（局部性）。它精确地定义每一个词，禁用松散的替代词（“component”、“service”、“API”、“boundary”），并阐明由它们得出的那几条原则。
 
-它是一个参考，而不是一个流程。没有要运行的循环，没有它产生的工件，没有问你问题的检查点。其他所有涉及设计的技能都借用它的词汇；它独自为你提供语言，然后停止。在调用它之前要知道这一点，因为一个没有流程和停止规则的技能，如果你将 [会话](https://www.aihero.dev/ai-coding-dictionary/session) 指向它并说“开始”，它会即兴创作一个流程——见下文的问题。
+它是一份参考资料，而不是一个流程。没有需要运行的循环，没有它产生的产物，也没有它会向你提问的检查点。每个涉及设计的其他技能都会借用它的词汇；单独使用时，它把语言交给你，然后就此打住。这是你在调用它之前需要知道的事，因为一个没有流程、没有停止规则的技能，如果你把一个 [session](https://www.aihero.dev/ai-coding-dictionary/session) 指向它并说“开始”，它会即兴编造一个流程——见下面的问题。
 
-## 何时使用
+## 何时使用它
 
-输入 `/codebase-design`，或者当设计任务适合时，代理会自动调用它。
+类型`/codebase-design`, or the agent reaches for it automatically when a design task fits.
 
-当你已经知道要重新设计哪段代码，并且需要考虑其形状时使用它：缝合点在哪里，接口可以多小，提取是否物有所值。这也是你用来解决关于某个词的含义的争论的工具。
+当你已经知道要重新设计哪些代码，并且需要思考它的形态时，就使用它：接缝放在哪里、接口能有多小、一次抽取是否值得保留。要解决关于某个词含义的争论时，你也会用到它。
 
-有几个技能与之相近。你想要哪一个取决于实际问题是：
+有几个技能和它靠得很近。你想要哪一个取决于实际的问题是什么：
 
-| 问题                                        | 技能                                                                           |
-| ----------------------------------------- | ---------------------------------------------------------------------------- |
-| 单个模块的形状——它的接口、它的缝合点、它的深度                  | `codebase-design`                                                            |
-| 领域的\*词汇\* *词汇*——"账户"意味着三件事，两个人对"取消"有不同的意思 | [domain-modeling](https://aihero.dev/skills-domain-modeling)                 |
-| 你还不知道\*哪个\* *哪个*模块需要重新设计                  | [改进代码库架构](https://aihero.dev/skills-improve-codebase-architecture)——找出候选者的调查 |
-| 你希望对设计进行辩论，而不仅仅是命名                        | [grill-me](https://aihero.dev/skills-grilling)                               |
-| 有具体的行为要构建，并且你希望测试能经受住重构                   | [tdd](https://aihero.dev/skills-tdd)                                         |
+| 问题                                                | 技能                                                                                                  |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| 单个模块的形态——它的接口、它的接缝、它的深度                           | `codebase-design`                                                                                   |
+| 该 *领域的词汇*——“account”有三种含义，两个人对“cancellation”的理解不同 | [domain-modeling](https://aihero.dev/skills-domain-modeling)                                        |
+| 你还不知道 *哪*个模块需要重新设计                                | [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture)——找出候选模块的调研 |
+| 你希望设计接受质疑，而不只是被命名                                 | [追问](https://aihero.dev/skills-grilling)                                                            |
+| 有一个具体的行为要构建，并且你希望测试能在重构中幸存下来                      | [tdd](https://aihero.dev/skills-tdd)                                                                |
 
 ## 词汇表
 
-词汇表就是该技能。每个术语都是相对于其他术语定义的，并且每个术语都附有它所替换的词。
+词汇表就是这个技能。每个术语都相对于其他术语来定义，而且每个都带有它所替代的词。
 
-| 术语       | 它的含义                                                                            | 不要说      |
-| -------- | ------------------------------------------------------------------------------- | -------- |
-| **模块**   | 任何具有接口和实现的事物。有意设计为规模无关——一个函数、一个类、一个包、一个跨越层级的切片。                                 | 单元、组件、服务 |
-| **接口**   | 调用者为了正确使用它必须知道的一切：类型签名，加上不变量、顺序约束、错误模式、所需配置、性能特征。                               | API、签名   |
-| **深度**   | 接口处的杠杆作用——调用者或测试人员每学习一个单位的接口可以执行多少行为。 **深度**：在小的接口后面有许多行为。 **浅度**：接口几乎和实现一样复杂。  | —        |
-| **缝合点**  | Michael Feathers 的术语：一个你可以在不编辑该处的情况下改变行为的地方。 *位置*接口的位置，把它放在哪里是它自己的决定，与它后面是什么无关。 | 边界       |
-| **适配器**  | 在缝合点满足接口的具体事物。它命名的是一个角色，而不是一种物质——内存中的假数据和 Postgres 仓库都是适配器。                     | —        |
-| **杠杆作用** | 调用者从深度中获得的东西：每学习一个单位的接口就能获得更多的能力。                                               | —        |
-| **局部性**  | 维护者从深度中获得的东西：变更、错误和验证集中在同一个地方。一次修复，到处修复。                                        | —        |
+| 术语                | 含义                                                                                         | 不要使用                             |
+| ----------------- | ------------------------------------------------------------------------------------------ | -------------------------------- |
+| **模块（Module）**    | 任何具有接口和实现的东西。刻意与规模无关——可以是一个函数、一个类、一个包、一个跨层的切片。                                             | unit、component、service（单元、组件、服务） |
+| **接口（Interface）** | 调用者为了正确使用它而必须知道的一切：类型签名，外加不变量、顺序约束、错误模式、必需的配置、性能特征。                                        | API、signature（签名）                |
+| **深度（Depth）**     | 接口处的杠杆——调用者或测试每学习一个单位的接口，就能驱动多少行为。 **深（Deep）**：大量行为隐藏在一个小接口背后。 **浅（Shallow）**：接口几乎与实现一样复杂。 | —                                |
+| **接缝（Seam）**      | Michael Feathers 的术语：一个无需在该处编辑就能改变行为的地方。它是接口的 *位置*，而把它放在哪里本身就是独立的决策，与它背后放什么分开考虑。           | boundary（边界）                     |
+| **适配器（Adapter）**  | 在接缝处满足接口的具体事物。它命名的是一个角色，而不是一种实体——内存假实现和 Postgres 仓库都是适配器。                                  | —                                |
+| **杠杆（Leverage）**  | 调用者从深度中获得的东西：每学习一单位接口，就获得更多能力。                                                             | —                                |
+| **局部性（Locality）** | 维护者从深度中获得的东西：变更、缺陷和验证集中在一处。修复一次，处处生效。                                                      | —                                |
 
-深度故意不定义为实现行数与接口行数的比率，这是 Ousterhout 自己的定义。那个指标会奖励填充实现。相反使用的是“深度即杠杆作用”的定义。
+深度特意*不*被定义为实现代码行数与接口代码行数之比——尽管那是 Ousterhout 本人的定义。那个指标会奖励给实现注水的行为。取而代之的是“深度即杠杆”（depth-as-leverage）的定义。
 
-## 四个原则
+## 四条原则
 
-* **深度是接口的属性，而不是实现的属性。** 一个深度模块可以在内部由小的可交换部分构建。它们只是不会暴露给调用者。模块可以有内部缝合点供其自己的测试使用，并且在接口处有一个外部缝合点。
-* **删除测试。** 想象删除该模块。如果复杂性消失了，它就是一个透传。如果它在 N 个调用者之间重新出现，它就是物有所值的。
-* **接口是测试表面。** 调用者和测试穿过同一个缝合点。如果你想要测试接口*之后*的内容，该模块的形状就是错误的。
-* **一个适配器意味着一个假设的缝合点。两个适配器意味着一个真实的缝合点。** 在有东西实际穿过它发生变化之前，不要切割缝合点。单适配器的缝合点只是间接引用。
+* \*\*深度是接口的属性，不是实现的属性。\*\*一个深模块内部可以由可替换的小部件构建而成。它们只是不会向调用者显现。一个模块可以有供自身测试使用的内部接缝，以及一个位于其接口上的外部接缝。
+* \*\*删除测试。\*\*想象删除这个模块。如果复杂性随之消失，那它就是个透传。如果复杂性重新出现在 N 个调用者身上，那它就是在体现自己的价值。
+* \*\*接口就是测试表面。\*\*调用者和测试穿过同一个接缝。如果你想测试*越过*接口的东西，那么这个模块的形状就是错的。
+* \*\*一个适配器意味着假设的接缝；两个适配器意味着真实的接缝。\*\*在确实有东西跨越它变化之前，不要切出接缝。单一适配器的接缝只是间接层。
 
-两个支持文件更进一步，该技能按需读取它们而不是预先读取。[DEEPENING.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/DEEPENING.md) 对候选者的依赖进行分类——进程内、本地可替换、远程但拥有、真正的外部——因为类别决定了如何跨越缝合点测试深度化的模块。[DESIGN-IT-TWICE.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/DESIGN-IT-TWICE.md) 启动并行的[sub-agents](https://www.aihero.dev/ai-coding-dictionary/subagent) 为同一个模块生成三个或更多截然不同的接口，然后根据深度、局部性和缝合点位置对它们进行比较。
+两个辅助文件更进一步，技能按需读取它们，而不是预先读取。[DEEPENING.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/DEEPENING.md) 对候选模块的依赖进行分类——进程内、本地可替换、远程但自有、真正外部——因为类别决定了加深后的模块如何跨越接缝进行测试。[DESIGN-IT-TWICE.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/DESIGN-IT-TWICE.md) 会启动并行的[子智能体](https://www.aihero.dev/ai-coding-dictionary/subagent)，为同一个模块生成三个或更多截然不同的接口，然后比较它们的深度、局部性和接缝位置。
 
 ## 常见问题
 
-**我实际上如何在 TypeScript 中构建一个深度模块？**
+**我到底如何在 TypeScript 中构建一个深模块？**
 
-这是关于该技能最常被问到的问题，而该技能并没有回答它。它定义了深度模块*是什么*；它对如何阻止一个随机的导入越过接口到达另一端没有任何说明。[Issue #458](https://github.com/mattpocock/skills/issues/458) 把这一点说得很清楚：“假设我们对接口很满意，它隐藏了细节等等。但我们如何强制执行它？我认为如果没有 linting 或清晰的护栏，人类和 LLM 都会随着时间的推移开始把它弄得一团糟。” Matt 在那个线程中的回答有三个选项：将其包装在类或 IIFE 中并接受类变得极其庞大；在 monorepo 中将其设为一个包并接受 monorepo 工具；或者使用像 [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) 这样的 linter 来禁止绕过接口的导入。他单独将 Effect 称为最佳机制，将 dependency-cruiser 称为第二好的。仓库的 `in-progress/` 桶中有一个 `setup-ts-deep-modules` 技能，它制定了 `src/packages/<name>/index.ts` 约定，但它是一个 beta 渠道技能，没有文档页面，并且没有附带任何 lint 规则。
+这是关于这个技能被问得最多的问题，而这个技能并没有回答它。它定义了深模块*是什么*，却完全没有提到如何阻止游离的导入越过接口。[Issue #458](https://github.com/mattpocock/skills/issues/458) 说得直白：“假设我们对接口感到满意，它隐藏了细节，等等。但我们如何强制实施它？我认为如果没有 lint 或清晰的护栏，人类和 LLM 都会随着时间推移开始把它弄得一团糟。”Matt 在那个讨论串中的回答是三个选项：把它包在一个 class 或 IIFE 里，并接受这个类会变得巨大；把它做成 monorepo 中的一个包，并接受 monorepo 的工具链；或者使用像 [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) 这样的 linter，禁止绕过接口的导入。他另外还分别称 Effect 是最好的机制，dependency-cruiser 是第二好的。仓库的 `in-progress/` 目录中有一个 `setup-ts-deep-modules` 技能，它定下了一种 `src/packages/<name>/index.ts` 约定，但它是一个没有文档页面的测试版技能，而且没有随附任何 lint 规则。
 
-**我将一个会话指向它，它烧掉了 10 万 [token](https://www.aihero.dev/ai-coding-dictionary/token)重新设计了我从未问过的事情。**
+**我把一个 session 指向它，结果它烧掉了 10 万 [tokens](https://www.aihero.dev/ai-coding-dictionary/token)重新设计我从未要求过的东西。**
 
-已知，并作为 [issue #449](https://github.com/mattpocock/skills/issues/449) 提交。该技能是由模型调用的，并将其描述为词汇表，但其中没有任何内容能硬性阻止代理将其视为可运行的流程。被指示“在 /codebase-design 中恢复并推动未完成的决策”时，代理找到了它所能找到的最具行动导向的内容——即 `DESIGN-IT-TWICE.md` 中的并行子代理——重新探索了前一个会话已经映射过的代码，并在提出任何问题之前运行了很长时间。驱动技能的所有护栏（检查点、一次一个问题、不自动前进）在这里都不存在，因为参考技能没有任何护栏。变通方法是命名一个驱动技能并让这个技能位于它之下：使用 `codebase-design` 作为词汇表的 `/grill-with-docs`、`/improve-codebase-architecture` 或 `/tdd`。该问题尚未解决。
+已知问题，已作为 [issue #449](https://github.com/mattpocock/skills/issues/449) 归档。这个技能由模型调用，并将自己描述为词汇表，但其中没有任何东西能硬性阻止智能体把它当作一个可运行的流程。当被告知“在 /codebase-design 中继续，并推动尚未决定的决策”时，一个智能体抓住了它能找到的最具行动形态的内容——`DESIGN-IT-TWICE.md` 中的并行子智能体——重新探索了先前会话已经摸清过的代码，并且在问任何问题之前跑出了很远。驱动型技能所拥有的护栏（检查点、一次只问一个问题、不自动推进）在这里一个都没有，因为参考资料本来就没有护栏。变通办法是指定一个驱动技能，让这个技能作为它的底层：`/grill-with-docs`、`/improve-codebase-architecture` 或 `/tdd`，以 `codebase-design` 作为词汇表。该 issue 仍然开放。
 
-**哪里去了 `design-an-interface`\`design-an-interface\` `/interface-design`去了？并且有一个吗**
+**把 `design-an-interface`移到哪去了？还有 `/interface-design`这个技能吗？**
 
-`design-an-interface` 被移除并合并到这个技能中。没有什么丢失：它的“设计两次”技术——即由并行子代理生成截然不同的设计，源自 Ousterhout——作为 `DESIGN-IT-TWICE.md` 在这里发布。此外，几个人要求有一个专门的 `/interface-design` 技能用于深度模块/薄接口哲学；该哲学已经存在于这里，并且没有计划单独的技能。如果你来寻找这两个名字中的任何一个，这就是这个页面。
+`design-an-interface` 已被移除并并入这个技能。没有任何损失：它的“设计两次”技术——由并行子智能体生成截然不同的设计，源自 Ousterhout——以 `DESIGN-IT-TWICE.md` 的形式包含在这里。另外，有几个人曾要求为深模块/薄接口的哲学专门做一个 `/interface-design` 技能；那种哲学已经存在于这里，而且没有计划另立技能。如果你是为了这两个名字中的任何一个而来，就是这一页。
 
-**这不是一个文件结构约定——文件夹、桶文件、功能切片吗？**
+**这难道不是一种文件结构约定吗——文件夹、桶文件、特性切片？**
 
-不，该技能在多次回击中一直坚持这一立场。[Issue #95](https://github.com/mattpocock/skills/issues/95) 提议了一种形式化的分形树文件结构作为深度模块的具体实现；回复是两者是正交的——"深度模块是关于接口的设计以及通过严格的接口访问，无论文件系统看起来如何。使用这种方法似乎完全可以拥有浅模块。" #458 中也出现了同样的情况："我认为你可能将模块的概念与文件系统联系得太紧密。文件系统当然可以作为模块形状的有用提示，但在构建深度模块时没有必要使用文件系统。" 词汇表特意将 **模块** 定义为规模无关。
+不，而且该技能在反复的反对声中一直坚守这一立场。[Issue #95](https://github.com/mattpocock/skills/issues/95) 提议将形式化的分形树文件结构作为深模块的具体实现；当时的回复是，这两者是正交的——"深模块关乎接口的设计，以及通过严格接口进行访问，无论文件系统长什么样。使用这种方法似乎完全有可能出现浅模块。"同样的问题在 #458 中也出现了："我认为你可能把模块的概念与文件系统绑得太紧了。文件系统当然可以作为模块形状的有用提示，但在构建深模块时没有必要使用文件系统。"词汇表特意将 **module** 定义为规模无关（scale-agnostic）的。
 
-**\`tdd\` 会取代 \`/implement\`，还是课程的 \`/do-work\`？ `tdd`实际上在使用这个词汇吗？**
+**&#x20;`tdd`真的使用这套词汇吗？**
 
-现在确实如此。很长一段时间并非如此。以前位于 `tdd` 内部的内联深度模块注释在 v1.0 中被删除，取而代之的是这个共享技能，但替换它们的指针从未被添加——所以 `tdd` 为自己定义了"seam"（缝合点）并且没有引用任何内容。差距已填补：指针现在在技能中，当接口的形状是开放问题而不是测试时被调用。`tdd` 仍然拥有"seam"作为你*测试*的边界；这个技能拥有其背后的模块形状。
+现在是了。但很长一段时间内并非如此。曾经放在 `tdd` 内部的内联深模块笔记在 v1.0 中被移除，转而使用这个共享技能，但替换它们的指针从未被添加——所以 `tdd` 为自己定义了 "seam"（接缝），并且没有引用任何东西。现在这个缺口已经补上：指针现在就放在 `tdd` 中，当开放问题是接口的形状而非测试时，就会触达这里。`tdd` 仍然拥有 "seam" 这个词，指你*进行测试*所针对的边界；而这个技能拥有其背后的模块形状。
 
-**"design-it-twice" 模式在 Claude Code 之外有效吗？**
+**design-it-twice 模式在 Claude Code 之外也能工作吗？**
 
-并不整洁。`DESIGN-IT-TWICE.md` 说"使用 Agent 工具并行生成 3 个以上子代理"，这是 Claude Code 的 [tool](https://www.aihero.dev/ai-coding-dictionary/tool)（工具）。该仓库为其他 [harnesses](https://www.aihero.dev/ai-coding-dictionary/harness)（启动器）发送元数据，包括 Codex，并且这些可能不会在该名称下暴露任何内容——因此并行设计阶段不如技能的元数据所暗示的那样可移植。在 [issue #564](https://github.com/mattpocock/skills/issues/564) 中追踪，未解决。
+不能干净利落地工作。`DESIGN-IT-TWICE.md` 说"使用 Agent 工具并行生成 3 个以上的子代理"，这里的 Agent 工具是 Claude Code 的 [tool](https://www.aihero.dev/ai-coding-dictionary/tool)，用的是 Claude Code 自己的名称。该仓库为其他 [harnesses](https://www.aihero.dev/ai-coding-dictionary/harness)（包括 Codex）提供了元数据，而那些工具在该名称下可能什么都不会暴露——所以并行设计阶段的便携性不如技能元数据所暗示的那么好。这个问题已在 [issue #564](https://github.com/mattpocock/skills/issues/564) 中跟踪，尚未关闭。
 
-**我可以把自己的概念添加到词汇表中吗——connascence（相依性）、module secrets（模块秘密），\[progressive disclosure]\(https\://www\.aihero.dev/ai-coding-dictionary/progressive-disclosure)？ [渐进式披露](https://www.aihero.dev/ai-coding-dictionary/progressive-disclosure)\`/do-work\`？**
+**我可以把自己的概念加入词汇表吗——connascence（共变）、module secrets（模块秘密）、 [progressive disclosure（渐进式披露）](https://www.aihero.dev/ai-coding-dictionary/progressive-disclosure)？**
 
-人们提出了正是这些。[Issue #180](https://github.com/mattpocock/skills/issues/180) 添加了 Parnas 的模块秘密和 Page-Jones 的相依性作为跨越缝合点泄漏的*什么*的命名层，并附上了工作补丁；[issue #303](https://github.com/mattpocock/skills/issues/303) 提议在实现内部进行渐进式披露，因此在其公共接口处深度模块在其下面不是一个未区分的厚板。两者都是开放且未合并的。作为已发布的词汇表故意很小，它保持很小的原因是该技能本身所述：一致的语言是重点所在，而一个没有人一致使用的术语比没有术语更糟。
+人们确实提议过这些。[Issue #180](https://github.com/mattpocock/skills/issues/180) 将 Parnas 的 module secrets（模块秘密）和 Page-Jones 的 connascence（共变）作为命名层加入，用来说明*什么*正在穿过接缝泄漏，并附带了可用的 diff；[issue #303](https://github.com/mattpocock/skills/issues/303) 提议在实现内部采用 progressive disclosure（渐进式披露），这样在公共接口上是深模块的模块，其内部就不会是一整块无从区分的平板。两者都处于开放状态，尚未合并。随附的词汇表刻意保持很小，而它保持很小的原因在技能本身中就有说明：一致的语言才是全部意义所在，一个没人能一致使用的术语比没有术语更糟。
 
-## 判断是否生效
+## 如果它起作用了
 
-* 设计对话不再产出 "component"（组件）、"service"（服务）和 "boundary"（边界）等词汇，而是开始产出 "module"（模块）、"interface"（接口）和 "seam"（缝合点）。
-* 任何人都可以指出一个提议的提取项，并说明它是否通过删除测试，而无需含糊其辞。
-* 提议的缝合点会附带一个第二个适配器，而不仅仅是第一个。
-* 对接口的讨论涵盖了不变量、顺序和错误模式——而不仅仅是类型签名。
-* 调用它不会启动会话。如果代理开始读取文件并仅基于 `/codebase-design` 提出重构，它就误将参考作为了驱动。
+* 设计对话不再产出 "component"、"service" 和 "boundary" 这些词，而是开始产出 "module"、"interface" 和 "seam"。
+* 有人能指着提议的抽取方案，毫不犹豫地说出它是否通过删除测试。
+* 提议的接缝要附带第二个已命名的适配器，而不只是第一个。
+* 对接口的讨论涵盖不变量、顺序和错误模式——而不仅仅是类型签名。
+* 调用它不会启动会话。如果 agent 单凭 `/codebase-design` 就开始读取文件并提出重构，那就是把参考文档误当成了驱动者。
 
-## 在系统中的位置
+## 它在系统中的位置
 
-`codebase-design` 是一个**随时可用的独立技能**，位于工程技能之下的词汇层，而不是任何链条中的一步。它最近的邻居是 [domain-modeling](https://aihero.dev/skills-domain-modeling)，它是*问题域*的词汇的并行参考，而不是模块的形状——两者通常一起需要，因为要很好地命名深度模块两者都需要。[improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) 是另一个：它调查代码库以寻找深化候选者，并将它们中的每一个写入此词汇表，因此它找到模块，而这个技能是你设计它的平台。当你不确定哪个技能或流程适合时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指引。
+`codebase-design` 是一个**随时可用的独立技能**，是工程技能之下的词汇层，而不是任何链条中的一步。它最接近的邻居是 [domain-modeling](https://aihero.dev/skills-domain-modeling)，那是*问题域*词汇的平行参考，而非模块的形状——两者通常需要一起使用，因为要给深模块取好名字，两者都需要。[improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) 是另一个：它会勘察代码库以寻找值得加深的候选模块，并用这套词汇表逐一写出，因此它负责找到模块，而这个技能是你设计模块时的工作台。当你不确定哪个技能或流程合适时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指路。

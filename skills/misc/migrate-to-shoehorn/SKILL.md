@@ -1,23 +1,23 @@
 ---
 name: migrate-to-shoehorn
-description: 迁移测试文件中的 `as` 类型断言至 @total-typescript/shoehorn。当用户提到
-  shoehorn、想要替换测试中的 `as`，或需要部分测试数据时使用。
+description: 将测试文件从 `as` 类型断言迁移到 @total-typescript/shoehorn。当用户提到
+  shoehorn、想要在测试中替换 `as` 或需要部分测试数据时使用。
 
 ---
 
-# 迁移至 Shoehorn
+# 迁移到 Shoehorn
 
-## 为什么要使用 shoehorn？
+## 为什么使用 shoehorn？
 
-`shoehorn` 允许你在测试中传入部分数据，同时保持 TypeScript 的类型检查通过。它用类型安全的方式替代了 `as` 断言。
+`shoehorn` 允许你在测试中传入部分数据，同时让 TypeScript 保持满意。它用类型安全的替代方案取代了 `as` 断言。
 
-**仅限测试代码。** 永远不要在生产代码中使用 shoehorn。
+**仅限测试代码。** 切勿在生产代码中使用 shoehorn。
 
-`as` 在测试中的问题：
+在测试中使用 `as` 的问题：
 
-* 已被教导不使用它
+* 被教导不要使用它
 * 必须手动指定目标类型
-* 使用双重 `as` (`as unknown as Type`) 来传入故意错误的数据
+* 用于故意传入错误数据的双重 as（`as unknown as Type`）
 
 ## 安装
 
@@ -27,7 +27,7 @@ npm i @total-typescript/shoehorn
 
 ## 迁移模式
 
-### 属性较少的大对象
+### 大型对象，仅需少数属性
 
 Before:
 
@@ -96,25 +96,25 @@ import { fromAny } from "@total-typescript/shoehorn";
 getUser(fromAny({ body: { id: 123 } }));
 ```
 
-## 如何选择
+## 何时使用它们
 
-| 函数              | 使用场景                        |
-| --------------- | --------------------------- |
-| `fromPartial()` | 传入仍然能通过类型检查的部分数据            |
-| `fromAny()`     | 传入故意错误的数据（保持自动补全）           |
-| `fromExact()`   | 强制使用完整对象（稍后替换为 fromPartial） |
+| 函数              | 使用场景                      |
+| --------------- | ------------------------- |
+| `fromPartial()` | 传递仍能通过类型检查的部分数据           |
+| `fromAny()`     | 传递故意错误的数据（保留自动补全功能）       |
+| `fromExact()`   | 强制完整对象（之后可换用 fromPartial） |
 
 ## 工作流程
 
 1. **收集需求** - 询问用户：
-   * 哪些测试文件中有导致问题的 `as` 断言？
-   * 他们是否正在处理只有部分属性重要的大对象？
-   * 他们是否需要传入故意错误的数据来进行错误测试？
+   * 哪些测试文件中的 `as` 断言导致了问题？
+   * 是否涉及大型对象，其中只有部分属性重要？
+   * 是否需要为错误测试传入故意错误的数据？
 
 2. **安装并迁移**：
    * [ ] 安装：`npm i @total-typescript/shoehorn`
    * [ ] 查找包含 `as` 断言的测试文件：`grep -r " as [A-Z]" --include="*.test.ts" --include="*.spec.ts"`
    * [ ] 将 `as Type` 替换为 `fromPartial()`
    * [ ] 将 `as unknown as Type` 替换为 `fromAny()`
-   * [ ] 添加来自 `@total-typescript/shoehorn` 的导入
+   * [ ] 从 `@total-typescript/shoehorn` 添加导入
    * [ ] 运行类型检查以验证
