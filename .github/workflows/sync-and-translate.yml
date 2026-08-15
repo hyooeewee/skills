@@ -65,7 +65,9 @@ jobs:
       # a pre-created branch tracking upstream breaks create-pull-request.
       - name: Prepare content from upstream
         run: |
-          git checkout "upstream/$UPSTREAM_BRANCH" -- .
+          # Resolve the workspace workflow files from our repo, not upstream, so
+          # upstream's release workflow never enters the branch.
+          git checkout "upstream/$UPSTREAM_BRANCH" -- . ':!.github/workflows'
           # Delete files removed upstream.
           git ls-tree -r --name-only origin/main | while read -r f; do
             git cat-file -e "upstream/$UPSTREAM_BRANCH:$f" 2>/dev/null || echo "$f"
