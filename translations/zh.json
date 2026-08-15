@@ -3787,5 +3787,6 @@
   "You invoke this by typing `/grill-me` — the [agent](https://www.aihero.dev/ai-co.5AA765F6D39E0CC7BB31": "你通过输入 `/grill-me` 来调用它——[代理](https://www.aihero.dev/ai-coding-dictionary/agent) 不会主动使用它。请在**全新的对话**中启动，而不是叠加在已经让代理写好的计划之上。",
   "What This Sets Up": "此设置包含的内容",
   "A **wizard** is a bash script that walks a human, step by step, through a manual.16A3CF8B8664FE1E1945": "**向导**是一个 bash 脚本，它一步一步地引导人类完成一个手动流程，这个过程用手做很繁琐，每次都要向 AI 重新解释也很繁琐。它会打开每个 URL，准确地说出要点击和复制的内容，捕获这些值，将它们写到该去的地方（`.env`、GitHub secrets），在每个阶段进行确认，并显示还剩多少阶段。它可能配置第三方服务、运行一次性迁移，或将项目从一种状态移到另一种状态。",
-  "The delightful UX is already solved by [template.sh](template.sh) — stage-by-sta.9CF409D346C4BFF43B82": "[template.sh](template.sh) 已经解决了令人愉悦的用户体验——逐步进度、确认门、跨平台 URL 打开（包括 WSL）、隐藏密钥输入、幂等的 `.env` 更新、`gh secret`/`gh variable` 写入，以及收尾总结。**你的工作只是界定流程并编写其阶段。** `STAGES` 标记上方的库在每个向导中都是相同的；这种一致性才是关键——永远不要手工编辑它。"
+  "The delightful UX is already solved by [template.sh](template.sh) — stage-by-sta.9CF409D346C4BFF43B82": "[template.sh](template.sh) 已经解决了令人愉悦的用户体验——逐步进度、确认门、跨平台 URL 打开（包括 WSL）、隐藏密钥输入、幂等的 `.env` 更新、`gh secret`/`gh variable` 写入，以及收尾总结。**你的工作只是界定流程并编写其阶段。** `STAGES` 标记上方的库在每个向导中都是相同的；这种一致性才是关键——永远不要手工编辑它。",
+  "Build and sharpen a project's domain model. Use when discussing codebase termino.5E6FB1C5E62BB8E5FADF": "构建并完善项目的领域模型。在讨论代码库术语、编写或编辑 CONTEXT.md 或记录或编辑 ADR 时使用。"
 }
