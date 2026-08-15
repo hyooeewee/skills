@@ -1,6 +1,6 @@
 ---
 name: domain-modeling
-description: 构建并完善项目的领域模型。当用户想要确定领域术语或通用语言、记录架构决策，或者当另一个技能需要维护领域模型时使用。
+description: 构建并完善项目的领域模型。在讨论代码库术语、编写或编辑 CONTEXT.md 或记录或编辑 ADR 时使用。
 
 ---
 
