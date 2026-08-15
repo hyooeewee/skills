@@ -1,40 +1,40 @@
-# 撰写 Agent Brief
+# 编写 Agent 简报
 
-Agent Brief 是一种结构化注释，当 Issue 或 PR 进入 `ready-for-agent` 时发布。它是 AFK Agent 的工作规范。原始内容和讨论是背景信息 — Agent Brief 是契约。
+Agent 简报是当 GitHub issue 或 PR 进入 `ready-for-agent` 状态时发布的一条结构化评论。它是 AFK Agent 将依据的权威规范。原始正文和讨论只是背景信息——Agent 简报才是契约。
 
-Brief 说明了 **Agent 应该做什么**，这适用于两个层面：对于 Issue，是从零开始构建变更；对于 PR，是针对现有 diff 剩余的工作 — 完成它、填补空白、解决审查点。原理相同；下面的 PR 示例显示了区别。
+简报说明 **Agent 应该做什么**，这适用于两种场景：对于 issue，就是从零开始构建改动；对于 PR，则是 *针对现有 diff* 还需要完成的工作——完成它、弥补差距、处理评审意见。两种场景的原则相同；下面的 PR 示例展示了区别。
 
 ## 原则
 
-### 耐用性优于精确性
+### 持久性优先于精确性
 
-Issue 可能会在 `ready-for-agent` 中停留数天或数周。在此期间代码库会发生变化。编写 Brief 时要确保即使文件被重命名、移动或重构，它仍然有用。
+Issue 可能会在 `ready-for-agent` 状态下停留数天或数周。在此期间，代码库会发生变化。撰写简报时，要确保即使文件被重命名、移动或重构，它仍然有用。
 
-* **应该** 描述接口、类型和行为契约
-* **应该** 指定 Agent 应该查找或修改的具体类型、函数签名或配置形状
-* **不要** 引用文件路径 — 它们会过时
-* **不要** 引用行号
-* **不要** 假设当前的实现结构会保持不变
+* **要**描述接口、类型和行为契约
+* **要**指出 Agent 应该查找或修改的具体类型、函数签名或配置形态
+* **不要**引用文件路径——它们会过时
+* **不要**引用行号
+* **不要**假设当前的实现结构将保持不变
 
-### 行为导向，而非过程导向
+### 强调行为，而非过程
 
-描述系统 **应该做什么**，而不是 **如何实现**。Agent 将从头探索代码库并做出自己的实现决策。
+描述系统应该**做什么**，而不是**如何**实现它。Agent 会重新探索代码库，并自行做出实现决策。
 
-* **好：** "`SkillConfig` 类型应该接受一个类型为 `CronExpression` 的可选 `schedule` 字段"
-* **坏：** "打开 src/types/skill.ts 并在第 42 行添加一个 schedule 字段"
-* **好：** "当用户不带参数运行 `/triage` 时，他们应该看到需要关注的 issues 摘要"
-* **坏：** "在主处理函数中添加一个 switch 语句"
+* **好：**"`SkillConfig` 类型应接受一个可选的 `schedule` 字段，类型为 `CronExpression`"
+* **不好：**"打开 src/types/skill.ts 并在第 42 行添加一个 schedule 字段"
+* **好：**"当用户不带参数运行 `/triage` 时，他们应该看到需要关注的问题摘要"
+* **不好：**"在主处理函数中添加一个 switch 语句"
 
 ### 完整的验收标准
 
-Agent 需要知道何时完成。每个 Agent Brief 都必须有具体、可测试的验收标准。每个标准都应独立可验证。
+Agent 需要知道何时完成。每个 Agent 简报都必须有具体、可测试的验收标准。每条标准都应可独立验证。
 
-* **好：** "运行 `gh issue list --label needs-triage` 返回经过初步分类的 issues"
-* **坏：** "Triage 应该正常工作"
+* **好：**"运行 `gh issue list --label needs-triage` 返回的是已经过初步分类的 issue"
+* **不好：**"分类应该正常工作"
 
 ### 明确的范围边界
 
-说明哪些不在范围内。这可以防止 Agent 进行过度设计或对相邻功能做出假设。
+明确说明哪些不在范围内。这可以防止 Agent 过度设计或对相邻功能做出假设。
 
 ## 模板
 
@@ -69,7 +69,7 @@ Be specific about edge cases and error conditions.
 
 ## 示例
 
-### 良好的 Agent Brief (bug)
+### 好的 Agent 简报（bug）
 
 ```markdown
 ## Agent Brief
@@ -104,7 +104,7 @@ and append "..." to indicate truncation.
 - Multi-line description support
 ```
 
-### 良好的 Agent Brief (enhancement)
+### 好的 Agent 简报（增强）
 
 ```markdown
 ## Agent Brief
@@ -145,9 +145,9 @@ checked for matches.
 - Bug reports (only enhancement rejections go to `.out-of-scope/`)
 ```
 
-### 良好的 Agent Brief (PR)
+### 好的 Agent 简报（PR）
 
-对于 PR，"当前行为" 描述的是 diff 的状态，Brief 要求 Agent 完成或修复它，而不是从头开始构建。
+对于 PR，"当前行为"描述的是 diff 的状态，简报要求 Agent 完成或修复它，而不是从头开始构建。
 
 ```markdown
 ## Agent Brief
@@ -182,7 +182,7 @@ is untouched when the flag is absent.
 - Changing the JSON shape of the success payload the PR already defined
 ```
 
-### 糟糕的 Agent Brief
+### 不好的 Agent 简报
 
 ```markdown
 ## Agent Brief
@@ -198,11 +198,11 @@ The function around line 150 has the issue.
 - src/types.ts (line 42)
 ```
 
-这很糟糕，因为：
+这是不好的原因：
 
-* 没有分类
-* 描述模糊 ("the triage thing is broken")
-* 引用了会过期的文件路径和行号
+* 没有类别
+* 描述含糊（"分类功能坏了"）
+* 引用了会过时的文件路径和行号
 * 没有验收标准
 * 没有范围边界
-* 没有描述当前与期望的行为
+* 没有描述当前行为与期望行为的对比

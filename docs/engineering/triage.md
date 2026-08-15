@@ -1,200 +1,94 @@
-## 功能说明
+## 它做什么
 
-`triage` 会遍历项目追踪器上的问题，通过一个包含 **triage 角色**（类别角色和状态角色）的小型状态机来移动每个问题，并留下一个就绪代理的简报、给报告人的具体问题，或一个带有记录原因的已关闭问题。````P001
-它仅适用于 **您未创建** 的问题。原始的 bug 报告、收到的功能请求、未提前宣布的外部拉取请求——从外部进入追踪器的工作，无论报告人留下了什么形式。`to-tickets` 生成的 [工单](https://www.aihero.dev/ai-coding-dictionary/ticket) 在构建上已经是就绪代理的，对它们运行 `triage` 至多只是浪费工作。规则很简单：`/triage` 仅用于传入的问题，不适用于您自己创建的问题。
+`triage` 会遍历你项目跟踪器上的 issue，让每一个经过一个由 **triage 角色** 组成的小型状态机——一个类别角色和一个状态角色——并留下一个可供 agent 直接使用的简报、一个向报告人提出的具体问题，或一个带着已记录原因的已关闭 issue。
 
+它只针对**你没有创建**的 issue。原始的 bug 报告、新来的功能请求、一个未经预告就到达的外部拉取请求——这些从外部进入跟踪器的工作，无论报告人以何种形式留下它。[Tickets](https://www.aihero.dev/ai-coding-dictionary/ticket) 由 [to-tickets](https://aihero.dev/skills-to-tickets) 生成，天生就是 agent-ready 的，对它们运行 `triage` 最多只是浪费工作。规则很简单：`/triage` 只用于传入的 issue，不用于你自己创建的 issue。
 
-```T002
-将其与手动标记分开的第二件事是：它会推荐并等待。它会告诉您它的类别和状态调用，并附带推理，以及它在代码库中找到的内容，并且直到您指示它之前，它不会应用任何内容。
+它区别于手工打标签的第二点是：它会给出建议并等待。它会告诉你它对类别和状态的判断及理由，以及它在代码库中的发现，而在你给出指示之前，它不会应用任何更改。
 
+## 何时使用它
 
-## 何时使用
+你通过输入 `/triage` 然后用自然语言描述你想要什么来调用它——[agent](https://www.aihero.dev/ai-coding-dictionary/agent) 不会主动使用它。“给我看任何需要我注意的东西”、“我们看看 #42”、“把 #42 移到 ready-for-agent”。
 
-```P003
-您通过输入 `/triage` 然后用自然语言描述您想要的内容来调用它——[代理](https://www.aihero.dev/ai-coding-dictionary/agent) 不会自行调用它。“展示任何需要我关注的东西”、“让我们看看 #42”、“将 #42 移至 ready-for-agent”。
-
-
-| 你拥有什么                                                                 | 去往哪里                                                         |
+| 你拥有什么                                                                 | 去哪里                                                          |
 | --------------------------------------------------------------------- | ------------------------------------------------------------ |
-| 充满他人原始报告的追踪器                                                          | `/triage`                                                    |
-| 你自己粗糙的想法，没有任何记录                                                       | [grill-with-docs](https://aihero.dev/skills-grill-with-docs) |
-| 将一段已确定的对话转化为规范 [规范](https://www.aihero.dev/ai-coding-dictionary/spec) | [to-spec](https://aihero.dev/skills-to-spec)                 |
-| 一个可以拆分为就绪代理票证的规范                                                      | [to-tickets](https://aihero.dev/skills-to-tickets)           |
-| 一个需要根本原因而非标签的已确认 bug                                                  | [诊断 bug](https://aihero.dev/skills-diagnosing-bugs)          |
+| 一个满是他人原始报告的跟踪器                                                        | `/triage`                                                    |
+| 自己有一个粗略的想法，什么都没写下来                                                    | [grill-with-docs](https://aihero.dev/skills-grill-with-docs) |
+| 将一次已定型的对话转化为 [规格说明](https://www.aihero.dev/ai-coding-dictionary/spec) | [to-spec](https://aihero.dev/skills-to-spec)                 |
+| 将规格说明拆分为 agent-ready 工单                                               | [to-tickets](https://aihero.dev/skills-to-tickets)           |
+| 一个已确认的 bug，需要的是根本原因，而不是标签                                             | [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs) |
 
-## 前置条件
+## 先决条件
 
-```P004
-`triage` 会读取和写入您的问题追踪器，因此 [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) 必须先配置好该追踪器及其标签词汇表。下面的角色名称是 **规范的**；您追踪器中的标签字符串可能不同，映射关系由 setup 提供。如果您的追踪器已经完全使用了规范名称，则无需映射，也无需设置。
+`triage` 会读取并写入你的 issue 跟踪器，因此 [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) 必须首先配置好该跟踪器及其标签词汇表。下面的角色名称是**规范**的；你跟踪器中的标签字符串可能不同，映射关系由 setup 提供。如果你的跟踪器已经精确使用了规范名称，那就没有什么需要映射，也没有什么需要设置。
 
-
-```P005
-追踪器配置还决定了外部拉取请求是否算作请求面，以及谁算作外部。该标志默认为关闭，不再是一个设置问题——如果您希望 PR 在范围内，请在 `docs/agents/issue-tracker.md` 中切换它。
-
+跟踪器配置还决定外部拉取请求是否算作请求面，以及谁算作外部。“该标志默认为关闭，不再是一个设置问题——如果你希望将 PR 纳入范围，请在 `docs/agents/issue-tracker.md` 中启用它。
 
 ## 状态机
 
-每个经过 triage 的项目最终只携带一个类别角色和一个状态角色。两个类别：`bug`（某物损坏了）和 `enhancement`（新功能或改进）。五种状态：
+每个经过 triage 的项目最终都恰好携带一个类别角色和一个状态角色。两个类别：`bug`（某样东西坏了）和 `enhancement`（新功能或改进）。五个状态：
 
-| 状态                | 含义                                                                            |
-| ----------------- | ----------------------------------------------------------------------------- |
-| `needs-triage`    | 你需要对其进行评估。未标记问题通常首先落在这里。                                                    |
-| `needs-info`      | 等待报告人回复。 `needs-triage`代理可以接手它。                                               |
-| `ready-for-agent` | 已完全指定，并附有代理简报。 [AFK](https://www.aihero.dev/ai-coding-dictionary/afk)代理可以接手它。 |
-| `ready-for-human` | 同样的简报，加上为什么不能委派的原因——判断、外部访问权限、手动测试。                                           |
-| `wontfix`         | 已关闭，并记录了原因。                                                                   |
+| 状态                | 含义                                                                                     |
+| ----------------- | -------------------------------------------------------------------------------------- |
+| `needs-triage`    | 你需要评估它。未标记的 issue 通常首先落在这里。                                                            |
+| `needs-info`      | 等待报告人。他们回复后返回 `needs-triage`。                                                          |
+| `ready-for-agent` | 完全明确，并附带 agent 简报。一个 [AFK](https://www.aihero.dev/ai-coding-dictionary/afk)agent 可以接手。 |
+| `ready-for-human` | 同样的简报，外加为什么这不能委派——判断力、外部访问权限、手动测试。                                                     |
+| `wontfix`         | 已关闭，并记录了原因。                                                                            |
 
-这就是整个词汇表，而“恰好一个状态角色”的不变量是保持查询简单的原因。这也是技能中最被要求的部分：用户要求增加第六种状态，用于工作已指定但被其他问题阻塞的情况，用于基于未来触发的 `deferred` 工作，以及用于最终的 `implemented` 状态。这些都没有实现。请看下文的问题。
+这就是全部的词汇表，"恰好一个状态角色"的不变约束是保持查询简单的关键。这也是该 [skill](https://www.aihero.dev/ai-coding-dictionary/skill) 中被要求最多的领域：用户要求为那些已经明确但被另一个 issue 阻塞的工作增加第六个状态，为受未来触发条件门控的 `deferred` 工作，以及一个终态的 `implemented` 状态。这些都没有推出。请看下面的问题。
 
-`wontfix` 分为三种情况，区别很重要，因为只有其中一种会写入知识库：
+`wontfix` 有三种情况，区别很重要，因为只有其中一种会写入知识库：
 
-| 你关闭它的原因  | 发生了什么                                                                 |
-| -------- | --------------------------------------------------------------------- |
-| 已实现      | 一条指向它已经存在的位置的评论。 Nothing is written to `.out-of-scope/` — it's a built feature, not a rejected one, and filing it there would poison the dedup checks. |
-| 被拒绝的 bug | 礼貌的解释，然后关闭。                                                           |
-| 被拒绝的功能增强 | \`.out-of-scope/\` 中的一个文件， `.out-of-scope/`从关闭评论中链接，然后关闭。             |
+| 你关闭它的原因  | 会发生什么                                                                           |
+| -------- | ------------------------------------------------------------------------------- |
+| 已实现      | 一条评论指向它已经存在的位置。不会向 `.out-of-scope/`写入任何内容——这是一个已构建的功能，而不是被拒绝的功能，将其归档到那里会污染去重检查。 |
+| 被拒绝的 bug | 礼貌地解释，然后关闭。                                                                     |
+| 被拒绝的增强   | 在 `.out-of-scope/`中创建一个文件，在关闭评论中链接它，然后关闭。                                       |
 
-`.out-of-scope/` 是每个被拒绝的**概念**一个 markdown 文件，而不是每个问题一个，写成一个简短的设计文档而不是数据库行：被拒绝了什么，为什么，以及所有请求过它的每个问题。`triage` 在评估任何东西之前会读取整个目录，并根据概念而不是关键词进行匹配——"night theme" 匹配 `dark-mode.md`。当它匹配时，它会显示旧的决定并询问你是否仍然有同感，而不是从头重新争论该请求。
+`.out-of-scope/` 是每个被拒绝的**概念**对应一个 markdown 文件，而不是每个 issue 一个，以简短的设计文档而非数据库行的形式编写：被拒绝的内容、原因，以及所有提出过该请求的 issue。`triage` 在评估任何内容之前会读取整个目录，并按概念而非关键词进行匹配——“夜间主题”会匹配 `dark-mode.md`。当它找到匹配项时，会呈现旧的决策并询问你是否仍然持相同看法，而不是从头重新争辩这个请求。
 
-## 在提供简报前进行验证
+## 简报前先验证
 
-在任何 \[grilling] 之前，`triage` 检查该声明是否确实成立。对于 bug，它会根据报告人的步骤重现它。对于 PR，它会检出分支并运行相关的测试。然后它报告三件事中发生了哪一件：已确认，附带代码路径；无法重现；或者细节不足以尝试，这本身是最强的 `needs-info` 信号。
+在进行任何 [grilling](https://www.aihero.dev/ai-coding-dictionary/grilling) 之前，`triage` 会检查该声明是否确实成立。对于 bug，它会按照报告人的步骤复现。对于 PR，它会检出分支并运行相关测试。然后它会报告三种情况中的哪一种发生了：已确认，并附带代码路径；无法复现；或者细节不足而无法尝试——这本身就是最强的 `needs-info` 信号。
 
-它在一个遍历中针对代码库运行另外两个检查——**冗余**（这是否已经实现，通过域概念搜索而不是通过报告人的措辞？）和**先前拒绝**（`.out-of-scope/` 是否已经说“不”？）。两者都很便宜，当命中时都会产生一个 `wontfix`。
+在同一次检查中，它还会对代码库运行两项额外检查——**冗余性**（是否已经实现，按领域概念而不是按报告人的措辞搜索？）和**先前拒绝**（`.out-of-scope/` 是否已经说了不？）。两者都很廉价，并且命中时都会产生 `wontfix`。
 
-所有这一切的存在都是为了使一个工件变得优秀：**代理简报**，即问题移至 `ready-for-agent` 时发布的结构化评论。一旦发布，简报就是合同，原始报告仅是上下文。简报是写得**持久**而不是精确，因为一个问题可以在 `ready-for-agent` 中停留数周，而代码在它下面移动。因此它们命名类型、签名和行为契约，从不记录文件路径或行号。确认的复现比猜测能做出更强的简报。
+所有这一切的存在都是为了造就一件好的产物：**agent 简报**，即当 issue 移到 `ready-for-agent` 时发布的结构化评论。一旦发布，简报就是契约，原始报告只是背景。简报被写成**持久**而非精确的，因为一个 issue 可能停留在 `ready-for-agent` 中数周，而代码在其下方不断变化。因此它们命名类型、签名和行为契约，而绝不涉及文件路径或行号。已确认的复现比猜测能创造出强得多的简报。
 
-## PR 是带有代码的问题
+## PR 就是附带代码的 issue
 
-当追踪器将外部拉取请求视为请求表面时，它们会经过同一台机器——相同的类别、相同的状态、相同的转换。状态只是对照差异进行读取：`ready-for-agent` 意味着附有简报，代理应该在代码上采取下一步，`ready-for-human` 意味着准备好由人来合并。PR 上的简报描述了相对于现有差异还需要做什么，而不是如何从零开始构建该事物。
+在跟踪器将外部拉取请求视为请求面的情况下，它们会经过同样的机器——相同的类别、相同的状态、相同的转换。状态只是对照 diff 来解读：`ready-for-agent` 意味着已附加简报，agent 应该对代码采取下一步行动，`ready-for-human` 意味着它已经准备好由人来合并。PR 上的简报描述的是对现有 diff 还需要做什么，而不是如何从零开始构建。
 
-发现功能仅显示*外部* PR，因为协作者的进行中的分支不是 triage 工作。该过滤器仅用于发现——明确命名一个 PR，无论谁写的它都会被 triage。一个粗糙的边缘情况：GitHub 模板的 PR 列出命令要求 `gh pr list` 提供一个 `gh` 没有暴露的 `authorAssociation` 字段，所以按照编写的命令会直接失败（[#468](https://github.com/mattpocock/skills/issues/468)）。
-
-## 常见问题
-
-我运行了 `/to-spec` 和 `/to-tickets`，现在那些票证就放在那里未经过 triage。我是否应该对它们运行 `/triage`？不。它们已经就绪——`to-tickets` 在发布时会应用 `ready-for-agent` 标签，正是为了让 AFK 运行器在没有另一次遍历的情况下接取它们。遇到这种情况的用户已经运行了规范流程，在输出中看到了 `needs-triage`，并发现他们的 AFK 运行器忽略了所有内容。`triage` 是来自外部的工作的入口；规范流程是你产生的工作的车道。它们在 `ready-for-agent` 处相遇，而不是在此之前。
-
-现在有 `to-spec` → `to-tickets` → `implement` 流程，`triage` 仍然相关吗？只有当你有 inbound 工作时才相关。`triage` 早于那个主干并且做着不同的工作：它是其他人提交的报告的车道。如果你追踪器中的所有内容都来自你自己的规划，你很少会打开它。如果你维护任何公共内容，或者你的团队向你提交 bug，它就是前门。主要用途是开源仓库从外部贡献者那里接收问题。
-
-**代理尝试应用 `ready-for-agent`，但 `gh` 报告该标签不存在。**
-已知开放性错误 ([#616](https://github.com/mattpocock/skills/issues/616))。`setup-matt-pocock-skills` 将标签词汇表写入 `docs/agents/triage-labels.md`，但不会在您的跟踪器中创建这些标签。请使用 `gh label create` 或跟踪器的 UI 一次性自行创建这五个状态标签和两个类别标签，问题就会停止。问题链接中有一个社区修复分支尚未合并。
-
-**五种状态不够用——那被阻塞、延期或已实现的情况呢？**
-这是该技能中最常被反馈的缺口，有三种表现形式。一个完全定义但等待另一个问题关闭的问题 ([#139](https://github.com/mattpocock/skills/issues/139))——报告者的抱怨是 `ready-for-agent` 在那里“技术上是正确的”，但具有误导性，所以代理会将其拾取并撞墙。触发门控的预期但尚不可执行的未来工作 ([#297](https://github.com/mattpocock/skills/issues/297))。以及“已实现，待验证”的终态，否则 AFK 运行器可以重新排队已完成的工单。Matt 已同意被阻塞的情况是真实的，但对名称未定（`blocked` 与 `paused`）。这些都没有发布。人们使用的变通方法是在类别旁边使用仓库本地的额外标签，这会占用规范的状态槽位，代价是技能不知道它的存在。一个社区衍生项目更进一步，添加了 `needs-slicing`、`tracking` 和 effort 标签——这行得通，但那是他们的，不是技能的。
-
-**这与 `/diagnosing-bugs` 有何不同？**
-此处的验证步骤故意很浅——足以回答“这是否真实，以及大致位置在哪里”，而不是寻找根本原因。当错误无法在几分钟内从报告者的步骤中复现时，诚实的做法是 `needs-info`，或者如果您现在想追踪它，可以使用 [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs)。目前这两个技能的文本都没有提到对方；一个用户发现了这个接口，它仍然开放。
-
-**我可以将其指向我的整个积压工作并让它运行吗？**
-您可以问，但要注意它读取的内容。“显示需要关注的内容”这一遍是一个用于*选择*的廉价列表——您挑选一个，然后它会收集您挑选的那个的完整 [上下文](https://www.aihero.dev/ai-coding-dictionary/context)。如果一次性在二十个问题上运行，代理可以悄悄地将其作为证据基础回退到那个廉价列表，该列表返回问题正文但不返回评论。一个用户正好遇到了这种情况：三个问题已经包含一条评论说“已修复，建议关闭”，但所有三个都获得了全新的代理简报。如果您想要批量通过，请明确说明每个问题都必须读取评论。
-
-**它适用于 Linear，或其他任何除 GitHub Issues 以外的工具吗？**
-是的——跟踪器是配置，而不是硬编码的假设，人们针对 Linear（通过 `linear` CLI）、GitLab 以及 `.scratch/` 下的纯 markdown 文件运行它。常见的划分是 Linear 用于问题和规划，GitHub 用于代码和 PR：说“问题跟踪器”的技能映射到 Linear，说“PR”的技能映射到 GitHub。在本地 markdown 跟踪器上有一个开放的模板错误，生成的文件可以在顶层和代理简报内部两次携带验收标准 ([#200](https://github.com/mattpocock/skills/issues/200))。
-
-## 判断是否生效
-
-* 每个它接触的项目都以恰好一个类别角色和一个状态角色结束——从不为零，从不冲突的两个状态。
-* 它会给出带有推理的建议并停止，而不是重新标记并继续。
-* 在任何内容到达 `ready-for-agent` 之前，错误已复现，或 PR 已检出并运行。
-* 它编写的简报命名类型和行为，并且不包含文件路径和行号。
-* 六个月前被拒绝的请求回来了，它指出了这一点并引用了旧原因，而不是重新对其进行分类。
-* 它发布的每条评论都以 `> *此内容在分类过程中由 AI 生成。*` 开头
-
-## 在系统中的位置
-
-`triage` 是一个**入口**，而不是主流程中的一个步骤。主流程从您有的想法运行——grill、spec、tickets、implement、review——而 `triage` 是到达的工作的并行车道。它在同一个地方合并：一个标记为 `ready-for-agent` 并带有简报的问题，[implement](https://aihero.dev/skills-implement) 会像从 [to-tickets](https://aihero.dev/skills-to-tickets) 拾取工单一样精确地拾取它。当请求在可以简报之前需要完善时，`triage` 会一起运行 [grilling](https://aihero.dev/skills-grilling) 和 [domain-modeling](https://aihero.dev/skills-domain-modeling)，一次一轮问题，以便决策在制定时落入 `CONTEXT.md` 和 ADR 中。当您不确定自己在哪个车道时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为您指路。
-````
-
-它仅适用于 **您未创建** 的问题。原始的 bug 报告、收到的功能请求、未提前宣布的外部拉取请求——从外部进入追踪器的工作，无论报告人留下了什么形式。`to-tickets` 生成的 [工单](https://www.aihero.dev/ai-coding-dictionary/ticket) 在构建上已经是就绪代理的，对它们运行 `triage` 至多只是浪费工作。规则很简单：`/triage` 仅用于传入的问题，不适用于您自己创建的问题。
-
-将其与手动标记区分开来的第二件事是：它会推荐并等待。它会告诉您它的类别和状态调用，并附带推理，以及它在代码库中找到的内容，并且直到您指示它之前，它不会应用任何内容。
-
-## 何时使用
-
-您通过输入 `/triage` 然后用自然语言描述您想要的内容来调用它——[代理](https://www.aihero.dev/ai-coding-dictionary/agent) 不会自行调用它。“展示任何需要我关注的东西”、“让我们看看 #42”、“将 #42 移至 ready-for-agent”。
-
-| 你拥有什么                                                                 | 去往哪里                                                         |
-| --------------------------------------------------------------------- | ------------------------------------------------------------ |
-| 充满他人原始报告的追踪器                                                          | `/triage`                                                    |
-| 你自己粗糙的想法，没有任何记录                                                       | [grill-with-docs](https://aihero.dev/skills-grill-with-docs) |
-| 将一段已确定的对话转化为规范 [规范](https://www.aihero.dev/ai-coding-dictionary/spec) | [to-spec](https://aihero.dev/skills-to-spec)                 |
-| 一个可以拆分为就绪代理票证的规范                                                      | [to-tickets](https://aihero.dev/skills-to-tickets)           |
-| 一个需要根本原因而非标签的已确认 bug                                                  | [诊断 bug](https://aihero.dev/skills-diagnosing-bugs)          |
-
-## 前置条件
-
-`triage` 会读取和写入您的问题追踪器，因此 [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) 必须先配置好该追踪器及其标签词汇表。下面的角色名称是 **规范的**；您追踪器中的标签字符串可能不同，映射关系由 setup 提供。如果您的追踪器已经完全使用了规范名称，则无需映射，也无需设置。
-
-追踪器配置还决定了外部拉取请求是否算作请求面，以及谁算作外部。该标志默认为关闭，不再是一个设置问题——如果您希望 PR 在范围内，请在 `docs/agents/issue-tracker.md` 中切换它。
-
-## 状态机
-
-每个经过 triage 的项目最终只携带一个类别角色和一个状态角色。两个类别：`bug`（某物损坏了）和 `enhancement`（新功能或改进）。五种状态：
-
-| 状态                | 含义                                                                            |
-| ----------------- | ----------------------------------------------------------------------------- |
-| `needs-triage`    | 你需要对其进行评估。未标记问题通常首先落在这里。                                                      |
-| `needs-info`      | 等待报告人回复。 `needs-triage`代理可以接手它。                                               |
-| `ready-for-agent` | 已完全指定，并附有代理简报。 [AFK](https://www.aihero.dev/ai-coding-dictionary/afk)代理可以接手它。 |
-| `ready-for-human` | 同样的简报，加上为什么不能委派的原因——判断、外部访问权限、手动测试。                                           |
-| `wontfix`         | 已关闭，并记录了原因。                                                                   |
-
-这就是整个词汇表，而“恰好一个状态角色”的不变量是保持查询简单的原因。这也是技能中最被要求的部分：用户要求增加第六种状态，用于工作已指定但被其他问题阻塞的情况，用于基于未来触发的 `deferred` 工作，以及用于最终的 `implemented` 状态。这些都没有实现。请看下文的问题。
-
-`wontfix` 分为三种情况，区别很重要，因为只有其中一种会写入知识库：
-
-| 你关闭它的原因  | 发生了什么                                                                 |
-| -------- | --------------------------------------------------------------------- |
-| 已实现      | 一条指向它已经存在的位置的评论。 `.out-of-scope/`——它是一个内置功能，而不是被拒绝的功能，将其提交到那里会破坏重复检查。 |
-| 被拒绝的 bug | 礼貌的解释，然后关闭。                                                           |
-| 被拒绝的功能增强 | \`.out-of-scope/\` 中的一个文件， `.out-of-scope/`从关闭评论中链接，然后关闭。             |
-
-`.out-of-scope/` 是每个被拒绝的**概念**一个 markdown 文件，而不是每个问题一个，写成一个简短的设计文档而不是数据库行：被拒绝了什么，为什么，以及所有请求过它的每个问题。`triage` 在评估任何东西之前会读取整个目录，并根据概念而不是关键词进行匹配——"night theme" 匹配 `dark-mode.md`。当它匹配时，它会显示旧的决定并询问你是否仍然有同感，而不是从头重新争论该请求。
-
-## 在提供简报前进行验证
-
-在任何 \[grilling] 之前，`triage` 检查该声明是否确实成立。对于 bug，它会根据报告人的步骤重现它。对于 PR，它会检出分支并运行相关的测试。然后它报告三件事中发生了哪一件：已确认，附带代码路径；无法重现；或者细节不足以尝试，这本身是最强的 `needs-info` 信号。
-
-它在一个遍历中针对代码库运行另外两个检查——**冗余**（这是否已经实现，通过域概念搜索而不是通过报告人的措辞？）和**先前拒绝**（`.out-of-scope/` 是否已经说“不”？）。两者都很便宜，当命中时都会产生一个 `wontfix`。
-
-所有这一切的存在都是为了使一个工件变得优秀：**代理简报**，即问题移至 `ready-for-agent` 时发布的结构化评论。一旦发布，简报就是合同，原始报告仅是上下文。简报是写得**持久**而不是精确，因为一个问题可以在 `ready-for-agent` 中停留数周，而代码在它下面移动。因此它们命名类型、签名和行为契约，从不记录文件路径或行号。确认的复现比猜测能做出更强的简报。
-
-## PR 是带有代码的问题
-
-当追踪器将外部拉取请求视为请求表面时，它们会经过同一台机器——相同的类别、相同的状态、相同的转换。状态只是对照差异进行读取：`ready-for-agent` 意味着附有简报，代理应该在代码上采取下一步，`ready-for-human` 意味着准备好由人来合并。PR 上的简报描述了相对于现有差异还需要做什么，而不是如何从零开始构建该事物。
-
-发现功能仅显示*外部* PR，因为协作者的进行中的分支不是 triage 工作。该过滤器仅用于发现——明确命名一个 PR，无论谁写的它都会被 triage。一个粗糙的边缘情况：GitHub 模板的 PR 列出命令要求 `gh pr list` 提供一个 `gh` 没有暴露的 `authorAssociation` 字段，所以按照编写的命令会直接失败（[#468](https://github.com/mattpocock/skills/issues/468)）。
+发现功能只显示*外部* PR，因为协作者在途的分支不是 triage 工作。该过滤器仅用于发现——明确指定一个 PR，无论谁写的它都会被 triage。一个粗糙的边缘情况：GitHub 模板的外部 PR 列命令要求 `gh pr list` 提供一个 `gh` 并不公开的 `authorAssociation` 字段，因此该命令按原样会直接失败（[#468](https://github.com/mattpocock/skills/issues/468)）。
 
 ## 常见问题
 
-我运行了 `/to-spec` 和 `/to-tickets`，现在那些票证就放在那里未经过 triage。我是否应该对它们运行 `/triage`？不。它们已经就绪——`to-tickets` 在发布时会应用 `ready-for-agent` 标签，正是为了让 AFK 运行器在没有另一次遍历的情况下接取它们。遇到这种情况的用户已经运行了规范流程，在输出中看到了 `needs-triage`，并发现他们的 AFK 运行器忽略了所有内容。`triage` 是来自外部的工作的入口；规范流程是你产生的工作的车道。它们在 `ready-for-agent` 处相遇，而不是在此之前。
+**我运行了 `/to-spec` 和 `/to-tickets`，现在那些工单未经 triage 停留在那里。我需要对它们运行 `/triage` 吗？**
+不需要。它们已经是 agent-ready 的——`to-tickets` 在发布时就会应用 `ready-for-agent` 标签，正是为了让 AFK 运行器无需再次经过就能拾取它们。遇到这个问题的用户运行了 spec 流程，看到输出上的 `needs-triage`，并发现他们的 AFK 运行器忽略了一切。`triage` 是从外部到达的工作的上坡道；spec 流程是你在组织内发起的工作的车道。它们在 `ready-for-agent` 汇合，而不是之前。
 
-现在有 `to-spec` → `to-tickets` → `implement` 流程，`triage` 仍然相关吗？只有当你有 inbound 工作时才相关。`triage` 早于那个主干并且做着不同的工作：它是其他人提交的报告的车道。如果你追踪器中的所有内容都来自你自己的规划，你很少会打开它。如果你维护任何公共内容，或者你的团队向你提交 bug，它就是前门。主要用途是开源仓库从外部贡献者那里接收问题。
+**既然现在有了 `to-spec` → `to-tickets` → `implement` 流程，`triage` 仍然相关吗？**
+只有当你有入站工作时才相关。`triage` 先于那条主线存在，并且做的是不同的工作：它是其他人提交的报告的车道。如果你跟踪器中的一切都来自你自己的规划，你很少会打开它。如果你维护任何公开项目，或者你的团队向你提交 bug，它就是前门。主要用途是接受外部贡献者 issue 的开源仓库。
 
-**代理尝试应用 `ready-for-agent`，但 `gh` 报告该标签不存在。**
-已知开放性错误 ([#616](https://github.com/mattpocock/skills/issues/616))。`setup-matt-pocock-skills` 将标签词汇表写入 `docs/agents/triage-labels.md`，但不会在您的跟踪器中创建这些标签。请使用 `gh label create` 或跟踪器的 UI 一次性自行创建这五个状态标签和两个类别标签，问题就会停止。问题链接中有一个社区修复分支尚未合并。
+**代理尝试应用 `ready-for-agent` 标签，但 `gh` 提示该标签不存在。** 已知的未修复 bug（[#616](https://github.com/mattpocock/skills/issues/616)）。`setup-matt-pocock-skills` 会将标签词汇写入 `docs/agents/triage-labels.md`，但不会在你的问题追踪器中创建这些标签。你需要自己一次性创建五个状态标签和两个类别标签，使用 `gh label create` 或追踪器的界面即可，之后就不会再出现这个问题。该 issue 中链接了一个社区修复分支，但尚未合并。
 
-**五种状态不够用——那被阻塞、延期或已实现的情况呢？**
-这是该技能中最常被反馈的缺口，有三种表现形式。一个完全定义但等待另一个问题关闭的问题 ([#139](https://github.com/mattpocock/skills/issues/139))——报告者的抱怨是 `ready-for-agent` 在那里“技术上是正确的”，但具有误导性，所以代理会将其拾取并撞墙。触发门控的预期但尚不可执行的未来工作 ([#297](https://github.com/mattpocock/skills/issues/297))。以及“已实现，待验证”的终态，否则 AFK 运行器可以重新排队已完成的工单。Matt 已同意被阻塞的情况是真实的，但对名称未定（`blocked` 与 `paused`）。这些都没有发布。人们使用的变通方法是在类别旁边使用仓库本地的额外标签，这会占用规范的状态槽位，代价是技能不知道它的存在。一个社区衍生项目更进一步，添加了 `needs-slicing`、`tracking` 和 effort 标签——这行得通，但那是他们的，不是技能的。
+**五个状态不够用——那 blocked、deferred 或 implemented 呢？** 这是该技能上被反馈最多的缺口，表现为三种形式。一个是已完全明确但在等待另一个 issue 关闭（[#139](https://github.com/mattpocock/skills/issues/139)）——报告者抱怨说 `ready-for-agent` 在那里“技术上没错”但有误导性，于是代理接单后碰壁。一个是触发器门控的未来工作，虽然有意图但尚不可执行（[#297](https://github.com/mattpocock/skills/issues/297)）。还有一个是用于“已实现，等待验证”的终态，否则 AFK 运行器可能重新排队已完成的任务。Matt 已同意 blocked 的情况是真实的，但对命名（`blocked` 与 `paused`）尚未决定。这些都没有发布。人们使用的变通方法是在类别旁添加一个仓库本地的额外标签，这让规范状态槽位保持诚实，但代价是该技能不知道这个标签。一个社区衍生品更进一步，增加了 `needs-slicing`、`tracking` 和工作量标签——这有效，但那是他们的，而不是该技能的。
 
-**这与 `/diagnosing-bugs` 有何不同？**
-此处的验证步骤故意很浅——足以回答“这是否真实，以及大致位置在哪里”，而不是寻找根本原因。当错误无法在几分钟内从报告者的步骤中复现时，诚实的做法是 `needs-info`，或者如果您现在想追踪它，可以使用 [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs)。目前这两个技能的文本都没有提到对方；一个用户发现了这个接口，它仍然开放。
+**这与 `/diagnosing-bugs` 有何不同？** 这里的验证步骤刻意保持浅层——足以回答“这是不是真的，大致在哪”，而不是找出根本原因。如果一个 bug 在几分钟内无法根据报告者的步骤复现，诚实的做法是标记 `needs-info`，或者如果你想现在就追查，可以使用 [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs)。目前两个技能的文字都没有提及对方；一位用户发现了这个缝隙，它至今仍未处理。
 
-**我可以将其指向我的整个积压工作并让它运行吗？**
-您可以问，但要注意它读取的内容。“显示需要关注的内容”这一遍是一个用于*选择*的廉价列表——您挑选一个，然后它会收集您挑选的那个的完整 [上下文](https://www.aihero.dev/ai-coding-dictionary/context)。如果一次性在二十个问题上运行，代理可以悄悄地将其作为证据基础回退到那个廉价列表，该列表返回问题正文但不返回评论。一个用户正好遇到了这种情况：三个问题已经包含一条评论说“已修复，建议关闭”，但所有三个都获得了全新的代理简报。如果您想要批量通过，请明确说明每个问题都必须读取评论。
+**我可以让它处理整个待办列表并放手运行吗？** 你可以这样要求，但要注意它读取了什么。“显示需要关注的内容”这一步是一个廉价的列表，用于*选择*——你挑一个，然后它才会针对你选的那个收集完整的[上下文](https://www.aihero.dev/ai-coding-dictionary/context)。如果一次性跑二十个 issue，代理可能会悄悄以那个廉价列表作为证据基础，这只会返回 issue 正文而不会返回评论。就有用户遇到了这种情况：三个 issue 都已经带有一条“已修复，建议关闭”的评论，但三个还是都被生成了新的代理简报。如果你想要批量处理，请明确说明必须逐 issue 阅读评论。
 
-**它适用于 Linear，或其他任何除 GitHub Issues 以外的工具吗？**
-是的——跟踪器是配置，而不是硬编码的假设，人们针对 Linear（通过 `linear` CLI）、GitLab 以及 `.scratch/` 下的纯 markdown 文件运行它。常见的划分是 Linear 用于问题和规划，GitHub 用于代码和 PR：说“问题跟踪器”的技能映射到 Linear，说“PR”的技能映射到 GitHub。在本地 markdown 跟踪器上有一个开放的模板错误，生成的文件可以在顶层和代理简报内部两次携带验收标准 ([#200](https://github.com/mattpocock/skills/issues/200))。
+**它能用于 Linear 或 GitHub Issues 以外的其他工具吗？** 可以——追踪器是可配置的，不是硬编码假设，人们会用它对接 Linear（通过 `linear` CLI）、GitLab，以及 `.scratch/` 下的纯 markdown 文件。一种常见的分工是：issue 和规划用 Linear，代码和 PR 用 GitHub：提到“issue tracker”的技能映射到 Linear，提到“PR”的技能映射到 GitHub。在本地 markdown 追踪器上有一个未修复的模板 bug，生成的文件可能将验收标准写了两次，一次在顶层，一次在代理简报内部（[#200](https://github.com/mattpocock/skills/issues/200)）。
 
-## 判断是否生效
+## 如果它起作用了
 
-* 每个它接触的项目都以恰好一个类别角色和一个状态角色结束——从不为零，从不冲突的两个状态。
-* 它会给出带有推理的建议并停止，而不是重新标记并继续。
-* 在任何内容到达 `ready-for-agent` 之前，错误已复现，或 PR 已检出并运行。
-* 它编写的简报命名类型和行为，并且不包含文件路径和行号。
-* 六个月前被拒绝的请求回来了，它指出了这一点并引用了旧原因，而不是重新对其进行分类。
-* 它发布的每条评论都以 `> *此内容在分类过程中由 AI 生成。*` 开头
+* 它接触的每个条目最终都恰好有一个类别角色和一个状态角色——绝不会为零，也绝不会出现两个冲突的状态。
+* 它会给出带理由的建议并停下来，而不是重新打标签然后继续。
+* 在任何内容达到 `ready-for-agent` 之前，bug 已经被复现，或者 PR 已经被检出并运行。
+* 它编写的简报会指明类型和行为，且不包含文件路径和行号。
+* 如果六个月前被拒绝的请求再次出现，它会说明这一点并引用旧理由，而不是重新做一次分流。
+* 它发布的每条评论都以 `> *This was generated by AI during triage.*` 开头。
 
-## 在系统中的位置
+## 它在系统中的位置
 
-`triage` 是一个**入口**，而不是主流程中的一个步骤。主流程从您有的想法运行——grill、spec、tickets、implement、review——而 `triage` 是到达的工作的并行车道。它在同一个地方合并：一个标记为 `ready-for-agent` 并带有简报的问题，[implement](https://aihero.dev/skills-implement) 会像从 [to-tickets](https://aihero.dev/skills-to-tickets) 拾取工单一样精确地拾取它。当请求在可以简报之前需要完善时，`triage` 会一起运行 [grilling](https://aihero.dev/skills-grilling) 和 [domain-modeling](https://aihero.dev/skills-domain-modeling)，一次一轮问题，以便决策在制定时落入 `CONTEXT.md` 和 ADR 中。当您不确定自己在哪个车道时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为您指路。
+`triage` 是一个**入口匝道**，而不是主链路上的一个步骤。主流程从一个想法开始——打磨、规格、工单、实现、审查——而 `triage` 是处理“外来”工作的并行车道。它汇合到同一处：一个标记为 `ready-for-agent` 并带有简报的 issue，[implement](https://aihero.dev/skills-implement) 会像处理来自 [to-tickets](https://aihero.dev/skills-to-tickets) 的工单一样接起它。当一个请求在形成简报前需要打磨时，`triage` 会同时运行 [grilling](https://aihero.dev/skills-grilling) 和 [domain-modeling](https://aihero.dev/skills-domain-modeling)，一轮一轮地提问，从而让决策在做出时就落入 `CONTEXT.md` 和 ADR 中。当你不确定自己处于哪条车道时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指路。
