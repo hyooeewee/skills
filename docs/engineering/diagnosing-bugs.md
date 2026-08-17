@@ -6,7 +6,7 @@
 
 ## 何时使用它
 
-类型`/diagnosing-bugs`, or the agent reaches for it on its own when a task fits — it is model-invoked, and fires on "diagnose" / "debug this" or on a report that something is broken, throwing, failing, or slow.
+输入 `/diagnosing-bugs`，或者当某个任务符合条件时，agent 会自行调用它——它由模型调用，并在遇到“诊断”/“调试这个”或关于某物损坏、抛错、失败或缓慢的报告时触发。
 
 在棘手的问题上才使用它：一眼看不透的 bug、间歇性的偶发失败、在两个已知良好状态之间悄悄潜入的回归。它设计上就是重量级的，对于你想一条消息就得到回答的问题，它是错误的工具。
 

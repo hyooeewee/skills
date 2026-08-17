@@ -6,7 +6,7 @@
 
 ## 何时使用它
 
-You invoke this by typing `/teach` — the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) won't reach for it on its own.
+你可以通过输入 `/teach` 来调用它——[代理](https://www.aihero.dev/ai-coding-dictionary/agent)不会自行调用它。
 
 当学习本身就是项目时，就使用它：一门语言、一个框架、你刚加入的一个代码库、瑜伽、着色器、一项认证。它不是用来顺带解释一个问题的工具。
 

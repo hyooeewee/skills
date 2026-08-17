@@ -14,7 +14,7 @@ description: 沿两个轴审查自某个固定点（commit、branch、tag 或
 
 两个轴都作为**并行子代理**运行，这样它们不会污染彼此的上下文，然后此技能汇总它们的发现。
 
-应该已经向你提供了 issue 跟踪器——如果 `docs/agents/issue-tracker.md` 缺失，请运行 `/setup-matt-pocock-skills`。
+问题追踪器应该已经提供给你。如果 `docs/agents/issue-tracker.md` 缺失，请告诉用户运行 `/setup-matt-pocock-skills`。
 
 ## 流程
 

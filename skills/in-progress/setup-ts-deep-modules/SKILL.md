@@ -10,7 +10,7 @@ disable-model-invocation: true
 
 让此仓库中的每个包都成为**深模块**：以一个小接口承载大量行为。包的公共表面是其**入口点**——包根目录下的文件——而子文件夹中的一切都被隐藏。此技能安装 [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) 以及使入口点成为唯一进入方式的规则，然后验证这些规则确实生效。
 
-关于词汇（深模块、接口、接缝、深度），请运行 `/codebase-design` 技能——并全程使用其术语。
+关于术语（深模块、接口、接缝、深度），请使用 "codebase-design" 调用 Skill 工具——全程采用其用语。
 
 ## ## 强制形成的结构形态
 

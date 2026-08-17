@@ -6,7 +6,7 @@
 
 ## 何时使用它
 
-类型`/codebase-design`, or the agent reaches for it automatically when a design task fits.
+输入 `/codebase-design`，或者当某个设计任务适用时，agent 会自动调用它。
 
 当你已经知道要重新设计哪些代码，并且需要思考它的形态时，就使用它：接缝放在哪里、接口能有多小、一次抽取是否值得保留。要解决关于某个词含义的争论时，你也会用到它。
 
