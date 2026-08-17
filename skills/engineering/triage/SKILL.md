@@ -41,7 +41,7 @@ disable-model-invocation: true
 
 每个经过分流的 issue 都应恰好带有一个类别角色和一个状态角色。如果状态角色冲突，请标记出来并先询问维护者，再做任何其他事情。
 
-这些是规范的角色名称 — issue 跟踪器中实际使用的标签字符串可能不同。映射应已提供给你 - 如果没有，请运行 `/setup-matt-pocock-skills`。
+这些是规范的角色名称 — issue 跟踪器中实际使用的标签字符串可能有所不同。映射应该已经提供给你。如果没有，请告诉用户运行 `/setup-matt-pocock-skills`。
 
 状态转换：未标记的 issue 通常先进入 `needs-triage`；然后移动到 `needs-info`、`ready-for-agent`、`ready-for-human` 或 `wontfix`。一旦报告者回复，`needs-info` 回到 `needs-triage`。维护者可以随时覆盖 — 标记看起来不寻常的转换，并在继续之前询问。
 
@@ -74,7 +74,7 @@ disable-model-invocation: true
 
 3. **验证声明。** 在进行任何追问之前，检查声明是否成立。对于 bug，按照报告者的步骤复现。对于 PR，确认 diff 确实如其所述 — 将其检出，运行相关的测试或命令。报告结果：已确认（附代码路径）、失败，或细节不足（这是强烈的 `needs-info` 信号）。经过确认的验证会让 agent 简报有力得多。
 
-4. **追问（如需要）。** 如果请求需要进一步充实，可同时运行 `/grilling` 和 `/domain-modeling` 技能 — 一轮一轮地追问，使其成型，同时在决策确定时即时精炼领域术语并更新 `CONTEXT.md`/ADR。
+4. **追问（如有必要）。** 如果请求需要进一步充实，请调用 Skill 工具两次，分别用于“grilling”和“domain-modeling” — 一轮一轮地通过提问将其打磨成形，逐步明确领域术语，并在决策落定时内联更新 `CONTEXT.md`/ADR。
 
 5. **应用结果：**
    * `ready-for-agent` — 发布一条 agent 简报评论（[AGENT-BRIEF.md](AGENT-BRIEF.md)）。

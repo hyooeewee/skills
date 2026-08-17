@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 此技能获取当前对话上下文和对代码库的理解，并生成一份规格说明。不要对用户进行访谈——只需综合你已经掌握的信息。
 
-议题跟踪器和分流标签词汇表应该已经提供给你——如果没有，请运行 `/setup-matt-pocock-skills`。
+你的问题跟踪器和分流标签词汇表应该已经提供给你。如果没有，请告诉用户运行 `/setup-matt-pocock-skills`。
 
 ## 流程
 

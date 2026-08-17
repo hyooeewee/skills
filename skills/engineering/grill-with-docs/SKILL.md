@@ -5,4 +5,4 @@ disable-model-invocation: true
 
 ---
 
-使用 `/domain-modeling` 技能运行 `/grilling` 会话。
+调用 Skill 工具两次，分别用于“grilling”和“domain-modeling”。

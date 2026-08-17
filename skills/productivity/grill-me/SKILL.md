@@ -5,4 +5,4 @@ disable-model-invocation: true
 
 ---
 
-运行 `/grilling` 会话。
+使用“grilling”调用 Skill 工具。

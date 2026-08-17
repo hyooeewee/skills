@@ -13,7 +13,7 @@ disable-model-invocation: true
 
 将一个计划、规格说明或对话拆分为一组**票据**——曳光弹式垂直切片，每个切片声明**阻塞**它的票据。
 
-议题跟踪器和分流标签词汇表应该已经提供给你——如果没有，请运行 `/setup-matt-pocock-skills`。
+你的问题跟踪器和分流标签词汇表应该已经提供给你。如果没有，请告诉用户运行 `/setup-matt-pocock-skills`。
 
 ## 流程
 
