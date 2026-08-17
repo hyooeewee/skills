@@ -40,12 +40,6 @@ wayfinder 的分流归结为会话次数：`/grill-with-docs` 用于单会话规
 
 术语表才是重点。领域语言是这个技能真正在构建的东西——项目自己的词汇，一次达成一致，这样你、智能体以及你的同事就不必再付出代价去重新推导它们。值得说明的是，并非所有人都认同这会为你带来智能体性能的提升：最尖锐的公开反驳是，一个术语与它的平白英语解释从 [模型（model）](https://www.aihero.dev/ai-coding-dictionary/model) 那里得到的结果相同，而且这套词汇真正压缩的是共享它的那些人类之间的沟通。这种解读仍然让术语表有价值；只是把价值转移到了别处。
 
-## 它假设只有一位写作者
-
-这些有状态的输出假设由一个人来维护。一个两人开发者团队在一个仓库中运行四个月后报告称，在抽样的合并 PR 中约有 20% 出现了状态漂移，其中 ADR 引用和 README 声明是漂移最严重的表面——有意为之、由人维护的文档比智能体记忆漂移得还要厉害。修剪过时的文档并没有维持住；同样的清理在几天内就又过时了。真正有效的是彻底删除影子状态，并在 CI 中添加一个确定性的引用和链接 linter。
-
-Related: running the skill repeatedly across unrelated changes in one repo tends to accumulate mixed-topic docs, because nothing separates one session's output from another's. Neither of these is fixed in the skill today.
-
 ## 常见问题
 
 **我应该用这个还是 `/wayfinder`？**
