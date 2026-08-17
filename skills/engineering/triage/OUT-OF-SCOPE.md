@@ -1,11 +1,11 @@
-# Out-of-Scope Knowledge Base
+# 范围外知识库
 
-The `.out-of-scope/` directory in a repo stores persistent records of rejected feature requests. It serves two purposes:
+仓库中的 `.out-of-scope/` 目录用于持久保存被拒绝的功能请求记录。它有两个用途：
 
-1. **Institutional memory** — why a feature was rejected, so the reasoning isn't lost when the issue is closed
-2. **Deduplication** — when a new issue comes in that matches a prior rejection, the skill can surface the previous decision instead of re-litigating it
+1. **组织记忆**——记录功能被拒绝的原因，以便在 issue 关闭后，其理由不会丢失
+2. **去重**——当新 issue 与先前的拒绝相匹配时，技能可以呈现先前的决定，而无需重新讨论
 
-## Directory structure
+## 目录结构
 
 ```
 .out-of-scope/
@@ -14,13 +14,13 @@ The `.out-of-scope/` directory in a repo stores persistent records of rejected f
 └── graphql-api.md
 ```
 
-One file per **concept**, not per issue. Multiple issues requesting the same thing are grouped under one file.
+每个**概念**一个文件，而非每个 issue 一个文件。多个请求相同内容的 issue 归并到同一文件下。
 
-## File format
+## 文件格式
 
-The file should be written in a relaxed, readable style — more like a short design document than a database entry. Use paragraphs, code samples, and examples to make the reasoning clear and useful to someone encountering it for the first time.
+文件应以轻松、可读的风格编写——更像一份简短的设计文档，而非数据库条目。使用段落、代码示例和实例，使推理对首次遇到的人清晰且有用。
 
-```markdown
+````markdown
 # Dark Mode
 
 This project does not support dark mode or user-facing theming.
@@ -44,13 +44,14 @@ interface ThemeConfig {
   colors: ColorPalette; // single palette, resolved at build time
   fonts: FontStack;
 }
-```
+````
 
-## Prior requests
+## 先前的请求
 
-- #42 — "Add dark mode support"
-- #87 — "Night theme for accessibility"
-- #134 — "Dark theme option"
+* \#42 — “添加深色模式支持”
+* \#87 — “无障碍夜间主题”
+* \#134 — “深色主题选项”
+
 ```
 
 ### Naming the file
@@ -103,3 +104,4 @@ If the maintainer changes their mind about a previously rejected concept:
 - Delete the `.out-of-scope/` file
 - The skill does not need to reopen old issues — they're historical records
 - The new issue that triggered the reconsideration proceeds through normal triage
+```
