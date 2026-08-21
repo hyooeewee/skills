@@ -1,70 +1,70 @@
-## 它做什么
+## What it does
 
-`writing-for-agents` 是你编写面向智能体的文档时所依据的参考——无论是技能、`AGENTS.md` / `CLAUDE.md`、[spec](https://www.aihero.dev/ai-coding-dictionary/spec)、运行时提示词、README，还是 [agent](https://www.aihero.dev/ai-coding-dictionary/agent) 会读的任何文档。打包方式不同，但写作方式不变：同样的杠杆让每一份文档都可预测，因此智能体每次运行都遵循相同的*流程*，而不是产生相同的输出。
+`writing-for-agents` is the reference you write agent-facing documents against: a skill, an `AGENTS.md` / `CLAUDE.md`, a [spec](https://www.aihero.dev/ai-coding-dictionary/spec), a runtime prompt, a README, any doc an [agent](https://www.aihero.dev/ai-coding-dictionary/agent) reads. The packaging differs; the writing does not: the same levers make each one predictable, so the agent takes the same *process* every run rather than producing the same output.
 
-它的默认动作是删除，而不是解释。让一个智能体为另一个智能体编写指令，它会用大部分篇幅解释 [model](https://www.aihero.dev/ai-coding-dictionary/model) 已经知道的内容——这些行中的每一行都是 **no-op**，消耗 [context](https://www.aihero.dev/ai-coding-dictionary/context) 却不改变任何行为。本参考就是找出这些内容的透镜，这就是为什么它在你已有的文档上和空白文件上一样频繁地体现价值。
+Its default move is deletion, not explanation. Ask an agent to write instructions for another agent and it spends most of its words explaining what the [model](https://www.aihero.dev/ai-coding-dictionary/model) already knows. Every one of those lines is a **no-op**, paying [context](https://www.aihero.dev/ai-coding-dictionary/context) and changing no behaviour. This reference is the lens that finds them, which is why it earns its keep at least as often on a document you already have as on a blank file.
 
-在 v1.1 之前它叫 `writing-great-skills`。改名反映了它一直以来的本质：其中几乎没有技能专属内容。仅限技能使用的机制——frontmatter、模型调用与用户调用的选择、路由技能——被披露在链接的 `SKILL-MECHANICS.md` 中，只有当你面前的文档是技能时才需要阅读。
+It was called `writing-great-skills` until v1.1. The rename tracks what it always was underneath: almost none of it is skill-specific. The skill-only mechanics (frontmatter, the model- versus user-invoked choice, router skills) are disclosed to a linked `SKILL-MECHANICS.md` you read only when the document in front of you is a skill.
 
-## 何时使用它
+## When to reach for it
 
-输入 `/writing-for-agents`，或者当你在创建或编辑技能、修改 `AGENTS.md` 或 `CLAUDE.md` 时，智能体会自行使用它。
+Type `/writing-for-agents`, or the agent reaches for it on its own when you're creating or editing a skill, or modifying `AGENTS.md` or `CLAUDE.md`.
 
-对于智能体会读的其他一切内容，请手动使用它：你的文档、spec 和 [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket)、系统提示词和 [AFK](https://www.aihero.dev/ai-coding-dictionary/afk) 提示词。测试只有一个问题——智能体会读这个吗？——文档如何被呈现在它面前并不重要，无论是指针指向它、人类粘贴它，还是它只是放在仓库里。要弄清楚代码库实际包含什么，请使用 [grill-with-docs](https://aihero.dev/skills-grill-with-docs)——本参考决定文档如何被阅读，而不是它知道什么。
+Reach for it by hand for everything else an agent reads: your docs, specs and [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket), system and [AFK](https://www.aihero.dev/ai-coding-dictionary/afk) prompts. The test is one question: does an agent read this? And it does not matter how the document gets in front of it, whether a pointer names it, a human pastes it, or it simply sits in the repo. For working out what a codebase actually contains in the first place, use [grill-with-docs](https://aihero.dev/skills-grill-with-docs); this reference governs how a document reads, not what it knows.
 
-## 两种负载
+## The two loads
 
-整个参考所围绕的核心观点是每份文档和指针都会花费的两个预算：
+The idea the whole reference turns on is a pair of budgets every document and pointer spends:
 
-* **上下文负载** — 始终加载的材料对智能体窗口的成本：一行 `AGENTS.md`、一个技能描述、任何在每一 [turn](https://www.aihero.dev/ai-coding-dictionary/turn) 都存在于上下文中的内容，无论它是否触发。
-* **认知负载** — 你身上的成本：存在哪些文档，以及何时使用它们。你就是索引。这不是需要最小化的成本——这是人类能动性的代价。
+- **Context load**: the cost of always-loaded material on the agent's window: an `AGENTS.md` line, a skill description, anything sitting in context every [turn](https://www.aihero.dev/ai-coding-dictionary/turn) whether or not it fires.
+- **Cognitive load**: the cost on you, namely which documents exist and when to reach for each. You are the index. Not a cost to minimise: it is the price of human agency.
 
-一旦你用这两种负载来思考，大多数写作决策——拆分或不拆分、内联或披露、指向或推送——就变成了在不同地方做出的同一个权衡。
+Once you think in these two loads, most authoring decisions (split or don't, inline or disclose, point or push) become the same trade made in different places.
 
-## 杠杆
+## The levers
 
-* **[上下文指针](https://www.aihero.dev/ai-coding-dictionary/context-pointer)** — 保存在上下文中、指名上下文之外的材料并编码何时获取它的参考。一个技能描述和一行点名某文档的 `AGENTS.md` 是同一个对象；指针的*措辞*而非其目标，决定了智能体通过它触达的可靠性。
-* **信息层级** — 从文件内步骤、到文件内参考、再到指针背后的披露参考的阶梯。**[渐进式披露](https://www.aihero.dev/ai-coding-dictionary/progressive-disclosure)** 是沿着这个阶梯向下移动，让顶部保持清晰可读。
-* **完成标准** — 每个步骤完成条件的清晰度和要求，以及该要求驱动的**跑腿工作**；这是对**过早完成**的防御。
-* **领航词** — 模型中预训练中已有的紧凑概念（*tight*、*red*、*tracer bullet*），智能体在运行文档时用它来思考。它锚定两次：正文中的执行，指针中的调用。
-* **修剪** — 单一事实来源、相关性，以及逐句应用的 no-op 测试，针对**重复**、**沉积**和**蔓延**。
+- **[Context pointers](https://www.aihero.dev/ai-coding-dictionary/context-pointer)**: the reference held in context that names out-of-context material and encodes when to reach it. A skill description and an `AGENTS.md` line naming a doc are the same object; the pointer's *wording*, not its target, decides how reliably the agent reaches through it.
+- **Information hierarchy**: the ladder from in-file step, to in-file reference, to disclosed reference behind a pointer. **[Progressive disclosure](https://www.aihero.dev/ai-coding-dictionary/progressive-disclosure)** is the move down that ladder so the top stays legible.
+- **Completion criteria**: the clarity and demand of each step's done-condition, and the **legwork** that demand drives; the defence against **premature completion**.
+- **Leading words**: a compact concept already in the model's pretraining (*tight*, *red*, *tracer bullet*) that the agent thinks with while running the document. It anchors twice: execution in the body, invocation in the pointer.
+- **Pruning**: single source of truth, relevance, and the no-op test applied sentence by sentence, against **duplication**, **sediment** and **sprawl**.
 
-## 常见问题
+## Common questions
 
-**`/writing-great-skills` 去哪了？**
-它就是本技能，在 v1.1 中改名。早在名字跟上之前，实践者就已经把它用于 `AGENTS.md`、文档、spec、ticket 和运行时提示词；结构、领航词和修剪原来是任何智能体会读的文本的技艺。没有别名——请在新名称下重新安装。
+**Where did `/writing-great-skills` go?**
+It is this skill, renamed in v1.1. Practitioners were already pointing it at `AGENTS.md`, docs, specs, tickets and runtime prompts long before the name caught up; structure, leading words and pruning turn out to be the craft of any text an agent reads. There is no alias. Reinstall under the new name.
 
-**"为智能体写作"——所以写作的是智能体？**
-恰恰相反。你是作者；智能体是读者。这正是这类体裁的全部难点：你是在为一个已经读过一切的读者写作，所以解释是浪费，精确才是全部工作。
+**"Writing for agents": so the agent does the writing?**
+The other way round. You are the author; the agent is the reader. That is the whole difficulty of the genre: you are writing for a reader who has already read everything, so explanation is waste and precision is the entire job.
 
-**我就不能直接让智能体替我写吗？**
-可以，但它会产生冗长的东西。如果放任不管，模型会解释它已知的内容，而且它不会自己应用 no-op 测试或寻找领航词。在草稿上使用本参考——审查一遍才是它大部分价值所在。
+**Can't I just ask the agent to write it for me?**
+You can, and it will produce something verbose. Left alone the model explains what it already knows, and it will not apply the no-op test or reach for a leading word on its own. Use the reference on the draft: a review pass is where most of its value lands.
 
-**我让一个智能体修剪文档，结果它删掉了功能性。**
-被告知"精简"的智能体会优化长度，因为长度是它们能看到的东西。no-op 测试是行为性的，不是审美性的：删掉这一行，然后问智能体的行为是否改变了。当一个句子不通过时，删除整个句子而不是从里面删词——如果就此产生分歧，通过运行文档来解决，而不是通过争论。
+**I asked an agent to trim a document and it cut the functionality.**
+Agents told to "streamline" optimise for length, because length is the thing they can see. The no-op test is behavioural, not aesthetic: delete the line and ask whether the agent's behaviour changed. When a sentence fails, delete the whole sentence rather than trim words from it, and settle a disagreement about it by running the document, not by arguing.
 
-**我怎么知道它完成了？**
-当它起作用，并且你再也找不到重复、沉积或 no-op 时。这里没有自动化评估；检查方式是手动运行加上失败模式词汇表作为诊断。当文档行为异常时，这个词汇表也是修复工具包——先说出失败模式，再修复它。
+**How do I know when it's done?**
+When it works, and you can no longer find duplication, sediment or no-ops. There is no automated eval here; the check is a manual run plus the failure-mode vocabulary as a diagnostic. When a document misbehaves, that vocabulary is also the repair kit: name the failure mode first, then fix that.
 
-**这应该放在 `CLAUDE.md` 还是别的地方？**
-问你想付哪种负载。`CLAUDE.md` 会无条件加载到每个 [session](https://www.aihero.dev/ai-coding-dictionary/session) 中；指针背后的材料在触发之前只花费指针本身那一行。十种上下文中只有一种适用的事物，在另外九种情况下都在付出上下文负载。
+**Should this live in `CLAUDE.md` or somewhere else?**
+Ask which load you want to pay. `CLAUDE.md` loads into every [session](https://www.aihero.dev/ai-coding-dictionary/session) unconditionally; material behind a pointer costs only the pointer's own line until it fires. Anything that applies in one context out of ten is paying context load the nine other times.
 
-**我需要为每个新模型重写文档吗？**
-大多不需要，而且过度拟合某一个模型本身就是陷阱。为新模型更新通常只是另一次 no-op 遍历，而不是重写。
+**Do I need to rewrite my documents for each new model?**
+Mostly no, and over-fitting to one model is its own trap. Updating for a new model is usually another no-op pass rather than a rewrite.
 
-**我的技能只在我构建它的那个确切任务上有效。**
-常见的路线——先做一次工作，然后让智能体把它写成技能——过度偏向那一次运行，示例也因此过于具体。保留那次运行作为证据，然后刻意抽象：剥离属于那个仓库和那些文件的东西，为这类任务写作。
+**My skill only works on the exact task I built it from.**
+The common route (do the work once, then have the agent write it up as a skill) over-indexes on that one run, and the exemplars come out too specific. Keep the run as evidence, then abstract deliberately: strip what belonged to that repo and those files, and write for the class of task.
 
-**英语不是我的母语。我会失去领航词优势吗？**
-不会——找到用最少 [tokens](https://www.aihero.dev/ai-coding-dictionary/token) 打包最多行为的词，正是本参考为你做的工作。这正是它的用途之一。
+**English isn't my first language. Do I lose the leading-word advantage?**
+No. Finding the word that packs the most behaviour into the fewest [tokens](https://www.aihero.dev/ai-coding-dictionary/token) is work the reference does for you. It is one of the things it is for.
 
-## 如果它起作用了
+## It's working if
 
-* 文档变得越好就越短，你会惊讶于剩下的内容之少。
-* 你可以指着一个领航词，看着它在不止一处发挥作用。
-* 没有任何内容以任何形式被陈述两次。重复是文档从未被测试过的最可靠标志。
-* 只有某个分支需要的参考资料放在指针后面，而不是主文件中。
+- The document gets shorter as it gets better, and you are surprised how little is left.
+- You can point at a leading word and watch it doing work in more than one place.
+- Nothing is stated twice, in any form. Duplication is the most reliable sign a document was never tested.
+- Reference that only one branch needs sits behind a pointer rather than in the main file.
 
-## 它在系统中的位置
+## Where it fits
 
-这是一份随时可用的独立参考。它在链路中没有邻居，因为它位于整套技能的底层，而不是任何单个技能旁边：这里的每个技能都是依据它编写的，其他技能留下的文档——一份 `CONTEXT.md` 及其 ADR、一份 spec、一个 ticket——一旦智能体需要阅读它们，正是本参考所管辖的文本。当你不确定哪个技能或流程适合某项任务时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你路由整个集合。
+This is a reach-for-it-anytime standalone reference. It has no neighbour in the chain because it sits underneath the whole set rather than beside any one skill: every skill here was written against it, and the documents the other skills leave behind (a `CONTEXT.md` and its ADRs, a spec, a ticket) are exactly the text it governs once an agent has to read them. When you're unsure which skill or flow fits a task, [ask-matt](https://aihero.dev/skills-ask-matt) routes you over the whole set.

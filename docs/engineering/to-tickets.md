@@ -1,99 +1,99 @@
-## 它做什么
+## What it does
 
-`to-tickets` 接收一个计划、一份[规格](https://www.aihero.dev/ai-coding-dictionary/spec)，或你当前的对话，并将其分解为问题跟踪器上的一组 **[工单](https://www.aihero.dev/ai-coding-dictionary/ticket)**。每张工单都声明其**阻塞边**——即必须在它开始之前完成的其他工单。
+`to-tickets` takes a plan, a [spec](https://www.aihero.dev/ai-coding-dictionary/spec), or the conversation you are in, and breaks it into a set of **[tickets](https://www.aihero.dev/ai-coding-dictionary/ticket)** on your issue tracker. Each ticket declares its **blocking edges**: the other tickets that have to finish before it can start.
 
-每张工单都是一颗**曳光弹**：一条贯穿变更每一层——schema、API、UI、测试——的狭窄但完整的路径，一旦落地就能独立演示。正是这个约束让它区别于显而易见的工作拆分方式（一次切一层、最后再集成）。它还把每张工单的规模控制在能放进一个全新的[上下文窗口](https://www.aihero.dev/ai-coding-dictionary/context-window)里，因为接手这张工单的将是一个从未见过你规格的[会话](https://www.aihero.dev/ai-coding-dictionary/session)。
+Every ticket is a **tracer bullet**: a narrow but complete path through every layer of the change (schema, API, UI, tests) that can be demoed on its own the moment it lands. That is the constraint that makes it behave differently from the obvious way to split work, which is to cut one layer at a time and integrate at the end. It also sizes each ticket to fit in a single fresh [context window](https://www.aihero.dev/ai-coding-dictionary/context-window), because the thing that will pick the ticket up is a [session](https://www.aihero.dev/ai-coding-dictionary/session) that has never seen your spec.
 
-## 何时使用它
+## When to reach for it
 
-你通过输入 `/to-tickets` 来调用它——[智能体](https://www.aihero.dev/ai-coding-dictionary/agent)不会自己主动使用它。
+You invoke this by typing `/to-tickets`. The [agent](https://www.aihero.dev/ai-coding-dictionary/agent) won't reach for it on its own.
 
-| 你的情况                                                      | 要运行什么                                                                                                        |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| 你有一个规格工单，且实现过程横跨多个会话                                      | `/to-tickets`，或 `/to-tickets #<spec_issue>`                                                                  |
-| 计划只存在于对话中，从未写成文档                                          | `/to-tickets`直接读取会话线程——无需规格                                                                                  |
-| 整个变更可以装进一个上下文窗口                                           | [implement](https://aihero.dev/skills-implement)——跳过工单                                                       |
-| 还没有任何决定                                                   | [grill-with-docs](https://aihero.dev/skills-grill-with-docs)，然后 [to-spec](https://aihero.dev/skills-to-spec) |
-| 一个 [wayfinder](https://aihero.dev/skills-wayfinder)地图已经生成 | [to-spec](https://aihero.dev/skills-to-spec)先折叠地图，然后 `/to-tickets`                                           |
+| Where you are | What to run |
+| --- | --- |
+| You have a spec issue and the build spans several sessions | `/to-tickets`, or `/to-tickets #<spec_issue>` |
+| The plan is only in the conversation, never written up | `/to-tickets` reads the thread directly, no spec needed |
+| The whole change fits in one context window | [implement](https://aihero.dev/skills-implement), skip the tickets |
+| Nothing is decided yet | [grill-with-docs](https://aihero.dev/skills-grill-with-docs), then [to-spec](https://aihero.dev/skills-to-spec) |
+| A [wayfinder](https://aihero.dev/skills-wayfinder) map has cleared | [to-spec](https://aihero.dev/skills-to-spec) first, to collapse the map, then `/to-tickets` |
 
-`to-tickets` 生成的工单天生就是智能体就绪的。不要对它们运行[分诊](https://aihero.dev/skills-triage)——分诊是给来自别人的工作用的。
+Tickets that `to-tickets` produced are agent-ready by construction. Don't run [triage](https://aihero.dev/skills-triage) over them. Triage is for work that arrived from someone else.
 
-## 先决条件
+## Prerequisites
 
-`to-tickets` 发布到一个跟踪器中，因此 [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) 必须已经为这个仓库配置好了一个跟踪器，以及分诊标签词汇表。两种都可以：真实的跟踪器（如 GitHub 或 Linear），或者 `.scratch/` 下的本地 markdown 文件——后者开箱即用。
+`to-tickets` publishes into a tracker, so [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) must have configured one for this repo, along with the triage-label vocabulary. Either kind works: a real tracker like GitHub or Linear, or local markdown files under `.scratch/`, which is supported out of the box.
 
-## 曳光弹，而非分层
+## Tracer bullets, not layers
 
-**水平**切片只交付变更的一个层。在每一层都落地之前，什么都无法运行，而且每张工单的验收标准都不得不伸进另一张工单所负责的工作。**垂直**切片——即曳光弹——一次交付一条贯穿所有层的细路径，因此它可以独立验证，并且它所验收的一切都由自己负责。
+A **horizontal** slice ships one layer of the change. Nothing works until every layer has landed, and each ticket's acceptance criteria have to reach into work that another ticket owns. A **vertical** slice (the tracer bullet) ships one thin path through all the layers at once, so it is verifiable alone and owns everything it grades.
 
-这是人们最常违反的规则，后果也都有据可查。一个团队用 26 张按层切分的工单堆叠——语料库、生产者、聚合器、选择器——结果每关闭一张工单大约需要跑二十次智能体，其中约四分之三是返工。他们自己的事后复盘把每一类失败都归因于水平切分，而不是实现本身。
+This is the rule people break most often, and the consequences are well documented. One team ran a 26-ticket stack sliced by layer (corpus, producer, aggregator, selector) and got roughly twenty agent runs per closed ticket, about three quarters of them rework. Their own post-mortem traced every failure class back to the horizontal slicing rather than to the implementations.
 
-在发布任何内容之前，会发生两件事。`to-tickets` 会寻找预重构——"让变更变容易，再去做容易的变更"——并把这些工作排在前面。然后它以编号列表的形式呈现拆分方案，并就其向你提问：粒度对吗，阻塞边真实吗，有没有应该合并或拆分的项。在你批准之前，什么都不会进入跟踪器，而这个提问环节就是你可以反驳的地方。
+Two things happen before anything is published. `to-tickets` looks for prefactoring (the principle "make the change easy, then make the easy change") and orders that work first. Then it presents the breakdown as a numbered list and quizzes you on it: is the granularity right, are the blocking edges real, should anything merge or split. Nothing reaches the tracker until you approve, and that quiz is the place to push back.
 
-## 阻塞边
+## Blocking edges
 
-这些边正是该产物的意义所在。根据跟踪器的不同，它们有两种读取方式：
+The edges are the point of the artifact. They read two ways depending on the tracker:
 
-| 跟踪器                  | 边存放在哪里                                                          | 如何处理它们                        |
-| -------------------- | --------------------------------------------------------------- | ----------------------------- |
-| 本地 markdown          | 每个工单一个文件，位于 `.scratch/<feature>/issues/<NN>-<slug>.md`，编号时阻塞者在前 | 自上而下，手动处理                     |
-| 真实跟踪器（GitHub、Linear） | 原生阻塞链接，或跟踪器支持的子问题                                               | 任何其阻塞项都已完成、处于 **前沿**的工单都可以被领取 |
+| Tracker | Where the edges live | How you work them |
+| --- | --- | --- |
+| Local markdown | Text in one file per ticket under `.scratch/<feature>/issues/<NN>-<slug>.md`, numbered blockers-first | Top to bottom, by hand |
+| A real tracker (GitHub, Linear) | Native blocking links, or sub-issues where the tracker has them | Any ticket whose blockers are done is on the **frontier** and can be grabbed |
 
-无论哪种方式，边都存在于工单中。介质只决定它们能否被并行推进。`to-tickets` 负责产出产物；运行它——一次一个会话，或一批会话——是你的工作，而不是该技能的工作。
+The edges live in the ticket either way. The medium only decides whether anything can act on them in parallel. `to-tickets` produces the artifact; running it (one session at a time, or a fleet) is your job, not the skill's.
 
-## 大规模重构的例外
+## The wide-refactor exception
 
-有一种形态会打破曳光弹规则。**大规模重构（wide refactor）** 是一种单一的机械式变更——重命名一列、重设某个共享符号的类型——其**爆炸半径**波及整个代码库，因此一次编辑就会破坏成千上万个调用点，任何垂直切片都无法以绿色状态落地。
+One shape breaks the tracer-bullet rule. A **wide refactor** is a single mechanical change (rename a column, retype a shared symbol) whose **blast radius** fans across the whole codebase, so one edit breaks thousands of call sites and no vertical slice can land green.
 
-`to-tickets` 会将其按\*\*扩展—收缩（expand–contract）\*\*来排序：
+`to-tickets` sequences that as **expand–contract** instead:
 
-* **扩展（Expand）**——在旧形式旁边添加新形式，这样什么都不会破坏。
-* **迁移（Migrate）**——按爆炸半径分批迁移调用点（按包、按目录），每批一张工单，每张都被扩展步骤阻塞。因为旧形式仍然存在，CI 保持绿色。
-* **收缩（Contract）**——一旦没有调用者了，就删除旧形式，放在一张被每个迁移批次阻塞的工单中。
+- **Expand**: add the new form beside the old, so nothing breaks.
+- **Migrate**: move call sites over in batches sized by blast radius (per package, per directory), one ticket per batch, each blocked by the expand. CI stays green because the old form still exists.
+- **Contract**: delete the old form once no caller remains, in a ticket blocked by every migrate batch.
 
-即使分批后仍无法单独保持绿色，它们也会共享一条集成分支，并共同阻塞一张最终的集成并验证（integrate-and-verify）工单。只有在那里才承诺绿色。
+Where even the batches can't stay green alone, they share an integration branch and all block a final integrate-and-verify ticket. Green is promised only there.
 
-## 常见问题
+## Common questions
 
-**它为一个三行改动生成了十二张工单。**
-过度分解是这个技能上被反馈最多的摩擦点，而且在实践者中相当一致：[模型](https://www.aihero.dev/ai-coding-dictionary/model)默认生成原子单元，并丢失了能让它们有意义的组合。提问环节正是为此而设——让它合并，它就会合并。更深的答案是，工单有一个下限：如果整个变更能装进一个上下文窗口，你根本不需要这个技能。直接去 [implement](https://aihero.dev/skills-implement)。
+**It produced twelve tickets for a three-line change.**
+Over-decomposition is the most reported friction on this skill, and it is consistent across practitioners: the [model](https://www.aihero.dev/ai-coding-dictionary/model) defaults to atomic units and loses the grouping that would make them meaningful. The quiz step exists for exactly this: ask it to merge, and it will. The deeper answer is that the tickets have a floor: if the whole change fits in one context window, you don't need this skill at all. Go straight to [implement](https://aihero.dev/skills-implement).
 
-**工单是按层产出的——所有 schema 在一张里，所有 API 在另一张里。**
-这正是垂直切片规则所反对的失败，而该技能有时仍会这样产出。在提问环节抓住它：对每张工单问一个问题——这件事完成后我能演示什么？一张答不上来的工单就是水平切片。有些人因此会在每张工单里加一行"演示路径（demo path）"，并反馈说这样可以引导模型走向垂直分解。
+**The tickets came out one per layer: all the schema in one, all the API in another.**
+This is the failure the vertical-slice rule is written against, and the skill still produces it sometimes. Catch it at the quiz step by asking one question per ticket: what can I demo when this is done? A ticket with no answer is a horizontal slice. Some people add a "demo path" line to each ticket for this reason, and report it nudges the model toward vertical decomposition.
 
-**在 GitHub 上，工单没有被创建为规格工单的子问题。**
-已知且未修复。这已在十几次运行和多个模型中被报告，[最完整的描述在 issue #554](https://github.com/mattpocock/skills/issues/554)，而且在 Codex 上比在 Claude 上更严重。`gh` 从 v2.94 起原生支持这一点：`gh issue create --parent <n>`，以及事后执行 `gh issue edit <parent> --add-sub-issue <n>`。在跟踪器模板倾向于使用这些命令之前，运行后自己手动接好父链接是可靠的做法。
+**On GitHub the tickets weren't created as sub-issues of the spec issue.**
+Known and unfixed. It has been reported across a dozen runs and several models, [most fully in issue #554](https://github.com/mattpocock/skills/issues/554), and it is worse on Codex than on Claude. `gh` has supported this natively since v2.94: `gh issue create --parent <n>`, and `gh issue edit <parent> --add-sub-issue <n>` after the fact. Until the tracker template prefers those, wiring the parent links yourself after a run is the reliable move.
 
-**"Blocked by"被写进了 issue 正文，而不是真正的阻塞链接。**
-同样一类问题，[报告见 issue #513](https://github.com/mattpocock/skills/issues/513)，那里的智能体甚至断言 GitHub 根本没有原生阻塞关系。其实有——`gh issue create --blocked-by 12,15`。因为阻塞项会先发布，它们的编号在创建时总是现成的。正文文本只是给没有原生边的跟踪器的回退方案，而不是默认做法。
+**"Blocked by" was written into the issue body instead of a real blocking link.**
+Same class of problem, [reported in issue #513](https://github.com/mattpocock/skills/issues/513), where the agent went as far as asserting GitHub has no native blocking relationship at all. It does: `gh issue create --blocked-by 12,15`. Because blockers are published first, their numbers are always available at creation time. The body text is meant to be the fallback for trackers with no native edge, not the default.
 
-**本地的工单放哪里？v1.1 的说明写的是根目录下的 `tickets.md`。**
-确实写过，而那是个 bug——单个共享文件在多个智能体并行写入时还会发生竞争。本地模式现在在 `.scratch/<feature-slug>/issues/<NN>-<slug>.md` 下按依赖顺序为每张工单写一个文件，这与本地跟踪器模板已经描述的布局一致。`NN` 前缀是真实的工单 ID，所以直接 `/implement 03` 就行，不用重新输入一长串标题。
+**Where do the local tickets go? The v1.1 notes said a root-level `tickets.md`.**
+They did, and that was a bug: a single shared file also raced when parallel agents wrote to it. Local mode now writes one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, in dependency order, matching the layout the local tracker template already described. The `NN` prefix is a real ticket ID, so `/implement 03` works instead of retyping a long title.
 
-**它在尝试读取我的规格时一直截断。**
-非常大的规格可能超出跟踪器 issue 能干净返回的体量，而且没有本地副本可回退——于是智能体会烧掉大量[工具调用](https://www.aihero.dev/ai-coding-dictionary/tool-call)去重新获取分块，永远到不了结尾。不要在 `/to-spec` 和 `/to-tickets` 之间[清除](https://www.aihero.dev/ai-coding-dictionary/clearing)或[压缩](https://www.aihero.dev/ai-coding-dictionary/compaction)。在同一个上下文窗口中运行它们，规格就根本不需要再被取回。
+**It kept truncating when it tried to read my spec.**
+A very large spec can outgrow what a tracker issue serves back cleanly, and there is no local copy to fall back on, so the agent then burns [tool calls](https://www.aihero.dev/ai-coding-dictionary/tool-call) re-fetching chunks and never reaches the end. Don't [clear](https://www.aihero.dev/ai-coding-dictionary/clearing) or [compact](https://www.aihero.dev/ai-coding-dictionary/compaction) between `/to-spec` and `/to-tickets`. Run them in the same context window and the spec never has to be fetched back at all.
 
-**验收标准没有区分等级——有些标准在动手之前就已经通过了。**
-模板要求填写标准，却没有说明这些标准是否可能不通过，于是出现了这种情况。反复出现的三种形态：一种是在基础提交时就已经为真的标准，一种是只能由另一张工单的工作来满足的标准，还有一种是复述需求而非从工件推导出的标准。垂直切分可以避免大部分此类问题——一个交付了此前不存在行为的切分，在设计上就保证了在基础提交时是红灯——但这种检查仍值得手动执行。对每一条标准，指出能证明其为假的观察结果，并确认它在实现者开始工作的那个提交上确实是失败的。
+**The acceptance criteria graded nothing: some passed before any work was done.**
+The template asks for criteria and says nothing about whether they can fail, so this happens. Three shapes recur: a criterion already true at the base commit, a criterion that can only be satisfied by work another ticket owns, and one that restates the request rather than deriving from the artifact. Vertical slicing prevents most of it (a slice that delivers behaviour which didn't exist before is red at the base commit by construction), but the check is worth doing by hand. For each criterion, name the observation that would show it false, and confirm it fails at the commit the implementer starts from.
 
-**工单已经发布。我实际要如何运行它们？**
-该技能止步于工件，没有自动派发模式。派发是手动的：看板看一眼，数出没有未解决阻塞项的工单数量，然后开启同等数量的代理会话。每张工单对应一个全新上下文，会话之间要清理。请注意，[implement](https://aihero.dev/skills-implement) 在结束时并不总能可靠地在 GitHub 或本地 markdown 中关闭或勾选工单，因此工单状态需要你来更新。
+**The tickets are published. How do I actually run them?**
+The skill stops at the artifact, and there is no auto-dispatch mode. Dispatch is manual: look at the board, count the tickets with no open blockers, and open that many agent sessions. One ticket per fresh context, cleared between them. Be aware that [implement](https://aihero.dev/skills-implement) does not reliably close or check off the ticket when it finishes, on GitHub or in local markdown, so the ticket's state is yours to update.
 
-## 如果它起作用了
+## It's working if
 
-* 每张工单都回答了“完成后我可以演示什么？”——而答案是从行为出发，而不是某一个层次。
-* 在发布之前，返回给你的列表是带编号的，且每张工单上都有“被阻塞于”一行。
-* 最上面的工单没有阻塞项，可以立即开始。
-* 工单正文中不包含文件路径或行号，除了原型产生的代码片段。
-* 每张工单读起来都像是全新会话能在你不在场的情况下完成的事项。
-* 预重构（如果有发现）排在顺序的前面，而不是混在功能工单中。
+- Every ticket has an answer to "what can I demo when this is done?", and the answer is behaviour, not a layer.
+- The list comes back to you numbered, with a "Blocked by" line on each, before anything is published.
+- The ticket at the top has no blockers and can be started immediately.
+- Nothing in a ticket body is a file path or a line number, except a snippet a prototype produced.
+- Each ticket reads like something a fresh session could finish without you in the room.
+- Prefactoring, where it found any, is at the front of the order rather than mixed into feature tickets.
 
-## 它在系统中的位置
+## Where it fits
 
-`to-tickets` 是主构建链中的一个步骤：
+`to-tickets` is a step in the main build chain:
 
 ```txt
 grill-with-docs → to-spec → to-tickets → implement → code-review
 ```
 
-上游是 [to-spec](https://aihero.dev/skills-to-spec)，它会把已确定的规格交过来供你切分——两者要保持在同一个不断开的上下文窗口中。下游是 [implement](https://aihero.dev/skills-implement)，它每次全新会话构建一张工单，用 [tdd](https://aihero.dev/skills-tdd) 驱动测试，并以 [code-review](https://aihero.dev/skills-code-review) 收尾。当你不确定哪个技能或流程适用时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指路。
+Upstream is [to-spec](https://aihero.dev/skills-to-spec), which hands it a settled spec to slice against; keep both in one unbroken context window. Downstream is [implement](https://aihero.dev/skills-implement), which builds one ticket per fresh session, driving [tdd](https://aihero.dev/skills-tdd) for the tests and closing with [code-review](https://aihero.dev/skills-code-review). When you're unsure which skill or flow fits, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.

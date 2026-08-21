@@ -1,25 +1,25 @@
-# 问题跟踪器集成仅限于主流工具
+# Issue tracker integrations are limited to mainstream tools
 
-`setup-matt-pocock-skills` 仅对**主流**问题跟踪器提供一流支持。为小众、新兴或单一供应商的实验性跟踪器添加支持的请求不在范围内。
+`setup-matt-pocock-skills` only offers first-class support for **mainstream** issue trackers. Requests to add support for niche, new, or single-vendor experimental trackers are out of scope.
 
-## 为什么这不在范围内
+## Why this is out of scope
 
-每个问题跟踪器后端都会将 CLI 形态硬编码到技能中（命令、标志、输出解析）。每个新后端都是永久的维护面——它必须随着工具的 CLI 演进而持续工作，并且必须持续针对 `/to-spec`、`/to-tickets`、`/triage` 等命令进行测试。只有当相当比例的用户确实使用这些跟踪器时，这项成本才值得付出。
+Every issue-tracker backend hard-codes a CLI shape into the skills (commands, flags, output parsing). Each new backend is permanent maintenance surface, because it has to keep working as the tool's CLI evolves, and it has to keep being tested against `/to-spec`, `/to-tickets`, `/triage`, and friends. That cost is only worth paying for trackers a meaningful fraction of users actually have.
 
-“主流”是一种判断，而非数字标准：
+"Mainstream" is a judgment call, not a numeric bar:
 
-* GitHub、GitLab 和 Backlog.md 是我们认为的主流工具——广为人知、广泛使用，早已过了实验阶段。
-* 一个全新的、以代理为中心、在 GitHub 上只有几百颗星的工具则不算，无论其设计多么有趣。
+- GitHub, GitLab, and Backlog.md are the kind of tools we'd consider mainstream: broadly known, widely used, well past the experimental phase.
+- A brand-new agent-focused tool with a few hundred GitHub stars is not, no matter how interesting the design.
 
-星标数、存在时间和下载量是做出判断时有用的信号，但都不是标准。标准是：一个典型的工程师会认出这个工具，并且很可能为他们的团队选择它吗？
+Stars, age, and download counts are useful signals when making the call but none of them is the rule. The rule is: would a typical engineer recognise this tool and have plausibly chosen it for their team?
 
-针对非主流跟踪器的备用方案已经存在：
+The escape hatches for non-mainstream trackers already exist:
 
-* `local markdown` 用于轻量级的仓库内跟踪。
-* `other/custom` 供想要自行配置的用户使用。
+- `local markdown` for lightweight in-repo tracking.
+- `other/custom` for users who want to wire something up themselves.
 
-这两者都不需要核心技能了解具体工具。
+Neither requires the core skills to know about the specific tool.
 
-## 先前的请求
+## Prior requests
 
-* \#99 — “将 dex 添加为问题跟踪器后端”（请求时 dex 约有 3 个月历史，约 300 颗星）
+- #99: "Add dex as an issue tracker backend" (dex was ~3 months old and ~300 stars at the time of the request)

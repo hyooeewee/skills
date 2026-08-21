@@ -1,17 +1,17 @@
-# RESOURCES.md 格式
+# RESOURCES.md Format
 
-`RESOURCES.md` 是此主题的精选可信来源。解释器的知识应从此处获取，而非来自参数化猜测。智慧来自此处列出的社区。
+`RESOURCES.md` is the curated set of trusted sources for this topic. Knowledge for explainers should be drawn from here, not from parametric guesses. Wisdom comes from the communities listed here.
 
-## 结构
+## Structure
 
 ```md
 # {Topic} Resources
 
 ## Knowledge
 
-- [Book: _The Science and Practice of Strength Training_ — Zatsiorsky & Kraemer](https://example.com)
+- [Book: _The Science and Practice of Strength Training_ by Zatsiorsky & Kraemer](https://example.com)
   Foundational text on programming and adaptation. Use for: anything to do with periodisation, recovery, intensity zones.
-- [Article: "How Much Should I Train?" — Greg Nuckols (Stronger By Science)](https://example.com)
+- [Article: "How Much Should I Train?" by Greg Nuckols (Stronger By Science)](https://example.com)
   Evidence-based review of volume landmarks. Use for: weekly set targets per muscle group.
 
 ## Wisdom (Communities)
@@ -22,11 +22,11 @@
   Use for: real-time coaching feedback on lifts.
 ```
 
-## 规则
+## Rules
 
-* **仅高可信度。** 优先选择第一手来源、公认专家、同行评审工作以及具有严格审核的社区。如果某个资源是伪装成教育的营销，请将其排除。
-* **为每个条目添加注释。** 一个光秃秃的链接三个月后就没用了。添加一行说明：它涵盖了什么以及何时使用它。
-* **按知识 / 智慧分组。** 这与 [SKILL.md](./SKILL.md) 中的理念相呼应。一个资源只出现在一个组中是可以的。
-* **明确列出缺失项。** 如果任务所需的某个领域没有好的资源，请写一个 `## Gaps` 部分，列出缺失的内容。这会推动未来的搜索。
-* **毫不留情地修剪。** 被证明是错误、肤浅或偏离任务的资源应被移除，而不是埋没。五个有价值的来源胜过三十个平庸的。
-* **记录社区偏好。** 如果用户选择不加入社区，请在此处注明，以便未来的会话不再反复提议。
+- **High-trust only.** Prefer primary sources, recognised experts, peer-reviewed work, and communities with strong moderation. If a resource is marketing dressed as education, leave it out.
+- **Annotate every entry.** A bare link is useless in three months. Add one line: what it covers and when to reach for it.
+- **Group by Knowledge / Wisdom.** Mirrors the philosophy in [SKILL.md](./SKILL.md). It is fine for a resource to appear in only one group.
+- **Surface gaps explicitly.** If no good resource exists for an area the mission needs, write a `## Gaps` section listing what is missing. This drives future search.
+- **Prune ruthlessly.** A resource that turned out to be wrong, shallow, or off-mission should be removed, not buried. Better five sharp sources than thirty mediocre ones.
+- **Record community preferences.** If the user has opted out of joining communities, note it here so future sessions don't keep proposing them.

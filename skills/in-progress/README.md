@@ -1,16 +1,16 @@
-# 进行中
+# In Progress
 
-Beta 版。这些技能特意公开——试用它们并告诉我哪里出了问题。在它们进入稳定分类之前，它们不会包含在插件和顶层 README 中，也没有文档页面，并且可能随时更改或消失，恕不另行通知。
+Beta. These skills are public on purpose: try them and tell me what breaks. They're excluded from the plugin and the top-level README until they graduate to a stable bucket, they get no docs pages, and they can change or disappear without warning.
 
-插件不会提供这些。请直接安装其中一个：
+The plugin won't give you these. Install one directly:
 
 ```bash
 npx skills@latest add mattpocock/skills --skill=<name>
 ```
 
-* **[loop-me](./loop-me/SKILL.md)** — 通过多次会话，将当前目录作为有状态的工作区，让自己打磨出可实施的工作流规范。由用户调用。
-* **[writing-beats](./writing-beats/SKILL.md)** — 以节拍旅程的形式来构思文章，采用“选择你自己的冒险”风格。选择一个起始节拍，只写那个节拍，然后转向下一个，直到文章自然收尾。
-* **[writing-fragments](./writing-fragments/SKILL.md)** — 一次追问式会话，挖掘你的写作片段——各种异质的小块文字——并将它们追加到单个文档中，作为未来文章的原始素材。
-* **[writing-shape](./writing-shape/SKILL.md)** — 将一份原始素材的 Markdown 文件逐段塑造成一篇文章，并在每一步讨论格式选择。
-* **[claude-handoff](./claude-handoff/SKILL.md)** — 将当前对话移交给一个新的后台代理，该代理会立即接手工作，并通过 `claude --bg` 预先注入交接摘要。由用户调用。
-* **[setup-ts-deep-modules](./setup-ts-deep-modules/SKILL.md)** — 将 dependency-cruiser 接入 TypeScript 仓库，使每个包都成为一个深层模块——实现隐藏在子文件夹中，只能通过其入口文件访问，测试也通过这些入口文件来执行。由用户调用。
+- **[loop-me](./loop-me/SKILL.md)**: Grill yourself into implementable workflow specs over multiple sessions, using the current directory as a stateful workspace. User-invoked.
+- **[writing-beats](./writing-beats/SKILL.md)**: Shape an article as a journey of beats, choose-your-own-adventure style. Pick a starting beat, write only that beat, then pivot to the next, until the article reaches a natural end.
+- **[writing-fragments](./writing-fragments/SKILL.md)**: Grilling session that mines you for fragments (heterogeneous nuggets of writing) and appends them to a single document as raw material for a future article.
+- **[writing-shape](./writing-shape/SKILL.md)**: Take a markdown file of raw material and shape it into an article paragraph by paragraph, arguing format choices at each step.
+- **[claude-handoff](./claude-handoff/SKILL.md)**: Hand the current conversation off to a fresh background agent that picks up the work immediately, seeded with a handoff summary via `claude --bg`. User-invoked.
+- **[setup-ts-deep-modules](./setup-ts-deep-modules/SKILL.md)**: Wire dependency-cruiser into a TypeScript repo so each package is a deep module: implementation hidden in subfolders, reachable only through its entry-point files, tests exercising it through those. User-invoked.

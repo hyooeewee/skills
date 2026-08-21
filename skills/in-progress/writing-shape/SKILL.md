@@ -1,82 +1,79 @@
 ---
 name: writing-shape
-description: |-
-  写作、利用——将原始素材塑造成一篇文章，
-    逐段推进。
+description: "Writing, exploit: shape raw material into an article, paragraph by paragraph."
 disable-model-invocation: true
-
 ---
 
 <what-to-do>
 
-用户已经（或将）传入一个原始素材的 Markdown 文件。将其视为输入堆——无论是整齐的片段列表、大段非结构化文字，还是转录稿，格式无关紧要。在做任何其他事情之前，先完整读一遍。
+The user has passed (or will pass) a markdown file of raw material. Treat it as the input pile: anything from a tidy list of fragments to a wall of unstructured prose to a transcript. The format does not matter. Read it end-to-end before doing anything else.
 
-然后运行一次塑形会话，产出一份独立的文章文档。这是**利用**：探索已经完成，素材堆已固定——确定结构，并从素材堆中挖掘以填充它。不要编辑原始素材文件——它对这个技能是只读的。
+Then run a shaping session that produces a separate article document. This is **exploit**: the exploring is done, the pile is fixed: commit to a structure and mine the pile to fill it. Do not edit the raw material file: it is read-only to this skill.
 
-如果用户没有说明文章保存到哪里，问一次并记住该路径。
+If the user did not say where to save the article, ask once and remember the path.
 
 </what-to-do>
 
 <supporting-info>
 
-## 循环
+## The loop
 
-1. **通读素材堆。** 完整读取输入文件，对其中内容形成整体认识。
-2. **确立前置条件。** 与用户商定读者在进入时已具备哪些知识——即从一开始就**已铺垫**的概念。其他一切概念必须先由某个区块铺垫，后续区块才能依赖它。参见[铺垫](#grounding)。
-3. **起草 2–3 个候选开头。** 每个开头都应暗示文章的不同论点或角度。全部展示出来，迫使用户选择或组合出一个混合版本。所选开头决定了文章其余部分必须完成的任务。
-4. **逐段生长。** 开头确定后，问：“基于这个开头，读者接下来需要听到什么？”从素材堆中提取材料来回答。下一个区块只能依赖已铺垫的概念，并在落定时铺垫新的概念。就下一个区块采用的形式进行论证——段落、列表、表格、标注、引用、代码块。每种格式选择都应是深思熟虑且站得住脚的。
-5. **随写随追加到文章文件。** 不要批量处理。每达成一个段落或区块，立即写入，让用户看到文章逐渐成形。
-6. **重复第 4 步直到文章完成。** 由用户决定何时完成。
+1. **Read the pile.** Read the input file in full. Form a sense of what's in it.
+2. **Establish the prerequisites.** Settle with the user what the reader knows walking in: the concepts that are **grounded** from the start. Everything else must be grounded by a block before a later block can lean on it. See [Grounding](#grounding).
+3. **Draft 2–3 candidate openings.** Each opening should imply a different thesis or angle for the article. Show all of them. Force the user to pick or compose a hybrid. The chosen opening defines what the rest of the article must do.
+4. **Grow paragraph by paragraph.** After the opening lands, ask "given this opening, what does the reader need to hear next?" Pull material from the pile to answer. The next block may only lean on grounded concepts, and grounds new ones as it lands. Argue about the form the next block takes: a paragraph, a list, a table, a callout, a quote, a code block. Each format choice should be deliberate and defensible.
+5. **Append to the article file as you go.** Don't batch. Write each agreed paragraph or block immediately so the user can see the article taking shape.
+6. **Loop step 4 until the article is done.** The user decides when it's done.
 
-## 铺垫
+## Grounding
 
-每个**概念**都必须先被**铺垫**，后续区块才能依赖它：要么读者在进入时已经知道，要么在更早的区块中遇到过。一个使用了未铺垫概念的区块会失去读者。单位是概念，而不是它的说法——即使没有任何术语出现，一个区块也可能依赖读者并不具备的想法。当概念有名称——即**术语**——铺垫意味着将想法和术语一起落地。
+Every **concept** has to be **grounded** before a block can lean on it: the reader either walked in knowing it or met it in an earlier block. A block that reaches for an ungrounded concept loses the reader. The unit is the concept, not the word for it: a block can lean on an idea the reader lacks even with no jargon in sight. Where a concept has a name (a **term**), grounding it means landing the idea and the term together.
 
-概念通过两种方式之一获得铺垫：
+A concept gets grounded one of two ways:
 
-* **前置条件**——在开头之前已铺垫。读者自带。一开始就固定。
-* **引入**——由某个区块建立，此后在文章余下部分保持已铺垫状态。
+- **Prerequisite**: grounded before the opening. The reader brings it. Fixed at the start.
+- **Introduced**: a block establishes it, and from then on it's grounded for the rest of the article.
 
-持续记录已铺垫的内容。当你问“读者接下来需要听到什么？”时，下一步所需但尚未铺垫的概念本身就是答案：先铺垫它——在这里或更早的区块中——否则你无法迈出这一步。这是[从素材堆中提取](#pulling-from-the-pile)在更高一层上的缺口命名：在那里，素材堆缺少材料；在这里，文章缺少基础。
+Keep a running list of what's grounded. When you ask "what does the reader need to hear next?", an ungrounded concept the next move needs is itself the answer: ground it first (here or in an earlier block) or you can't make the move. This is the gap-naming of [Pulling from the pile](#pulling-from-the-pile) one level up: there the pile is missing material; here the article is missing a foundation.
 
-杠杆在于你选择哪些作为前置条件，哪些在文章内部铺垫。前置要求太多，会把读者挡在门外；内部铺垫太多，开头会淹没在定义中。在确立前置条件时与用户一起商定。
+The lever is what you make a prerequisite versus what you ground inside the article. Demand too much up front and you shut readers out; ground too much inside and the opening drowns in definitions. Settle it with the user when you establish prerequisites.
 
-## 对话感
+## Conversational feel
 
-这是一场倒转的拷问。在构思阶段，问题是“你实际上注意到了什么？”而这里是“这篇文章实际上在论证什么，读者需要按什么顺序听到？”要反驳。绝不让薄弱的过渡蒙混过关。如果一个段落不配占有一席之地，就删掉它。
+This is a grilling session inverted. In ideation, the question was "what are you actually noticing?" Here it's "what is this article actually arguing, and in what order does the reader need to hear it?" Push back. Refuse to let weak transitions slide. If a paragraph doesn't earn its place, cut it.
 
-可以继续使用的具体话术：
+Specific moves to keep using:
 
-* “这个段落为读者带来了什么上一段没有的东西？”
-* “如果我删掉这个，什么会坏掉？”
-* “这是散文，还是应该是列表？为什么是散文？”
-* “这句话在干两件事——拆开它，或选一件。”
-* “开头承诺了 X。我们已经漂移到 Y。要么重新接回去，要么修改开头。”
+- "What does this paragraph do for the reader that the previous one didn't?"
+- "If I cut this, what breaks?"
+- "Is this prose, or should it be a list? Why prose?"
+- "This sentence is doing two jobs: split it or pick one."
+- "The opening promised X. We've drifted to Y. Either re-thread it or change the opening."
 
-## 从素材堆中提取
+## Pulling from the pile
 
-将原始素材视为采石场，而不是脚本。抽取一个片段，重写以适应周围段落，然后放置。一个片段可以拆到多个段落、与另一个合并，或改写。素材堆的职责是被开采；文章的职责是读起来像出自同一人之口。
+Treat the raw material as a quarry, not a script. Pull a fragment, rework it to fit the surrounding paragraph, and place it. A fragment may be split across multiple paragraphs, merged with another, or paraphrased. The pile's job is to be mined; the article's job is to read as one voice.
 
-如果素材堆缺少文章所需的内容，明确说出缺口：“我们这里需要一个例子，但素材堆里没有——现在给我一个，否则我们砍掉这一节。”
+If the pile lacks something the article needs, name the gap explicitly: "We need an example here and the pile doesn't have one. Give me one now or we cut this section."
 
-## 真正要进行的格式论证
+## Format arguments to actually have
 
-在选择如何呈现一个区块时，要把这些取舍大声与用户权衡，而不是默默进行：
+When choosing how to render a block, weigh these tradeoffs out loud with the user, not silently:
 
-* **散文 vs. 列表。** 散文承载论证；列表承载并列项。如果各项并非真正并列，散文更好。如果确实并列，列表更便于扫读。
-* **行内 vs. 标注。** 提示、警告和补充说明放入标注（`> [!TIP]`、`> [!NOTE]`）——但前提是它们放在正文中确实会打断主要论证。否则就留在行内。
-* **表格 vs. 重复结构。** 如果同样的形状以相同字段重复出现 3 次以上，用表格。否则用带粗体引导词的散文。
-* **引用 vs. 转述。** 当原始措辞本身就是重点时引用。当只有想法重要时转述。
-* **代码块 vs. 行内代码。** 多行、可运行或说明性内容 → 代码块。单个标记或标识符 → 行内。
+- **Prose vs. list.** Prose carries argument; lists carry parallel items. If items aren't truly parallel, prose is better. If they are, a list is faster to scan.
+- **Inline vs. callout.** Tips, warnings, and asides go in callouts (`> [!TIP]`, `> [!NOTE]`), but only if they'd genuinely derail the main argument inline. Otherwise leave them inline.
+- **Table vs. repeated structure.** If the same shape repeats 3+ times with the same fields, a table. Otherwise prose with bold leads.
+- **Quote vs. paraphrase.** Quote when the original wording is the point. Paraphrase when only the idea matters.
+- **Code block vs. inline code.** Multi-line, runnable, or illustrative → block. Single token or identifier → inline.
 
-## 写作节奏
+## Writing rhythm
 
-每达成一个区块就追加到文章文件。每次写入前都从磁盘重新读取文件——用户可能在你来回对话之间编辑过。绝不盲目覆盖。如果用户想重写某个段落，就原地编辑那个具体段落；其他部分保持不动。
+Append to the article file as each block is agreed. Re-read the file from disk before every write: the user may have edited between turns. Never overwrite blindly. If the user wants a paragraph rewritten, edit that specific paragraph in place; leave the rest alone.
 
-## 范围之外
+## Out of scope
 
-* 挖掘素材堆中没有的新片段（按“从素材堆中提取”一节处理缺口）。
-* 编辑原始素材文件。
-* 发布、针对特定平台格式化，或添加用户未要求的前置元数据（frontmatter）。
+- Mining for new fragments that aren't in the pile (handle gaps as in "Pulling from the pile").
+- Editing the raw material file.
+- Publishing, formatting for a specific platform, or adding frontmatter the user didn't ask for.
 
 </supporting-info>

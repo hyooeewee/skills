@@ -1,67 +1,67 @@
-## 它做什么
+## What it does
 
-`prototype` 编写**回答某个问题的临时代码**——这个状态模型是否合适，或者这个屏幕应该长什么样。问题优先，并决定后续所有内容的形式；回答错误问题的原型，无论看起来多好，都是纯粹的浪费。
+`prototype` writes **throwaway code that answers a question**: does this state model feel right, or what should this screen look like. The question comes first and decides the shape of everything that follows; a prototype that answers the wrong question is pure waste, however good it looks.
 
-临时是对代码*编写方式*的约束，而不是销毁它的承诺。没有测试，没有超出运行所需范围的错误处理，没有抽象，没有持久化——因为这些都无法帮助你学到你想学的那件事。留存下来的是答案，被融入真实代码，以及原型本身，停放在 main 之外的分支上，作为答案来源的证据。
+Throwaway is a constraint on how the code is *written*, not a promise to destroy it. No tests, no error handling beyond what makes it run, no abstractions, no persistence, because none of that helps you learn the one thing you're trying to learn. What survives is the answer, folded into the real code, and the prototype itself, parked on a branch out of main as the evidence the answer came from.
 
-## 何时使用它
+## When to reach for it
 
-输入 `/prototype`，或者当任务合适时，[agent](https://www.aihero.dev/ai-coding-dictionary/agent) 会自动使用它。
+Type `/prototype`, or the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) reaches for it automatically when a task fits.
 
-当你遇到无法通过交谈解决的问题时，就使用它——一个你无法在脑中掌握其边界情况的状态机，一个直到你并排看到三个版本才能想象出来的屏幕。在这些问题上，[Grilling](https://www.aihero.dev/ai-coding-dictionary/grilling) 会话会迅速膨胀：agent 换着说法，你猜测，范围不断扩大以填补不确定性。停止盘问，构建临时版本，看看它，然后用一行字回答。如果相反，已构建的东西行为异常而你想知道原因，请使用 [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs)——原型设计探索的是要构建什么，而不是已构建的东西为什么坏了。
+Reach for it the moment you hit a question you can't settle by talking: a state machine whose edge cases you can't hold in your head, a screen you can't picture until you see three versions side by side. [Grilling](https://www.aihero.dev/ai-coding-dictionary/grilling) sessions balloon on exactly these questions: the agent rephrases, you guess, and the scope grows to fill the uncertainty. Stop grilling, build the throwaway version, look at it, then answer in one line. If instead something already built is misbehaving and you want to know why, use [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs); prototyping explores what to build, not why the built thing is broken.
 
-你也会在不经意间来到这里。[wayfinder](https://aihero.dev/skills-wayfinder) 在其地图上归档 `prototype` 决策 [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket)，处理其中一个 ticket 就是本技能。
+You will also arrive here without choosing to. [wayfinder](https://aihero.dev/skills-wayfinder) files `prototype` decision [tickets](https://www.aihero.dev/ai-coding-dictionary/ticket) on its map, and working one is this skill.
 
-## 两个分支
+## Two branches
 
-问题决定分支，而各个分支产生截然不同的产物：
+The question picks the branch, and the branches produce very different artifacts:
 
-* **"这个逻辑/状态模型感觉对吗？"** — 一个**可共享的单个 HTML 文件**。一个自包含的页面，无需构建、无需服务器，双击即可打开。它带有一个带标签的状态面板，每次点击后都会重新渲染；还有自由操作按钮，可以按任意顺序戳弄模型；以及带标签页的**引导式演练**——每个标签页一个场景，每个场景下方都有按顺序要按的按钮。所有内容都用领域语言标注，因此你可以把它交给设计师、产品经理或领域专家，让他们自己感受这个模型。页面背后的逻辑是一个小型纯模块——一个 reducer、一个状态机、一组函数——保持与 DOM 无关，以便经过验证的版本可以直接移植到真实代码中。
-* **"这应该长什么样？"** — 同一个路由上的几个**截然不同**的 UI 变体，可通过浮动底部栏和 `?variant=` URL 参数切换。变体必须在结构上不同，而不是颜色上；三个微调过的卡片网格是壁纸，不是原型。只要可能，它们就在真实页面中渲染，使用真实数据和真实密度，因为在真空中评判的变体看起来总是很好。
+- **"Does this logic / state model feel right?"**: a **single shareable HTML file**. One self-contained page, no build and no server, that someone opens by double-clicking. It carries a labelled state panel that re-renders after every click, free-play buttons for poking at the model in any order, and tabbed **guided walkthroughs** (one scenario per tab, each with the ordered buttons to press underneath it). Everything is labelled in domain language, so you can hand it to a designer, a PM or a domain expert and let them feel the model themselves. The logic behind the page is a small pure module (a reducer, a machine, a set of functions) kept clean of the DOM so the validated version lifts straight into the real code.
+- **"What should this look like?"**: several **radically different** UI variations on one route, switchable from a floating bottom bar and a `?variant=` URL param. Variants must disagree about structure, not colour; three tweaked card grids is wallpaper, not a prototype. They render inside a real page wherever possible, against real data and real density, because a variant judged in a vacuum always looks fine.
 
-两者都将状态保存在内存中，开始时无需思考，并在每个步骤之后向你展示完整状态。当你发现自己开始加固其中一个——添加测试、连接真实数据库、为以后可能需要的场景做泛化——你就已经不是在原型设计了。
+Both keep state in memory, start with no thinking required, and show you the full state after every step. The moment you find yourself hardening one (adding a test, wiring the real database, generalising for a case you might want later), you have stopped prototyping.
 
-## 原型是一手来源
+## The prototype is a primary source
 
-一个完成的原型留下两样东西，它们去向不同的地方。
+A finished prototype leaves two things, and they go to different places.
 
-**答案**——结论加上它所解决的问题——被持久化地记录：一条提交信息、一份 ADR、一个实现 issue。这就是 main 分支所保留的，融入真实代码之中。
+The **answer** (the verdict plus the question it settled) is captured durably: a commit message, an ADR, the implementation issue. That is what the main branch keeps, folded into the real code.
 
-**原型**是答案来源的可运行证据，它不会被删除。它也不属于 main——那里没有什么需要维护的，而且它会很快腐烂——所以它被提交到 main 之外的一个临时 `prototype/<name>` 分支，永远不会合并，并在实现 issue 上留下指向该分支的 [context pointer](https://www.aihero.dev/ai-coding-dictionary/context-pointer)。main 保持干净；探索对下一个接手工作的人来说保持可查找、可重新运行。
+The **prototype** is the runnable evidence the answer came from, and it is not deleted. It doesn't belong in main either: there is nothing there to maintain and it rots fast. So it is committed to a throwaway `prototype/<name>` branch out of main, never merged, with a [context pointer](https://www.aihero.dev/ai-coding-dictionary/context-pointer) to that branch left on the implementation issue. Main stays clean; the exploration stays findable and re-runnable by whoever picks the work up next.
 
-## 常见问题
+## Common questions
 
-**等等——原型不是应该被删除吗？**
-现在不再是这样了。过去是：构建它，保留答案，丢弃代码。对此最尖锐的反对从来不是关于速度——而是*下一个 [session](https://www.aihero.dev/ai-coding-dictionary/session) 接手工作的人是谁，他们能依据什么开展工作？* 一个原型的文字摘要会失去让它有说服力的东西。所以原型现在被视为[一手来源](https://www.aihero.dev/ai-coding-dictionary/primary-source)：它被放置在 main 之外的一个 `prototype/<name>` 分支上，实现 issue 指向它。改变的是代码存放的位置，而不是纪律——它仍然永远不会合并到 main。
+**Wait, isn't the prototype supposed to be deleted?**
+Not any more. It used to be: build it, keep the answer, bin the code. The sharpest objection to that was never about speed: it was *who picks up the work next [session](https://www.aihero.dev/ai-coding-dictionary/session), and what do they have to work from?* A prose summary of a prototype loses the thing that made it convincing. So the prototype is now treated as a [primary source](https://www.aihero.dev/ai-coding-dictionary/primary-source): it lands on a `prototype/<name>` branch out of main and the implementation issue points at it. What changed is where the code lives, not the discipline; it still never merges into main.
 
-**它过去构建一个终端应用。那个去哪了？**
-逻辑分支现在改为产出一个可共享的单个 HTML 文件。终端应用只能由克隆了仓库并安装了运行时的人来驱动，而这恰恰排除了原型所需要的意见人群——设计师、产品经理、知道状态模型应该表达什么含义的领域专家。一个双击即可打开且能通过电子邮件发送的自包含文件，任何人都能驱动。底层的纯逻辑模块没有改变，它仍然是可以移植到真实代码中的部分。
+**It used to build a terminal app. Where did that go?**
+The logic branch now emits a single shareable HTML file instead. A terminal app can only be driven by someone with the repo cloned and a runtime installed, which rules out exactly the people whose opinion the prototype needs: the designer, the PM, the domain expert who knows what the state model is supposed to mean. One self-contained file that opens by double-click and survives being emailed can be driven by anyone. The pure logic module underneath is unchanged, and is still the part that lifts into the real code.
 
-**有一个 agent 告诉我要 `/prototype`，而我当时应该在实现功能。**
-已知问题，这是一个命名问题。`prototype` 是一个通用且吸引人的词，对于不了解流程的 agent 来说，一旦存在 tickets，它就会被理解为"显而易见的下一步"，所以即使设计已经在对话中完全确定，它也会被按名字推荐。如果你已经知道要构建什么，下一步就是按 ticket 执行 `/implement`。只有当某个具体的设计问题真正悬而未决且交谈无法解决时，才使用原型。
+**An agent told me to `/prototype` when I should have been implementing.**
+Known, and it is a naming problem. `prototype` is a generic, appealing word that reads to a flow-unaware agent as "the obvious next step" once tickets exist, so it gets recommended by name even where the design was fully settled in conversation. If you already know what to build, the next step is `/implement`, per ticket. Reach for a prototype only when a specific design question is genuinely unresolved and talking won't resolve it.
 
-**我是否应该在构建任何生产功能之前先对整个应用做原型——比如说，向潜在客户演示？**
-那是另一个戴着本技能名字的产物。这里的原型被限定在一个问题上，"整个应用是什么样的？"不是一个问题。一个全应用原型没有自然的停止点，所以它会凭借惯性变成生产应用：清理永远不会发生，在原型规则下编写的代码——没有测试、没有错误处理——最终会出现在用户面前。如果你需要销售演示，就刻意把它作为演示来构建，并明确说明其中没有任何东西是生产级的。如果你需要解决一个设计问题，就把它缩小到那个问题。
+**Should I prototype the whole application before building any of its production features (say, to demo it to prospects)?**
+That is a different artifact wearing this skill's name. A prototype here is scoped to one question, and "what is the whole app?" isn't one. A full-app prototype has no natural stopping point, so it becomes the production app by momentum: the cleanup pass never happens, and code written under prototype rules (no tests, no error handling) ends up in front of users. If you need a sales demo, build it deliberately as a demo and be explicit that none of it is production. If you need to settle a design question, cut it down to that question.
 
-**我如何在自己的会话中运行它？**
-原型存在于自己的目录中，并产生大量你不想留在提问线程中的 [context](https://www.aihero.dev/ai-coding-dictionary/context)，所以在其他地方运行它，只带回答案。[handoff](https://aihero.dev/skills-handoff) 是双向的桥梁。
+**How do I run it in its own session?**
+A prototype lives in its own directory and generates a lot of [context](https://www.aihero.dev/ai-coding-dictionary/context) you don't want in the thread that asked the question, so run it somewhere else and bring back only the answer. [handoff](https://aihero.dev/skills-handoff) is the bridge in both directions.
 
-**这不是消耗 token 最快的方式吗？**
-可能是的，如果你对本来可以通过交谈回答的问题做原型，或者让一个原型蔓延到整个功能。重要的比较不是 token 对零；而是 [tokens](https://www.aihero.dev/ai-coding-dictionary/token) 对比构建了错误的状态模型然后在它有了生产调用者之后才发现。保持问题窄小、运行短暂，花费就会保持合理。
+**Isn't this the fastest possible way to burn tokens?**
+It can be, if you prototype questions you could have answered by talking, or let one prototype sprawl across a whole feature. The comparison that matters isn't tokens against zero; it's [tokens](https://www.aihero.dev/ai-coding-dictionary/token) against building the wrong state model and finding out after it has production callers. Keep the question narrow and the run short, and the spend stays proportionate.
 
-## 如果它起作用了
+## It's working if
 
-* 你能用一句话说出这个原型要回答什么问题——而且它写在演示的顶部，而不仅仅是在你的脑子里。
-* 一个不读代码的人也能驱动逻辑演示。他们打开文件，在演练标签页中按下按钮，并用他们自己的话描述所见。
-* 有人说"等等，那不应该可能"或"嗯，我以为 X"。这是*想法*中的 bug，而这正是全部意义所在。
-* UI 变体在布局和信息层级上不同，而不仅仅是颜色和文案——你得到的反馈是"用 B 的页眉配上 C 的侧边栏"。
-* 它在一口气之内得到回答。如果一天后你还在构建它，那问题太大了；把它拆开。
-* 当它结束时，main 包含决策而不包含任何原型，实现 issue 指向仍然保存着它的分支。
+- You can say in one sentence what question the prototype exists to answer, and it's written at the top of the demo, not just in your head.
+- Someone who doesn't read code can drive the logic demo. They open the file, press the buttons in a walkthrough tab, and describe what they see in their own words.
+- Someone says "wait, that shouldn't be possible" or "huh, I assumed X". That's a bug in the *idea*, which is the entire point.
+- The UI variants disagree about layout and information hierarchy, not just colour and copy, and the feedback you get is "the header from B with the sidebar from C".
+- It is answered in one sitting. If you're still building it a day later, the question was too big; split it.
+- When it's over, main contains the decision and none of the prototype, and the implementation issue points at the branch that still holds it.
 
-## 它在系统中的位置
+## Where it fits
 
-`prototype` 是一个**随时可用的独立技能**——你进入它来解决一个设计问题，然后退出——它也是另一个技能所依赖的机制。
+`prototype` is a **reach-for-it-anytime standalone**: you drop into it to settle one design question, then drop back out, and it is also machinery another skill runs on.
 
-它最大的消费者是 [wayfinder](https://aihero.dev/skills-wayfinder)。wayfinder 地图由**决策 tickets** 组成，而 `prototype` 是 ticket 的四种类型之一：当阻塞性的问题是"这应该看起来怎么样"或"这应该怎么表现"时使用它，这些问题再多的讨论也无法解决。wayfinder 通过创造具体可反应的东西来提高模糊讨论的保真度，而本技能就是构建那个具体东西的方法。一个原型 ticket 由答案解决，原型作为资产从地图上链接。
+Its largest consumer is [wayfinder](https://aihero.dev/skills-wayfinder). A wayfinder map is made of **decision tickets**, and `prototype` is one of the four types a ticket can be: the one used when the blocking question is "how should this look" or "how should it behave", which no amount of discussion resolves. Wayfinder raises the fidelity of a foggy discussion by making something concrete to react to, and this skill is how that concrete thing gets built. A prototype ticket is resolved by the answer, and the prototype is linked from the map as an asset.
 
-其他邻居位于其上游和下游。[grill-me](https://aihero.dev/skills-grill-me) 和 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) 回答可拷问的问题；不可拷问的问题则来到此处，而一行答案会回到访谈中。下游，经过验证的状态模型或 UI 方向成为 [to-spec](https://aihero.dev/skills-to-spec) 的既定输入，后者可以内嵌原型产生的富含决策的片段，而不是用散文描述。至于其他任何问题，[ask-matt](https://aihero.dev/skills-ask-matt) 会将你路由到整个集合。
+The other neighbours are upstream and downstream of that. [grill-me](https://aihero.dev/skills-grill-me) and [grill-with-docs](https://aihero.dev/skills-grill-with-docs) answer grillable questions; the ungrillable ones come here instead, and the one-line answer goes back into the interview. Downstream, a validated state model or UI direction becomes settled input for [to-spec](https://aihero.dev/skills-to-spec), which can inline the decision-rich snippet the prototype produced rather than describing it in prose. For anything else, [ask-matt](https://aihero.dev/skills-ask-matt) routes you over the whole set.

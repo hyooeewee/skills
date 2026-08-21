@@ -1,10 +1,10 @@
-# 标准安装块
+# The canonical install block
 
-一个安装说明，一套措辞。`README.md`、`.changeset/*` 以及 `docs/` 下的每个页面都必须只使用**这一套**说法，而不是其他任何内容。先在这里修改，再传播到各处。
+One install story, one wording. `README.md`, `.changeset/*`, and every page under `docs/` must say **this** and nothing else. Change it here first, then propagate.
 
-`mattpocock-skills` 列在 **Claude Code 的官方市场**中——配置名为 `claude-plugins-official`，源仓库为 `anthropics/claude-plugins-official`——每个 Claude Code 安装都内置了该市场。无需先添加任何市场。Anthropic 官方市场默认启用自动更新（[discover-plugins](https://code.claude.com/docs/en/discover-plugins)），因此“更新会自动到达”是事实，而不是一种期望。
+`mattpocock-skills` is listed in **Claude Code's official marketplace** (configured name `claude-plugins-official`, source repo `anthropics/claude-plugins-official`), which every Claude Code install has out of the box. There is no marketplace to add first. Official Anthropic marketplaces have auto-update enabled by default ([discover-plugins](https://code.claude.com/docs/en/discover-plugins)), so "updates arrive automatically" is a true claim, not a hope.
 
-## Claude Code — 插件
+## Claude Code: the plugin
 
 <canonical-block name="claude-code">
 
@@ -12,19 +12,19 @@
 claude plugins install mattpocock-skills
 ```
 
-或者在会话内部：
+Or, from inside a session:
 
 ```
 /plugin install mattpocock-skills
 ```
 
-它位于 Claude Code 的官方市场中，因此无需预先添加任何内容，更新会自动到达。
+It's in Claude Code's official marketplace, so there's nothing to add first, and updates arrive automatically.
 
 </canonical-block>
 
-## Codex 及其他智能体 — skills.sh
+## Codex, and other agents: skills.sh
 
-该插件仅适用于 Claude Code。在其他所有地方，[skills.sh](https://skills.sh/mattpocock/skills) 会将可编辑的技能文件复制到项目中。在 `README.md` 上使用整套形式：
+The plugin is Claude Code only. Everywhere else, [skills.sh](https://skills.sh/mattpocock/skills) copies editable skill files into the project. Use the whole-set form on `README.md`:
 
 <canonical-block name="skills-sh-whole-set">
 
@@ -32,11 +32,11 @@ claude plugins install mattpocock-skills
 npx skills@latest add mattpocock/skills
 ```
 
-选择你想要的技能，以及要将它们安装到哪些编码智能体上。**安装程序允许你选择要安装哪些技能——请确保 `setup-matt-pocock-skills` 是其中之一。**
+Pick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take: make sure `setup-matt-pocock-skills` is one of them.**
 
 </canonical-block>
 
-……而在单独指名某个技能的地方，使用单技能形式。请注意，**`docs/` 页面不是此块的使用方**：ai-hero 会在正文上方渲染安装小部件，因此页面如果把这些命令写出来，就会重复。参见 [writing-docs.md](./writing-docs.md)。
+…and the single-skill form wherever one skill is named on its own. Note that **`docs/` pages are not a consumer of this block**: ai-hero renders the install widget above the body, so a page that writes the commands out duplicates it. See [writing-docs.md](./writing-docs.md).
 
 <canonical-block name="skills-sh-one-skill">
 
@@ -50,12 +50,12 @@ npx skills@latest update <name>
 
 </canonical-block>
 
-`skills@latest` 是三种形式中固定的写法。`docs/` 下的页面原先带有这些命令的副本；这些块现在被删除而不是被修正，因为站点会自行渲染安装命令。
+`skills@latest` is the pinned spelling in all three. The pages under `docs/` used to carry their own copy of these commands; those blocks are now deleted rather than corrected, because the site renders the install commands itself.
 
-## 两种途径互斥
+## The two routes are exclusive
 
-该插件是你订阅的一个受管、只读的捆绑包。skills.sh 则会写入你拥有并可编辑的文件。两者都安装会让用户把每个技能拿到两次——始终要说“选一个”。
+The plugin is a managed, read-only bundle you subscribe to. skills.sh writes files you own and edit. Installing both leaves the user with every skill twice: always say "pick one".
 
-## 不是安装说明
+## Not the install story
 
-`.claude-plugin/marketplace.json` 使该仓库成为自己的单插件市场（先执行 `/plugin marketplace add mattpocock/skills`，再执行 `/plugin install mattpocock-skills@mattpocock`）。官方列表取代了它。它保留下来，作为直接安装该仓库（未发布的提交或 fork）的后备方案，并且**不**向用户公开文档。
+`.claude-plugin/marketplace.json` makes the repo its own single-plugin marketplace (`/plugin marketplace add mattpocock/skills`, then `/plugin install mattpocock-skills@mattpocock`). The official listing supersedes it. It is kept as a fallback for installing the repo directly (an unreleased commit, or a fork), and is **not** documented to users.

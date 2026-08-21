@@ -1,91 +1,93 @@
-## 它做什么
+## What it does
 
-`diagnosing-bugs` 会对一个棘手的 bug 或性能回归执行六阶段诊断：构建复现、将其最小化、对假设排序、插桩、用回归测试修复、清理。
+`diagnosing-bugs` runs a six-phase diagnosis on a hard bug or a performance regression: build a repro, minimise it, rank hypotheses, instrument, fix with a regression test, clean up.
 
-在存在**紧密**的反馈循环之前，它不会让 agent 形成任何理论——这个循环是一个已命名的命令，已经运行过一次，会在这个 bug 上*变红*，并在修复后*变绿*。接到 bug 报告的编码 agent 的默认行为是阅读代码然后猜测；本技能会阻止这种行为。如果不存在能变红的命令，就没有第二阶段。这唯一的关卡就是本技能存在的意义。其后的所有步骤——二分查找、假设检验、插桩——一旦有了信号，就都是机械性的工作。
+It will not let the agent form a theory until a **tight** feedback loop exists: one named command, already run once, that goes red on *this* bug and green when it is fixed. The default behaviour of a coding agent handed a bug report is to read code and guess; this skill blocks that. If no red-capable command exists, there is no Phase 2. That single gate is what the skill is for. Everything after it (bisection, hypothesis-testing, instrumentation) is mechanical once the signal exists.
 
-## 何时使用它
+## When to reach for it
 
-输入 `/diagnosing-bugs`，或者当某个任务符合条件时，agent 会自行调用它——它由模型调用，并在遇到“诊断”/“调试这个”或关于某物损坏、抛错、失败或缓慢的报告时触发。
+Type `/diagnosing-bugs`, or the agent reaches for it on its own when a task fits: it is model-invoked, and fires on "diagnose" / "debug this" or on a report that something is broken, throwing, failing, or slow.
 
-在棘手的问题上才使用它：一眼看不透的 bug、间歇性的偶发失败、在两个已知良好状态之间悄悄潜入的回归。它设计上就是重量级的，对于你想一条消息就得到回答的问题，它是错误的工具。
+Reach for it on the hard ones: a bug that resists a first look, an intermittent flake, a regression that crept in between two known-good states. It is heavy by design, and the wrong tool for a question you want answered in one message.
 
-| 你的情况                     | 去哪里                                                                                                   |
-| ------------------------ | ----------------------------------------------------------------------------------------------------- |
-| 你能将其描述为症状的特定缺陷           | 本技能                                                                                                   |
-| 已知前后对比的慢端点或时序回归          | 本技能——它有一个性能分支（先测量基线，再二分查找）                                                                            |
-| "这个代码库的瓶颈在哪里？"——没有具体症状   | 不是本技能。它诊断一个已知的失败，不做审计                                                                                 |
-| 来自他人的原始 bug 报告，尚未确认或整理成文 | [triage](https://aihero.dev/skills-triage)优先                                                          |
-| 用于回答设计问题的临时代码，而不是追踪缺陷    | [prototype](https://aihero.dev/skills-prototype)                                                      |
-| 以测试优先的方式构建计划中的行为         | [tdd](https://aihero.dev/skills-tdd)                                                                  |
-| 没有好的接缝来锁定这个 bug          | [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture)——本技能会自行移交到那里 |
+| Your situation | Where to go |
+| --- | --- |
+| A specific defect you can describe as a symptom | This skill |
+| A slow endpoint or a timing regression with a known before-and-after | This skill: it has a performance branch (measure a baseline, then bisect) |
+| "Where are the bottlenecks in this codebase?", no specific symptom | Not this skill. It diagnoses one known failure, it does not audit |
+| A raw bug report from someone else, not yet confirmed or written up | [triage](https://aihero.dev/skills-triage) first |
+| Throwaway code to answer a design question, not chase a defect | [prototype](https://aihero.dev/skills-prototype) |
+| Building a planned behaviour test-first | [tdd](https://aihero.dev/skills-tdd) |
+| No good seam exists to lock the bug down | [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture): this skill hands off there itself |
 
-## 紧密循环就是本技能
+## The tight loop is the skill
 
-第一阶段获得了不成比例的投入，因为它是唯一困难的阶段。本技能给出了一组构建循环的方法阶梯，大致按优先顺序排列：
+Phase 1 gets disproportionate effort because it is the only phase that is hard. The skill gives a ladder of ways to construct the loop, roughly in order of preference:
 
-1. 在能触及该 bug 的任何接缝处编写一个失败的测试。
-2. 针对正在运行的开发服务器执行 curl 或 HTTP 脚本。
-3. 使用固定输入调用 CLI，并与已知正确的快照进行 diff 对比。
-4. 无头浏览器脚本，对 DOM、控制台或网络进行断言。
-5. 重放的捕获——保存的请求、payload 或事件日志，在隔离环境中跑通代码路径。
-6. 一次性的测试工具：系统的最小子集，一次函数调用。
-7. 针对"输出偶尔出错"的属性测试或模糊测试循环。
-8. 一个可以交给 `git bisect run` 的二分查找工具。
-9. 差分循环——相同输入，旧版本对比新版本。
-10. 一个[人在回路](https://www.aihero.dev/ai-coding-dictionary/human-in-the-loop) bash 脚本，作为最后手段。本技能为此附带了一个 `scripts/hitl-loop.template.sh`：agent 运行该脚本，你在终端中跟着提示操作，你的回答会以可解析的输出返回。
+1. A failing test at whatever seam reaches the bug.
+2. A curl or HTTP script against a running dev server.
+3. A CLI invocation with a fixture input, diffed against a known-good snapshot.
+4. A headless browser script asserting on DOM, console, or network.
+5. A replayed capture: a saved request, payload, or event log, run through the code path in isolation.
+6. A throwaway harness: a minimal subset of the system, one function call.
+7. A property or fuzz loop, for "sometimes wrong output".
+8. A bisection harness you can hand to `git bisect run`.
+9. A differential loop: same input, old version against new.
+10. A [human-in-the-loop](https://www.aihero.dev/ai-coding-dictionary/human-in-the-loop) bash script, last resort. The skill ships `scripts/hitl-loop.template.sh` for this: the agent runs the script, you follow prompts in your terminal, and your answers come back as parseable output.
 
-*一个*循环不是目标。**紧密**才是：快（秒级）、确定（每次运行结果一致）、精准（断言你的确切症状，而不是"没崩溃"）、并且可以无人值守地由 agent 运行。一个 30 秒的偶发循环比没有也好不了多少。对于只是偶尔出现的 bug，目标不是干净的复现，而是**更高的复现率**——循环触发条件、并行化、增加压力、注入休眠，直到偶发率高到足以以此为对象进行调试。
+*A* loop is not the goal. **Tight** is: fast (seconds), deterministic (same verdict every run), sharp (asserts your exact symptom, not "didn't crash"), and agent-runnable unattended. A 30-second flaky loop is barely better than none. For a bug that only shows up sometimes, the target is not a clean repro but a **higher reproduction rate**: loop the trigger, parallelise, add stress, inject sleeps, until the flake rate is high enough to debug against.
 
-当它确实无法构建出这样的循环时，指令要求它停下来并说明情况，列出它尝试过的方法，并向你请求[环境](https://www.aihero.dev/ai-coding-dictionary/environment)访问权限、一份捕获到的产物，或添加临时插桩的许可。它无论如何都不应继续推进假设。
+When it genuinely cannot build one, it is instructed to stop and say so, list what it tried, and ask you for [environment](https://www.aihero.dev/ai-coding-dictionary/environment) access, a captured artifact, or permission to add temporary instrumentation. It should not proceed to hypothesise anyway.
 
-## 阶段之间的关卡
+## The gates between phases
 
-各个阶段就是关卡，而不是检查清单。每个关卡都会拒绝打开，直到某个具体条件成立。
+The phases are gates, not a checklist. Each one refuses to open until something specific is true.
 
-| 关卡     | 必须满足的条件                                                           |
-| ------ | ----------------------------------------------------------------- |
-| 进入第二阶段 | 一条已命名的命令，已经运行过并连同其输出一起粘贴出来，且能在这个 bug 上变红                          |
-| 进入第三阶段 | 复现已成功 *和&#x20;*&#x88AB;最小化——每一个剩余元素都是承重的                          |
-| 进入第四阶段 | 存在 3–5 个已排序的、可证伪的假设，每个假设都说明其预测，并且在测试任何一个之前展示给你                    |
-| 进入第五阶段 | 探针映射到具体的预测，一次只改变一个变量，每条调试日志都打上 `[DEBUG-a4f2]`风格的标签，这样清理时只需一次 grep |
-| 完成     | 原始复现不再出现，插桩已清除，而且被证明正确的假设已写入提交信息                                  |
+| Gate | What has to be true |
+| --- | --- |
+| Into Phase 2 | A named command, already run and pasted with its output, that can go red on this bug |
+| Into Phase 3 | The repro is reproduced *and* minimised: every remaining element is load-bearing |
+| Into Phase 4 | 3–5 ranked, falsifiable hypotheses exist, each stating its prediction, shown to you before any is tested |
+| Into Phase 5 | Probes map to a specific prediction, one variable at a time, every debug log tagged `[DEBUG-a4f2]`-style so cleanup is one grep |
+| Done | Original repro no longer reproduces, instrumentation gone, and the hypothesis that turned out correct is written into the commit message |
 
-第五阶段有一个值得了解的逃生通道。回归测试要在修复之前编写，但前提是存在**正确的接缝**——也就是测试能在调用点处演练真实 bug 模式的那种接缝。当唯一可用的接缝太浅时，本技能会被指示如实说明，而不是写一个带来虚假信心的测试。这种缺失本身就是结论，也正是它将事后复盘引向 `improve-codebase-architecture`。
+Phase 5 has an escape hatch worth knowing about. The regression test is written before the fix, but only if a **correct seam** exists for it: one where the test exercises the real bug pattern as it occurs at the call site. Where the only available seam is too shallow, the skill is told to say so rather than write a test that gives false confidence. That absence is itself the finding, and it is what routes the post-mortem to `improve-codebase-architecture`.
 
-## 常见问题
+## Common questions
 
-**它会在我只想要直接答案的快速问题上触发。**
-这是本技能被报告最多的问题，而且确实存在。尤其是在 GPT-5.6-Sol 上，用户报告它会对一个简单的问题描述就触发："模型转而触发了相当正式的 diagnosing-bugs 技能。它接着去构建复现场景——往往是构建一个价值有限的模拟场景——然后才给我回应或建议。这导致回复出现相当大的延迟。"有四个人在 [issue #578](https://github.com/mattpocock/skills/issues/578) 上报告了同样的情况。已被接受的修复方案是先采用更轻量的方式，只在问题确实需要时才升级到更重量级的方式，但这一更改尚未落地。本技能是根据 Claude Code 的调用行为校准的；激活阈值更低的[模型](https://www.aihero.dev/ai-coding-dictionary/model)会过度触发它。在这一更改落地之前，实际的解决办法是说出你想要什么（"直接回答这个，不要诊断"），或在你的[工具链](https://www.aihero.dev/ai-coding-dictionary/harness)中为它禁用模型调用。
+**It fires on quick questions where I just wanted a direct answer.**
+This is the most-reported problem with the skill, and it is real. On GPT-5.6-Sol especially, users report it triggering on a plain description of a problem: "the model triggers the rather formal diagnosing-bugs skill instead. It then goes on to construct a reproduction scenario (often building a mock scenario with limited value) before giving me a response or suggestion. This results in considerable reply delays." Four separate people reported the same shape on [issue #578](https://github.com/mattpocock/skills/issues/578). The accepted fix is to start with a lighter approach and graduate to the heavier one only where the problem warrants it, but that change has not landed. The skill is calibrated against Claude Code's invocation behaviour; a [model](https://www.aihero.dev/ai-coding-dictionary/model) with a lower activation threshold over-fires it. Until it is graduated, the practical fix is to say what you want ("just answer this, don't diagnose") or to disable model invocation for it in your [harness](https://www.aihero.dev/ai-coding-dictionary/harness).
 
-**我能让它针对一个代码库，问它性能问题出在哪里吗？**
-不能。它诊断的是你已经能命名的某个具体失败。它的性能分支用于有症状的回归——先建立基线测量，再二分查找，先测量后修复——而不是主动扫描。针对主动版本的一个技能曾[被提出并关闭](https://github.com/mattpocock/skills/issues/431)；目前还没有这样的技能。
+**Can I point it at a codebase and ask where the performance problems are?**
+No. It diagnoses one failure you can already name. Its performance branch is for a regression with a symptom (establish a baseline measurement, then bisect, measure first and fix second), not for a proactive sweep. A skill for the proactive version was [proposed and closed](https://github.com/mattpocock/skills/issues/431); there is currently no skill for it.
 
-**它会在写修复代码之前停下来问我吗？**
-不会。只有第三阶段有人工检查点——排序后的假设列表会在测试任何假设之前展示给你，如果你不在场，它会按自己的排序继续推进。插桩和修复之间没有关卡，所以 agent 可以在你认可其根因之前就开始写代码。[Issue #124](https://github.com/mattpocock/skills/issues/124) 请求增加这一关卡，目前仍未解决。如果你需要，可以在调用本技能时明确说明。
+**Does it stop and ask me before it writes the fix?**
+No. Only Phase 3 has a human checkpoint: the ranked hypothesis list is shown to you before any is tested, and it proceeds on its own ranking if you are away. There is no gate between instrumentation and the fix, so the agent can start writing code before you have agreed with its root cause. [Issue #124](https://github.com/mattpocock/skills/issues/124) asks for that gate and is still open. If you want it, say so when you invoke the skill.
 
-**我已经在这个 bug 报告上运行过 `/triage` 了。这是不是又做一遍同样的工作？**
-部分是，而且两个技能都不承认这一点。正如一位读者所说："Triage 的第三步本质上是 diagnosing-bugs 第一阶段到第二阶段的一个浅层、有界的实例，但两个文件都没有提到对方。"Triage 做的是有界的"这到底是不是 bug，涉及面是什么"的检查；本技能做的是彻底版本。先运行 triage 并不浪费——它的验证通常会给你第一阶段的大部分原始素材——但要做好在这里重新认真做一遍的准备，而且不要指望有任何交叉引用会告诉你这一点。
+**I already ran `/triage` on this bug report. Is this the same work again?**
+Partly, and neither skill admits it. As one reader put it: "Triage's step 3 is essentially a shallow, bounded instance of diagnosing-bugs Phase 1–2, but neither file mentions the other." Triage does a bounded "is this actually a bug, and what is the surface" pass; this skill does the thorough version. Running triage first is not wasted (its verification often gives you most of Phase 1's raw material), but expect to redo it properly here, and expect no cross-reference to tell you that.
 
-**它粘贴的复现输出会不会泄露机密？**
-有可能。本技能要求 agent 粘贴命令及其输出，并请求诸如 HAR 文件、日志转储、核心转储之类的产物。这些都不会通过指令做脱敏处理。[Issue #674](https://github.com/mattpocock/skills/issues/674) 提出的正是这个问题——凭据、令牌、cookie 和个人数据会跟着进入聊天、issue 或 PR——并提议设置一个脱敏护栏。该 issue 仍是开放且未实现的。目前请把脱敏当作你自己的职责，尤其是在输出将要公开之前。
+**Will the repro output it pastes leak secrets?**
+It might. The skill asks the agent to paste the invocation and its output, and to request artifacts like HAR files, log dumps, and core dumps. None of those are sanitised by instruction. [Issue #674](https://github.com/mattpocock/skills/issues/674) raises exactly this (credentials, tokens, cookies, and personal data riding along into a chat, an issue, or a PR) and proposes a redaction guardrail. It is open and unimplemented. Treat redaction as your job for now, particularly before the output goes anywhere public.
 
-**我的安全扫描器将此技能标记为高风险。** Snyk 标记了它，但这是一个误报。它是该技能集中唯一一个随附可执行 shell 脚本（`hitl-loop.template.sh`）以及运行说明和 curl 开发服务器说明的技能。随附的 `.sh` 文件加上运行说明再加上出站 HTTP，足以触发静态扫描器。该脚本本身只有约 30 行用于暂停等待人工输入的 `read -r -p` 提示。扫描器评估的是能力面，而不是已证实的漏洞。
+**My security scanner flagged this skill as high risk.**
+Snyk flags it, and the flag is a false positive. It is the only skill in the set that ships an executable shell script (`hitl-loop.template.sh`) alongside instructions to run it and to curl a dev server. Shipped `.sh` plus run-it instructions plus outbound HTTP is enough to trip a static scanner. The script itself is about 30 lines of `read -r -p` prompts that pause for human input. The scanner is rating the capability surface, not a proven exploit.
 
-**`/diagnose` 发生了什么？** 在 v1.0.0 中已更名为 `/diagnosing-bugs`。旧名称已不再存在。你那边任何串联了 `/diagnose` 的内容——无论是包装技能还是保存的提示词——都需要更新。
+**What happened to `/diagnose`?**
+Renamed to `/diagnosing-bugs` in v1.0.0. The old name no longer exists. Anything of yours that chains `/diagnose` (a wrapper skill, a saved prompt) needs updating.
 
-## 如果它起作用了
+## It's working if
 
-* 它会在给出任何理论之前先向你展示一条命令及其红色输出。如果理论先出现，说明该技能没有在运行。
-* 它复现的失败是你报告的那个，而不是它在途中发现的类似失败。
-* 它在开始猜测之前会先缩小复现范围，并能告诉你为什么剩下的每一部分都不可或缺。
-* 在测试任何假设之前，你会看到一个按优先级排序的 3–5 个假设列表，每个假设都带有你能证伪的预测。
-* 它添加的每条调试日志都带有类似 `[DEBUG-a4f2]` 的标签，而当它宣布完成时，grep 该标签应该返回空结果。
-* 提交或 PR 消息会标明哪个假设是正确的。
-* 当它无法用测试锁定这个 bug 时，它会直说，而不是写一个浅层测试。
+- It shows you a command and its red output before it offers a single theory. If theory arrives first, the skill is not running.
+- The failure it reproduces is the one you reported, not a nearby one it found on the way.
+- It shrinks the repro before it starts guessing, and can tell you why each remaining piece is load-bearing.
+- You are shown a ranked list of 3–5 hypotheses, each with a prediction you could falsify, before any of them is tested.
+- Every debug log it adds carries a tag like `[DEBUG-a4f2]`, and a grep for that tag comes back empty when it declares done.
+- The commit or PR message names which hypothesis was right.
+- When it cannot lock the bug down with a test, it says so plainly instead of writing a shallow one.
 
-## 它在系统中的位置
+## Where it fits
 
-`diagnosing-bugs` 是一个随时可用的独立技能。当有东西坏了你就进入它，当修复及其回归测试完成后你就退出；它不保存状态，也不需要任何前置设置。[ask-matt](https://aihero.dev/skills-ask-matt) 会把“有东西坏了”的请求路由到这里。
+`diagnosing-bugs` is a reach-for-it-anytime standalone. You drop into it when something is broken and drop out when the fix and its regression test are in; it holds no state and needs no prior setup. [ask-matt](https://aihero.dev/skills-ask-matt) routes "Something's broken" here.
 
-两个相邻技能很重要。[improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) 在真正的发现是代码没有可锁定 bug 的接缝时会接手 [handoff](https://www.aihero.dev/ai-coding-dictionary/handoff)——建议会在修复完成、信息更充分时给出。[triage](https://aihero.dev/skills-triage) 位于其上游，用于处理来自其他人的原始 bug 报告，并对同样的前两个阶段做较浅层的处理。
+Two neighbours matter. [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) takes the [handoff](https://www.aihero.dev/ai-coding-dictionary/handoff) when the real finding is that the code has no seam to lock the bug down; the recommendation is made after the fix is in, when there is more information. [triage](https://aihero.dev/skills-triage) sits upstream of it for bugs that arrive as raw reports from other people, and does a shallower version of the same first two phases.

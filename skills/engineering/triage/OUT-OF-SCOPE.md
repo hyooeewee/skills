@@ -1,11 +1,11 @@
-# 范围外知识库
+# Out-of-Scope Knowledge Base
 
-仓库中的 `.out-of-scope/` 目录用于持久保存被拒绝的功能请求记录。它有两个用途：
+The `.out-of-scope/` directory in a repo stores persistent records of rejected feature requests. It serves two purposes:
 
-1. **组织记忆**——记录功能被拒绝的原因，以便在 issue 关闭后，其理由不会丢失
-2. **去重**——当新 issue 与先前的拒绝相匹配时，技能可以呈现先前的决定，而无需重新讨论
+1. **Institutional memory**: why a feature was rejected, so the reasoning isn't lost when the issue is closed
+2. **Deduplication**: when a new issue comes in that matches a prior rejection, the skill can surface the previous decision instead of re-litigating it
 
-## 目录结构
+## Directory structure
 
 ```
 .out-of-scope/
@@ -14,13 +14,13 @@
 └── graphql-api.md
 ```
 
-每个**概念**一个文件，而非每个 issue 一个文件。多个请求相同内容的 issue 归并到同一文件下。
+One file per **concept**, not per issue. Multiple issues requesting the same thing are grouped under one file.
 
-## 文件格式
+## File format
 
-文件应以轻松、可读的风格编写——更像一份简短的设计文档，而非数据库条目。使用段落、代码示例和实例，使推理对首次遇到的人清晰且有用。
+The file should be written in a relaxed, readable style, more like a short design document than a database entry. Use paragraphs, code samples, and examples to make the reasoning clear and useful to someone encountering it for the first time.
 
-````markdown
+```markdown
 # Dark Mode
 
 This project does not support dark mode or user-facing theming.
@@ -44,14 +44,13 @@ interface ThemeConfig {
   colors: ColorPalette; // single palette, resolved at build time
   fonts: FontStack;
 }
-````
+```
 
-## 先前的请求
+## Prior requests
 
-* \#42 — “添加深色模式支持”
-* \#87 — “无障碍夜间主题”
-* \#134 — “深色主题选项”
-
+- #42: "Add dark mode support"
+- #87: "Night theme for accessibility"
+- #134: "Dark theme option"
 ```
 
 ### Naming the file
@@ -60,31 +59,31 @@ Use a short, descriptive kebab-case name for the concept: `dark-mode.md`, `plugi
 
 ### Writing the reason
 
-The reason should be substantive — not "we don't want this" but why. Good reasons reference:
+The reason should be substantive: not "we don't want this" but why. Good reasons reference:
 
 - Project scope or philosophy ("This project focuses on X; theming is a downstream concern")
 - Technical constraints ("Supporting this would require Y, which conflicts with our Z architecture")
 - Strategic decisions ("We chose to use A instead of B because...")
 
-The reason should be durable. Avoid referencing temporary circumstances ("we're too busy right now") — those aren't real rejections, they're deferrals.
+The reason should be durable. Avoid referencing temporary circumstances ("we're too busy right now"); those aren't real rejections, they're deferrals.
 
 ## When to check `.out-of-scope/`
 
 During triage (Step 1: Gather context), read all files in `.out-of-scope/`. When evaluating a new issue:
 
 - Check if the request matches an existing out-of-scope concept
-- Matching is by concept similarity, not keyword — "night theme" matches `dark-mode.md`
-- If there's a match, surface it to the maintainer: "This is similar to `.out-of-scope/dark-mode.md` — we rejected this before because [reason]. Do you still feel the same way?"
+- Matching is by concept similarity, not keyword: "night theme" matches `dark-mode.md`
+- If there's a match, surface it to the maintainer: "This is similar to `.out-of-scope/dark-mode.md`. We rejected this before because [reason]. Do you still feel the same way?"
 
 The maintainer may:
 
-- **Confirm** — the new issue gets added to the existing file's "Prior requests" list, then closed
-- **Reconsider** — the out-of-scope file gets deleted or updated, and the issue proceeds through normal triage
-- **Disagree** — the issues are related but distinct, proceed with normal triage
+- **Confirm**: the new issue gets added to the existing file's "Prior requests" list, then closed
+- **Reconsider**: the out-of-scope file gets deleted or updated, and the issue proceeds through normal triage
+- **Disagree**: the issues are related but distinct, proceed with normal triage
 
 ## When to write to `.out-of-scope/`
 
-Only when an **enhancement** (not a bug) is *rejected* as `wontfix`. This applies to enhancement PRs exactly as it does to issues — a rejected PR is recorded here so the same request doesn't return as fresh code.
+Only when an **enhancement** (not a bug) is *rejected* as `wontfix`. This applies to enhancement PRs exactly as it does to issues: a rejected PR is recorded here so the same request doesn't return as fresh code.
 
 Do **not** write here when something is closed as `wontfix` because it's **already implemented**. That's a built feature, not a rejected one; recording it would poison the dedup checks with false rejections. Instead, the closing comment points to where the feature already lives.
 
@@ -102,6 +101,5 @@ The flow:
 If the maintainer changes their mind about a previously rejected concept:
 
 - Delete the `.out-of-scope/` file
-- The skill does not need to reopen old issues — they're historical records
+- The skill does not need to reopen old issues; they're historical records
 - The new issue that triggered the reconsideration proceeds through normal triage
-```
