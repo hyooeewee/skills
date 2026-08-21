@@ -1,76 +1,75 @@
 ---
 name: to-spec
-description: 将当前对话转化为一份规格说明，并发布到项目议题跟踪器——不进行访谈，仅综合你们已经讨论过的内容。
+description: "Turn the current conversation into a spec and publish it to the project issue tracker: no interview, just synthesis of what you've already discussed."
 disable-model-invocation: true
-
 ---
 
-此技能获取当前对话上下文和对代码库的理解，并生成一份规格说明。不要对用户进行访谈——只需综合你已经掌握的信息。
+This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
 
-你的问题跟踪器和分流标签词汇表应该已经提供给你。如果没有，请告诉用户运行 `/setup-matt-pocock-skills`。
+The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
 
-## 流程
+## Process
 
-1. 如果尚未完成，请探索代码仓库以了解代码库的当前状态。在整个规格说明中始终使用项目的领域术语表词汇，并尊重你所涉及区域内的任何 ADR。
+1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the spec, and respect any ADRs in the area you're touching.
 
-2. 描绘出你将在哪些接缝（seams）处测试该功能。应优先使用现有接缝，而不是新建接缝。使用尽可能高的接缝。如果需要新的接缝，请在尽可能高的位置提出。整个代码库中的接缝越少越好——理想数量是一个。
+2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
 
-与用户确认这些接缝是否符合他们的预期。
+Check with the user that these seams match their expectations.
 
-3. 使用下面的模板编写规格说明，然后将其发布到项目议题跟踪器。应用 `ready-for-agent` 分流标签——无需额外分流。
+3. Write the spec using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
 
 <spec-template>
 
-## 问题陈述
+## Problem Statement
 
-从用户的角度出发，用户当前面临的问题。
+The problem that the user is facing, from the user's perspective.
 
-## 解决方案
+## Solution
 
-从用户的角度出发，针对该问题的解决方案。
+The solution to the problem, from the user's perspective.
 
-## 用户故事
+## User Stories
 
-一个冗长的、带编号的用户故事列表。每个用户故事的格式应为：
+A LONG, numbered list of user stories. Each user story should be in the format of:
 
-1. 作为 <actor>，我想要 <feature>，以便 <benefit>
+1. As an <actor>, I want a <feature>, so that <benefit>
 
 <user-story-example>
 1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
 </user-story-example>
 
-这份用户故事列表应当极其详尽，覆盖该功能的各个方面。
+This list of user stories should be extremely extensive and cover all aspects of the feature.
 
-## 实现决策
+## Implementation Decisions
 
-所做的实现决策列表。可以包括：
+A list of implementation decisions that were made. This can include:
 
-* 将构建/修改的模块
-* 将被修改的这些模块的接口
-* 来自开发者的技术澄清
-* 架构决策
-* Schema 变更
-* API 契约
-* 具体交互
+- The modules that will be built/modified
+- The interfaces of those modules that will be modified
+- Technical clarifications from the developer
+- Architectural decisions
+- Schema changes
+- API contracts
+- Specific interactions
 
-不要包含具体的文件路径或代码片段。它们可能很快就会过时。
+Do NOT include specific file paths or code snippets. They may end up being outdated very quickly.
 
-Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it within the relevant decision and note briefly that it came from a prototype. Trim to the decision-rich parts — not a working demo, just the important bits.
+Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it within the relevant decision and note briefly that it came from a prototype. Trim to the decision-rich parts, not a working demo, just the important bits.
 
-## 测试决策
+## Testing Decisions
 
-所做的测试决策列表。包括：
+A list of testing decisions that were made. Include:
 
-* 描述什么构成了一个好的测试（只测试外部行为，而不是实现细节）
-* 哪些模块将被测试
-* 测试的既有先例（即代码库中类似类型的测试）
+- A description of what makes a good test (only test external behavior, not implementation details)
+- Which modules will be tested
+- Prior art for the tests (i.e. similar types of tests in the codebase)
 
-## 范围外
+## Out of Scope
 
-对本规格说明而言不在范围内的内容的描述。
+A description of the things that are out of scope for this spec.
 
-## 补充说明
+## Further Notes
 
-关于该功能的任何进一步说明。
+Any further notes about the feature.
 
 </spec-template>

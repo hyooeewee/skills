@@ -1,10 +1,10 @@
-# 仅为硬依赖显式使用 `/setup-matt-pocock-skills` 指针
+# Explicit `/setup-matt-pocock-skills` pointer only for hard dependencies
 
-工程技能依赖于由 `/setup-matt-pocock-skills` 播种的每仓库配置（问题跟踪器、分类标签词汇表、领域文档布局）。有些技能在没有该配置时无法有意义地运行——它们必须发布到特定问题跟踪器或应用特定标签字符串。其他技能仅用它来提升输出质量（词汇表、ADR 意识），没有配置时也能优雅降级。
+Engineering skills depend on per-repo config (issue tracker, triage label vocabulary, domain doc layout) seeded by `/setup-matt-pocock-skills`. Some skills cannot meaningfully function without that config: they have to publish to a specific issue tracker or apply a specific label string. Others only use it to sharpen output (vocabulary, ADR awareness) and degrade gracefully without it.
 
-我们将这些技能分为**硬依赖**和**软依赖**技能：
+We split these into **hard-dependency** and **soft-dependency** skills:
 
-* * **硬依赖**（`to-tickets`、`to-spec`、`triage`）——包含明确的一行提示：*"… 本应已提供给您 — 如果没有，请运行 `/setup-matt-pocock-skills`。"* 缺少映射时，输出是错误的，而不仅仅是模糊。
-* * **软依赖**（`diagnose`、`tdd`、`improve-codebase-architecture`）——仅以模糊的措辞提及"项目的领域词汇表"和"所涉区域的 ADR"。即使文档不存在，技能仍能工作；只是输出不够锐利。
+- **Hard dependency** (`to-tickets`, `to-spec`, `triage`): include an explicit one-liner: _"… should have been provided to you; run `/setup-matt-pocock-skills` if not."_ Without the mapping, output is wrong, not just fuzzy.
+- **Soft dependency** (`diagnose`, `tdd`, `improve-codebase-architecture`): reference "the project's domain glossary" and "ADRs in the area you're touching" in vague prose only. If the docs aren't there, the skill still works; output is just less sharp.
 
-这种划分使软依赖技能保持轻量（token-light），并避免将设置指针在非关键位置进行生搬硬套。
+The split keeps soft-dependency skills token-light and avoids cargo-culting the setup pointer into places where it isn't load-bearing.
