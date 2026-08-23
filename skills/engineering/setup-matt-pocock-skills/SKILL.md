@@ -1,6 +1,6 @@
 ---
 name: setup-matt-pocock-skills
-description: 配置此仓库以供工程技能使用 — 设置其 issue 跟踪器、分流标签词汇表和领域文档布局。在其他工程技能首次使用前运行一次。
+description: 为工程技能配置此仓库：设置其 issue 跟踪器、分流标签词汇和领域文档布局。在其他工程技能首次使用前运行一次。
 disable-model-invocation: true
 
 ---
@@ -9,9 +9,9 @@ disable-model-invocation: true
 
 搭建工程技能所依赖的每仓库配置：
 
-* **Issue 跟踪器** — issue 所在位置（默认 GitHub；开箱即用地支持本地 Markdown）
-* **分流标签** — 用于五种标准分流角色的标签字符串
-* **领域文档** — `CONTEXT.md` 与 ADR 的存放位置，以及读取它们的使用方规则
+* Issue tracker：问题存放的位置（默认为 GitHub；本地 Markdown 也开箱即支持）
+* Triage labels：用于五个标准分流角色的字符串
+* 领域文档：`CONTEXT.md` 和 ADRs 存放的位置，以及阅读它们的消费规则
 
 这是一个提示驱动的技能，不是确定性脚本。先探索，展示发现，与用户确认，然后写入。
 
@@ -21,45 +21,45 @@ disable-model-invocation: true
 
 查看当前仓库以了解其初始状态。读取所有已存在的内容，不要臆测：
 
-* `git remote -v` 和 `.git/config` — 这是 GitHub 仓库吗？是哪一个？
-* 仓库根目录下的 `AGENTS.md` 和 `CLAUDE.md` — 两者是否存在？其中是否已有 `## Agent skills` 部分？
+* `git remote -v` 和 `.git/config`：这是 GitHub 仓库吗？是哪一个？
+* 仓库根目录下的 `AGENTS.md` 和 `CLAUDE.md`：两者是否存在？其中是否已经有 `## Agent skills` 部分？
 * 仓库根目录下的 `CONTEXT.md` 和 `CONTEXT-MAP.md`
 * `docs/adr/` 以及任何 `src/*/docs/adr/` 目录
-* `docs/agents/` — 此技能之前的输出是否已经存在？
-* `.scratch/` — 表示本地 Markdown issue 跟踪器约定已在使用的迹象
+* `docs/agents/`：此技能的先前输出是否已经存在？
+* `.scratch/`：表明已经使用本地 Markdown issue 跟踪器约定的迹象
 * 是否安装了 `triage` 技能？（与此技能并列的 `triage` 技能文件夹，或你的可用技能中的 `triage`。）这决定了 B 部分是否要运行。
-* Monorepo 信号 — `pnpm-workspace.yaml`、`package.json` 中的 `workspaces` 字段，或带有自身 `src/` 的已填充 `packages/*`。只有真正的大型多包仓库才会出现这些；它们的缺失意味着单一上下文，而几乎所有仓库都是如此。
+* Monorepo 信号：`pnpm-workspace.yaml`、`package.json` 中的 `workspaces` 字段，或一个包含自身 `src/` 的已填充 `packages/*`。这些仅存在于真正的大型多包仓库中；其缺失意味着单上下文，这几乎是每个仓库。
 
 ### 2. 展示发现并询问
 
-总结哪些已存在、哪些缺失。然后按顺序逐一处理各部分 — 一个部分一个问题，得到答案后再进入下一部分。
+概述现有的内容以及缺失的内容。然后按顺序处理各部分。一次一个部分，一个答案，接着下一个。
 
 每个部分都以推荐答案开头，以便用户能用一句话接受。只有当选择确实有分支时才给出单行解释；当探索已经确定答案时，完全跳过该部分（未安装 `triage` 时跳过 B 部分，没有 monorepo 时跳过 C 部分）。
 
-**A 部分 — Issue 跟踪器。**
+**部分 A：Issue tracker。**
 
-> 解释：“issue 跟踪器”是此仓库 issue 的存放位置。诸如 `to-tickets`、`triage` 和 `to-spec` 之类的技能会读取并写入它 — 它们需要知道是调用 `gh issue create`、在 `.scratch/` 下写入 Markdown 文件，还是遵循你描述的其他工作流。选择你实际操作中跟踪此仓库工作的地方。
+> 解释器："Issue tracker" 是此仓库问题存放的位置。像 `to-tickets`、`triage` 和 `to-spec` 这样的技能会从中读写。它们需要知道是调用 `gh issue create`、在 `.scratch/` 下写入 markdown 文件，还是遵循你描述的其他工作流。选择你实际上为此仓库跟踪工作的位置。
 
 默认姿态：这些技能是为 GitHub 设计的。如果 `git remote` 指向 GitHub，则推荐 GitHub。如果 `git remote` 指向 GitLab（`gitlab.com` 或自托管主机），则推荐 GitLab。否则（或用户偏好），提供：
 
-* **GitHub** — issue 存在于仓库的 GitHub Issues 中（使用 `gh` CLI）
-* **GitLab** — issue 存在于仓库的 GitLab Issues 中（使用 [`glab`](https://gitlab.com/gitlab-org/cli) CLI）
-* **本地 Markdown** — issue 作为此仓库 `.scratch/<feature>/` 下的文件存在（适合个人项目或无远程仓库的仓库）
-* **其他**（Jira、Linear 等）— 请用户用一段话描述工作流；技能会将其记录为自由文本
+* **GitHub**：问题存放在仓库的 GitHub Issues 中（使用 `gh` CLI）
+* **GitLab**：问题存放在仓库的 GitLab Issues 中（使用 [`glab`](https://gitlab.com/gitlab-org/cli) CLI）
+* **Local markdown**：问题作为文件存放在此仓库的 `.scratch/<feature>/` 下（适合单人项目或没有远程仓库的仓库）
+* **Other** (Jira, Linear 等)：请用户用一段话描述工作流；技能将把它记录为自由文本
 
-将选择记录在 `docs/agents/issue-tracker.md` 中。GitHub 和 GitLab 模板带有“将 PR 作为请求表面”标志，默认**关闭** — 保持关闭且不要提及；希望外部 PR 进入分流队列的用户可以稍后在文件中切换该标志。
+将选择记录在 `docs/agents/issue-tracker.md` 中。GitHub 和 GitLab 模板携带一个 "PRs 作为请求面" 标志，默认为 **off**。保持关闭状态，不要将其开启：想要在分流队列中有外部 PR 的用户可以在文件中稍后翻转该标志。
 
-B 部分 — 分流标签词汇表。如果未安装 `triage` 技能（探索已告知），则完全跳过此部分 — 未安装的技能不需要标签。
+部分 B：Triage label vocabulary。如果未安装 `triage` 技能（探索已告诉你），则完全跳过此部分，因为未安装的技能不需要标签。
 
 如果已安装，只问一个问题：
 
 > 你想保留默认的分流标签吗？（推荐：**是**）
 
-默认值是五种标准角色，每个标签字符串与其名称相同：`needs-triage`、`needs-info`、`ready-for-agent`、`ready-for-human`、`wontfix`。如果回答**是**，则按原样写入。只有当用户说否 — 通常是因为其跟踪器已经使用了其他名称（例如 `bug:triage` 代替 `needs-triage`）— 才收集覆盖项，以便 `triage` 应用现有标签而不是创建重复标签。
+默认值是五个标准角色，每个标签字符串等于其名称：`needs-triage`、`needs-info`、`ready-for-agent`、`ready-for-human`、`wontfix`。在 **yes** 时，按原样写入它们。只有当用户说“不”时（通常是因为他们的跟踪器已经使用了其他名称，例如 `needs-triage` 对应 `bug:triage`），才收集覆盖项，以便 `triage` 应用现有标签而不是创建重复项。
 
-C 部分 — 领域文档。默认为**单一上下文** — 仓库根目录下一个 `CONTEXT.md` + `docs/adr/`。这几乎适合所有仓库；直接写入，无需询问。
+部分 C：Domain docs。默认为 **single-context**（仓库根目录下有一个 `CONTEXT.md` + `docs/adr/`）。这几乎适合所有仓库；无需询问即可写入。
 
-仅当探索发现 monorepo 信号时，才提供**多上下文** — 根目录 `CONTEXT-MAP.md` 指向各上下文的 `CONTEXT.md` 文件。然后确认他们想要哪种布局。
+仅当探索发现 monorepo 信号时，才提供 **multi-context**（一个根 `CONTEXT-MAP.md` 指向每个上下文的 `CONTEXT.md` 文件）。然后确认他们想要哪种布局。
 
 ### 3. 确认并编辑
 
@@ -76,9 +76,9 @@ C 部分 — 领域文档。默认为**单一上下文** — 仓库根目录下�
 
 * 如果 `CLAUDE.md` 存在，则编辑它。
 * 否则如果 `AGENTS.md` 存在，则编辑它。
-* 如果两者都不存在，询问用户要创建哪一个 — 不要替他们选择。
+* 如果都不存在，请用户选择创建哪一个；不要替他们选择。
 
-当 `CLAUDE.md` 已存在时，绝不创建 `AGENTS.md`（反之亦然）— 始终编辑已存在的那个文件。
+当 `CLAUDE.md` 已经存在时（反之亦然），永远不要创建 `AGENTS.md`；始终编辑已存在的那个。
 
 如果所选文件中已有 `## Agent skills` 块，则就地更新其内容，而不是附加重复块。不要覆盖用户对周围部分的编辑。
 
@@ -97,21 +97,21 @@ C 部分 — 领域文档。默认为**单一上下文** — 仓库根目录下�
 
 ### Domain docs
 
-[one-line summary of layout — "single-context" or "multi-context"]. See `docs/agents/domain.md`.
+[one-line summary of layout: "single-context" or "multi-context"]. See `docs/agents/domain.md`.
 ```
 
 仅在 `triage` 已安装且 B 部分运行时，才包含 `### Triage labels` 子块并写入 `docs/agents/triage-labels.md`。否则两者都省略。
 
 然后使用此技能文件夹中的种子模板作为起点写入文档文件：
 
-* [issue-tracker-github.md](./issue-tracker-github.md) — GitHub issue 跟踪器
-* [issue-tracker-gitlab.md](./issue-tracker-gitlab.md) — GitLab issue 跟踪器
-* [issue-tracker-local.md](./issue-tracker-local.md) — 本地 Markdown issue 跟踪器
-* [triage-labels.md](./triage-labels.md) — 标签映射（仅在安装了 `triage` 时）
-* [domain.md](./domain.md) — 领域文档使用方规则 + 布局
+* [issue-tracker-github.md](./issue-tracker-github.md): GitHub issue tracker
+* [issue-tracker-gitlab.md](./issue-tracker-gitlab.md): GitLab issue tracker
+* [issue-tracker-local.md](./issue-tracker-local.md): 本地 Markdown issue 跟踪器
+* [triage-labels.md](./triage-labels.md): 标签映射（仅当安装了 `triage` 时）
+* [domain.md](./domain.md): 领域文档消费规则 + 布局
 
 对于“其他”issue 跟踪器，请根据用户的描述从头编写 `docs/agents/issue-tracker.md`。
 
 ### 5. 完成
 
-告诉用户设置已完成，以及哪些工程技能现在会读取这些文件。提及他们以后可以直接编辑 `docs/agents/*.md` — 只有在他们想要更换 issue 跟踪器或从头重新开始时，才需要重新运行此技能。
+告诉用户设置已完成，哪些工程技能现在将读取这些文件。提到他们稍后可以直接编辑 `docs/agents/*.md`；只有当他们想切换 issue 跟踪器或从头开始时，才需要重新运行此技能。

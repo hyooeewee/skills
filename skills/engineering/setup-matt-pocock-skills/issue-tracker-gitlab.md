@@ -10,9 +10,9 @@
 * **评论 issue**：`glab issue note <number> --message "..."`。GitLab 将评论称为 "notes"。
 * **应用/移除标签**：`glab issue update <number> --label "..."` / `--unlabel "..."`。多个标签可以用逗号分隔，或重复该标志。
 * **关闭**：`glab issue close <number>`。`glab issue close` 不接受关闭评论，因此先用 `glab issue note <number> --message "..."` 发布说明，然后关闭。
-* **合并请求**：GitLab 将 PR 称为 "merge requests"。使用 `glab mr create`、`glab mr view`、`glab mr note` 等 — 与 `gh pr ...` 的形状相同，用 `mr` 代替 `pr`，用 `note`/`--message` 代替 `comment`/`--body`。
+* "Merge requests"：GitLab 将 PR 称为 "merge requests"。使用 `glab mr create`、`glab mr view`、`glab mr note` 等，其结构类似于 `gh pr ...`，将 `mr` 替换 `pr`，将 `note`/`--message` 替换 `comment`/`--body`。
 
-从 `git remote -v` 推断仓库 — 在克隆内运行时，`glab` 会自动执行此操作。
+从 `git remote -v` 推断出仓库；`glab` 在克隆内部运行时会自动执行此操作。
 
 ## 合并请求作为分流入口
 
@@ -40,7 +40,7 @@
 
 * **地图**：一个标记为 `wayfinder:map` 的单一 issue，包含 Notes / Decisions-so-far / Fog 正文。`glab issue create --label wayfinder:map`。（在具有原生 epic 的 GitLab 层级上，epic 可以代替保存地图；但在任何地方，带标签的 issue 都能工作。）
 * **子工单**：一个在描述顶部带有 `Part of #<map>` 以及标签 `wayfinder:<type>`（`research`/`prototype`/`grilling`/`task`）的 issue。一旦被认领，该工单会分配给主导开发者。
-* **阻塞**：GitLab 的**原生阻塞链接** — 规范的、可在 UI 中看到的表示方式。通过 `/blocked_by #<n>` 快捷操作添加，作为 note 发布（`glab issue note <child> --message "/blocked_by #<blocker>"`）。原生阻塞链接是 Premium/Ultimate 功能；在免费层级（或不可用的情况下）回退到描述顶部的 `Blocked by: #<n>, #<n>` 行。当所有阻塞项都关闭时，工单解除阻塞。
-* **前沿查询**：`glab issue list -F json` 限定在地图的子项范围内，丢弃任何带有未关闭阻塞项的 — 指向未关闭 issue 的原生 `blocked_by` 链接（`glab api projects/:id/issues/:iid/links`），或 `Blocked by` 行中的未关闭 issue — 或已有 assignee 的；按地图顺序靠前的优先。
-* **认领**：`glab issue update <n> --assignee @me` — 会话的首次写入操作。
+* "Blocking"：GitLab 的**原生阻塞链接**，这是规范、UI 可见的表示形式。使用 `/blocked_by #<n>` 快速操作添加它，作为 note 发布（`glab issue note <child> --message "/blocked_by #<blocker>"`）。原生阻塞链接是 Premium/Ultimate 功能；在免费层（或不可用的地方）回退到描述顶部的 `Blocked by: #<n>, #<n>` 行。当每个阻塞者都关闭时，工单即被解除阻塞。
+* "Frontier query"：`glab issue list -F json` 范围限定为地图的子项，排除任何具有开放阻塞者的项：指向开放 issue 的原生 `blocked_by` 链接（`glab api projects/:id/issues/:iid/links`），`Blocked by` 行中的开放 issue，或指派者；地图顺序中的第一个获胜。
+* "Claim"：`glab issue update <n> --assignee @me`，即会话中的首次写入。
 * **解决**：`glab issue note <n> --message "<answer>"`，然后 `glab issue close <n>`，接着在地图的 Decisions-so-far 中追加一个上下文指针（gist + link）。

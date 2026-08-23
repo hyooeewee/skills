@@ -81,7 +81,7 @@ description: 设置 Claude Code 钩子，以在危险 git 命令（push、reset 
 }
 ```
 
-如果设置文件已存在，请将钩子合并到现有的 `hooks.PreToolUse` 数组中——不要覆盖其他设置。
+如果设置文件已存在，请将钩子合并到现有的 `hooks.PreToolUse` 数组中。不要覆盖其他设置。
 
 ### 4. 询问自定义需求
 

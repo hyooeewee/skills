@@ -4,16 +4,16 @@
 
 ## 语言
 
-**Issue tracker**：
-托管仓库问题（issues）的工具——GitHub Issues、Linear、本地 `.scratch/` Markdown 约定或类似工具。`to-tickets`、`to-spec` 和 `triage` 等技能会读写该工具。
-*避免*：backlog manager、backlog backend、issue host
+**Issue 跟踪器**：
+托管仓库问题的工具：GitHub Issues, Linear，本地 `.scratch/` markdown 约定，或类似工具。像 `to-tickets`、`to-spec` 和 `triage` 这样的技能会从中读取和写入。
+*避免使用*：backlog manager, backlog backend, issue host
 
 **Issue**：
-**Issue tracker** 中的一个被跟踪的工作单元——由 `to-tickets` 产生的 bug、任务、规格或切片。
-*避免*：ticket（仅在引用外部系统称其为 ticket 时使用，或用于 **Decision ticket** ——见下文）
+**Issue tracker** 内的一个单独跟踪的工作单元：由 `to-tickets` 生成的 bug、任务、spec 或 slice。
+*避免使用*：ticket（仅在引用将它们称为 tickets 的外部系统时使用，或者对于 **Decision ticket**，请参阅下文）
 
-**Decision ticket**：
-一个 `wayfinder` 单元——`wayfinder:map` 的子 **Issue**，包含一个*问题*，其解决结果是一个决策，而不是要执行的构建切片。**decision** 限定词使其区别于实现 ticket；`wayfinder` 引入了该术语，然后使用 "ticket"。
+**决策 ticket**：
+一个 `wayfinder` 单元：一个持有 *问题* 的 `wayfinder:map` 的子级 **Issue**，其解决方案是一个决策，而不是要执行的构建片段。**decision** 限定词使其与实施 ticket 区分开来；`wayfinder` 引入了这个术语，然后使用 "ticket"。
 
 **Triage role**：
 分诊期间应用于 **Issue** 的规范状态机标签（例如 `needs-triage`、`ready-for-afk`）。每个角色通过 `docs/agents/triage-labels.md` 映射到 **Issue tracker** 中的实际标签字符串。
@@ -26,5 +26,5 @@
 
 ## 已标记的歧义
 
-* * "backlog" 此前既用于指托管问题的*工具*，也用于指其中的*工作主体*——已解决：该工具是 **Issue tracker**；"backlog" 不再作为领域术语使用。
-* * "backlog backend" / "backlog manager" ——已解决：合并到 **Issue tracker** 中。
+* "backlog" 之前被用来同时指代托管问题的 *工具* 和其中包含的 *工作体*。已解决：该工具是 **Issue tracker**；"backlog" 不再作为领域术语使用。
+* "backlog backend" / "backlog manager"。已解决：合并为 **Issue tracker**。

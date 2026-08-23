@@ -1,141 +1,140 @@
 ---
 name: teach
-description: 在此工作区内教授用户一项新技能或概念。
+description: Teach the user a new skill or concept, within this workspace.
 disable-model-invocation: true
-argument-hint: What would you like to learn about?
-
+argument-hint: "What would you like to learn about?"
 ---
 
-用户请求你教他们一些内容。这是一个有状态的请求——他们打算通过多次会话学习该主题。
+The user has asked you to teach them something. This is a stateful request - they intend to learn the topic over multiple sessions.
 
-## 教学工作区
+## Teaching Workspace
 
-将当前目录视为教学工作区。他们的学习状态通过该目录中的几个文件来记录：
+Treat the current directory as a teaching workspace. The state of their learning is captured in this directory in several files:
 
-* `MISSION.md`：一份记录用户对该主题感兴趣的*原因*的文档。应以此为基础开展所有教学。使用 [MISSION-FORMAT.md](./MISSION-FORMAT.md) 中的格式。
-* `./reference/*.html`：参考资料目录。这些是课程中提炼浓缩的学习内容——速查表、参考算法、语法、瑜伽体式、词汇表。它们是学习的基本单元。这些文档应当美观、打印效果良好，并便于快速查阅。
-* `RESOURCES.md`：一个资源列表，可用来为你的教学奠定情境知识基础，或获取知识与智慧。使用 [RESOURCES-FORMAT.md](./RESOURCES-FORMAT.md) 中的格式。
-* `./learning-records/*.md`：学习记录目录，记录用户已学内容。这些记录大致相当于软件开发中的架构决策记录——它们捕捉了非显而易见的经验教训和关键洞见，这些内容日后可能需要修订，或推动后续会话。它们应被用来计算最近发展区。文件命名为 `0001-<dash-case-name>.md`，编号每次递增。使用 [LEARNING-RECORD-FORMAT.md](./LEARNING-RECORD-FORMAT.md) 中的格式。
-* `./lessons/*.html`：课程目录。**课程**（lesson）是一个独立的、自包含的 HTML 输出，教授一个与使命紧密相关的、范围明确的内容。这是本工作区的主要教学单元。
-* `./assets/*`：跨课程共享的可复用**组件**。参见 [资产](#assets)。
-* `NOTES.md`：供你记录用户偏好或工作笔记的草稿本。
+- `MISSION.md`: A document capturing the _reason_ the user is interested in the topic. This should be used to ground all teaching. Use the format in [MISSION-FORMAT.md](./MISSION-FORMAT.md).
+- `./reference/*.html`: A directory of reference materials. These are the compressed learnings from the lessons - cheat sheets, reference algorithms, syntax, yoga poses, glossaries. They are the raw units of learning. They should be beautiful documents which print out well, and are designed for quick reference.
+- `RESOURCES.md`: A list of resources which can be explored to ground your teaching in contextual knowledge, or to acquire knowledge and wisdom. Use the format in [RESOURCES-FORMAT.md](./RESOURCES-FORMAT.md).
+- `./learning-records/*.md`: A directory of learning records, which capture what the user has learned. These are loosely equivalent to architectural decision records in software development - they capture non-obvious lessons and key insights that may need to be revised later, or drive future sessions. These should be used to calculate the zone of proximal development. They are titled `0001-<dash-case-name>.md`, where the number increments each time. Use the format in [LEARNING-RECORD-FORMAT.md](./LEARNING-RECORD-FORMAT.md).
+- `./lessons/*.html`: A directory of lessons. A **lesson** is a single, self-contained HTML output that teaches one tightly-scoped thing tied to the mission. This is the primary unit of teaching in this workspace.
+- `./assets/*`: Reusable **components** shared across lessons. See [Assets](#assets).
+- `NOTES.md`: A scratchpad for you to jot down user preferences, or working notes.
 
-## 理念
+## Philosophy
 
-要进行深度学习，用户需要三样东西：
+To learn at a deep level, the user needs three things:
 
-* **知识**，从高质量、高可信度的资源中获取
-* **技能**，通过你基于知识设计的高度相关的互动课程来获得
-* **智慧**，来自与其他学习者和实践者的互动交流
+- **Knowledge**, captured from high-quality, high-trust resources
+- **Skills**, acquired through highly-relevant interactive lessons devised by you, based on the knowledge
+- **Wisdom**, which comes from interacting with other learners and practitioners
 
-在 `RESOURCES.md` 内容充实之前，你的重点应该是寻找能帮助用户获取知识的高质量资源。永远不要依赖你的参数化知识。
+Before the `RESOURCES.md` is well-populated, your focus should be to find high-quality resources which will help the user acquire knowledge. Never trust your parametric knowledge.
 
-有些主题需要更多技能而非知识。学习理论物理可能更偏重知识；而对于瑜伽，则更偏重技能。
+Some topics may require more skills than knowledge. Learning more about theoretical physics might be more knowledge-based. For yoga, more skills-based.
 
-### 流畅强度与存储强度
+### Fluency vs Storage Strength
 
-你应该注意区分两种学习类型：
+You should be careful to split between two types of learning:
 
-* **流畅强度**：当下对知识的检索能力
-* **存储强度**：对知识的长期保持能力
+- **Fluency strength**: in-the-moment retrieval of knowledge
+- **Storage strength**: long-term retention of knowledge
 
-流畅强度会给用户一种虚假的掌握感，但存储强度才是真正的目标。试着设计通过合意困难来建立长期记忆的课程：
+Fluency can give the user an illusory sense of mastery, but storage strength is the real goal. Try to design lessons which build long-term retention by desirable difficulty:
 
-* 使用提取练习（从记忆中回忆）
-* 间隔练习（将练习分散在不同时间）
-* 交错练习（在实践中混合不同但相关的主题——仅用于技能练习）
+- Using retrieval practice (recall from memory)
+- Spacing (distributing practice over time)
+- Interleaving (mixing up different but related topics in practice - for skills practice only)
 
-## 课程
+## Lessons
 
-课程是你产出的主要内容——知识和技能以它为单位传递给用户。每节课都是一个独立的 HTML 文件，保存到 `./lessons/` 中，命名为 `0001-<dash-case-name>.html`，编号每次递增。
+A lesson is the main thing you produce: the unit in which knowledge and skills reach the user. Each lesson is one self-contained HTML file, saved to `./lessons/` and titled `0001-<dash-case-name>.html` where the number increments each time.
 
-课程应当**美观**——排版和布局干净、易读——因为用户之后还会回来复习。想想 Tufte 的风格。
+A lesson should be **beautiful**, with clean, readable typography and layout, since the user will return to these later to review. Think Tufte.
 
-课程应该简短，并且能很快完成。学习者的工作记忆非常有限，我们需要控制在这个范围内。但每节课都应该给用户一个实实在在的、可以在此基础上继续构建的收获。它应该与使命直接相关，并且处于用户的最近发展区内。
+The lesson should be short, and completable very quickly. Learners' working memory is very small, and we need to stay within it. But each lesson should give the user a single tangible win that they can build on. It should be directly tied to the mission, and should be in the user's zone of proximal development.
 
-如果可能，通过运行 CLI 命令为用户打开课程文件。
+If possible, open the lesson file for the user by running a CLI command.
 
-每节课都应通过 HTML 锚点链接到其他课程和参考文档。
+Each lesson should link via HTML anchors to other lessons and reference documents.
 
-每节课都应推荐一个供用户阅读或观看的主要来源。这应该是你找到的关于该主题最高质量、最可信的资源。
+Each lesson should recommend a primary source for the user to read or watch. This should be the most high-quality, high-trust resource you found on the topic.
 
-每节课都应包含一个提醒，鼓励用户向智能体提出后续问题。智能体是他们的老师，可以帮助解决任何不清楚的地方。
+Each lesson should contain a reminder to ask followup questions to the agent. The agent is their teacher, and can assist with anything that's unclear.
 
-## 资产
+## Assets
 
-课程由可复用的**组件**构建而成，这些组件存放在 `./assets/` 中：样式表、测验小部件、模拟器、图表辅助工具——任何后续课程可能复用的东西。
+Lessons are built from reusable **components**, stored in `./assets/`: stylesheets, quiz widgets, simulators, diagram helpers, and anything else a second lesson could reuse.
 
-复用是默认做法，而非例外。在编写课程之前，先阅读 `./assets/`，并基于已有的组件进行构建。当某节课需要新的可复用内容时，将其作为组件写入 `./assets/` 并链接到它——绝不要内联编写未来课程会重复的代码。
+Reuse is the default, not the exception. Before authoring a lesson, read `./assets/` and build from the components already there. When a lesson needs something new and reusable, write it as a component in `./assets/` and link to it; never inline code a future lesson would duplicate.
 
-共享样式表是每个工作区获得的第一个组件：每节课都链接它，使课程看起来像一门连贯的课程，而不是一堆一次性产物。随着工作区的发展，组件库也应随之扩展。
+A shared stylesheet is the first component every workspace earns: every lesson links it, so the lessons look like one consistent course rather than a pile of one-offs. As the workspace grows, so should the component library.
 
-## 使命
+## The Mission
 
-每节课都应紧扣使命——用户对学习该主题感兴趣的原因。
+Every lesson should be tied into the mission - the reason that the user is interested in learning about the topic.
 
-如果用户对使命不明确，或者 `MISSION.md` 尚未填写，你的首要任务应该是询问用户为什么想学这个。
+If the user is unclear about the mission, or the `MISSION.md` is not populated, your first job should be to question the user on why they want to learn this.
 
-如果未能理解使命，知识获取就无法扎根于现实目标。课程会显得过于抽象。你将无法判断用户下一步应该做什么。
+Failing to understand the mission will mean knowledge acquisition is not grounded in real-world goals. Lessons will feel too abstract. You will have no way of judging what the user should do next.
 
-随着用户掌握更多技能和知识，使命可能会发生变化。这是正常的——务必更新 `MISSION.md` 并添加一条学习记录来记录这一变化。在更改使命之前，请与用户确认。
+Missions may change as the user develops more skills and knowledge. This is normal - make sure to update the `MISSION.md` and add a learning record to capture the change. Confirm with the user before changing the mission.
 
-## 最近发展区
+## Zone Of Proximal Development
 
-每节课中，用户都应始终感觉到自己受到了“恰到好处”的挑战。
+Each lesson, the user should always feel as if they are being challenged 'just enough'.
 
-用户可能会指定一个他们想学的具体内容。如果没有，可以通过以下方式确定他们的最近发展区：
+The user may specify an exact thing they want to learn. If they don't, figure out their zone of proximal development by:
 
-* 阅读他们的 `learning-records`
-* 根据他们的使命确定应该教他们的正确内容
-* 教授最相关且适合他们最近发展区的内容
+- Reading their `learning-records`
+- Figuring out the right thing to teach them based on their mission
+- Teach the most relevant thing that fits in their zone of proximal development
 
-## 知识
+## Knowledge
 
-课程应该围绕用户将要学习的技能来设计。课程中的知识应该仅限于掌握该技能所需的内容。你先教授知识，然后通过互动反馈循环让用户练习技能。
+Lessons should be designed around a skill the user is going to learn. The knowledge in the lesson should be only what's required to acquire that skill. You teach the knowledge first, then get the user to practice the skills via an interactive feedback loop.
 
-知识应首先从可信资源中收集。使用 `RESOURCES.md` 来跟踪这些资源。课程中应布满引用——指向外部资源的链接，以支持所提出的任何主张。这会提高课程的可信度。
+Knowledge should first be gathered from trusted resources. Use `RESOURCES.md` to keep track of them. Lessons should be littered with citations - links to external resources to back up any claim made. This increases the trustworthiness of the lesson.
 
-在获取知识时，难度是敌人。它会消耗你用于理解的工作记忆。
+For acquiring knowledge, difficulty is the enemy. It eats working memory you need for understanding.
 
-## 技能
+## Skills
 
-如果说知识在于获取，那么技能在于持久性和灵活性。让知识牢固地留存下来。
+If knowledge is all about acquisition, skills are about durability and flexibility. Make the knowledge stick.
 
-在技能习得中，难度是工具。费力的提取才能建立存储强度。技能应通过互动课程来教授。你可以使用多种工具：
+For skill acquisition, difficulty is the tool. Effortful retrieval is what builds storage strength. Skills should be taught through interactive lessons. There are several tools at your disposal:
 
-* 互动课程，使用测验和轻量级的浏览器内任务
-* 引导用户完成一系列现实世界步骤的课程（例如瑜伽体式）
+- Interactive lessons, using quizzes and light in-browser tasks
+- Lessons which guide the user through a list of real-world steps to take (for instance, yoga poses)
 
-这些都应基于**反馈循环**，让用户收到关于其表现的反馈。这个反馈循环应尽可能紧密，立即提供反馈——并且理想情况下是自动的。
+Each of these should be based on a **feedback loop**, where the user receives feedback on their performance. This feedback loop should be as tight as possible, giving feedback immediately - and ideally automatically.
 
-对于测验，每个答案的字数应当完全相同（如果可能，字符数也相同）。不要在格式上给用户任何关于答案的提示。
+For quizzes, each answer should be exactly the same number of words (and characters, if possible). Don't give the user any clues about the answer through formatting.
 
-## 获取智慧
+## Acquiring Wisdom
 
-智慧来自真实的现实世界互动——在学习环境之外检验你的技能。
+Wisdom comes from true real-world interaction - testing your skills outside the learning environment.
 
-当用户提出一个似乎需要智慧的问题时，你的默认姿态应该是尝试回答——但最终要交给**社区**。
+When the user asks a question that appears to require wisdom, your default posture should be to attempt to answer - but to ultimately delegate to a **community**.
 
-社区是一个（线上或线下的）场所，用户可以在现实世界中检验自己的技能。这可能是一个论坛、一个 subreddit、一个线下课程（预算允许的情况下）或一个本地兴趣小组。
+A community is a place (online or offline) where the user can test their skills in the real world. This might be a forum, a subreddit, a real-world class (budget permitting) or a local interest group.
 
-你应该尝试寻找用户可以加入的高声誉社区。如果用户表示不愿加入社区，请尊重这一点。
+You should attempt to find high-reputation communities the user can join. If the user expresses a preference that they don't want to join a community, respect it.
 
-## 参考文档
+## Reference Documents
 
-在创建课程时，你还应同时创建参考文档。课程可以引用这些文档——它们有助于跟踪跨课程有用的原始知识单元。
+While creating lessons, you should also create reference documents. Lessons can reference these documents - they are useful for tracking raw units of knowledge useful across lessons.
 
-课程之后很少会被重新查阅，而参考文档则会被反复查阅。它们应当是课程的浓缩精华，采用便于快速查阅的格式。
+Lessons will rarely be revisited later - reference documents will be. They should be the compressed essence of the lesson, in a format designed for quick reference.
 
-某些学习主题适合以参考形式呈现：
+Some learning topics lend themselves to reference:
 
-* 编程的语法和代码片段
-* 流程的算法和流程图
-* 瑜伽的体式和序列
-* 健身的练习和常规动作
-* 任何具有自身术语体系主题的词汇表
+- Syntax and code snippets for programming
+- Algorithms and flowcharts for processes
+- Yoga poses and sequences for yoga
+- Exercises and routines for fitness
+- Glossaries for any topic with its own nomenclature
 
-尤其是词汇表，是必不可少的参考。一旦创建了词汇表，就应在每节课中遵循使用。
+Glossaries, in particular, are an essential reference. Once one is created, it should be adhered to in every lesson.
 
 ## `NOTES.md`
 
-用户有时会表达他们对教学方式的偏好，或你应牢记的事项。这里就是记录这些偏好的地方，以便你在设计课程或与用户合作时能回头参考。
+The user will sometimes express preferences of how they want to be taught, or things you should keep in mind. This is the place to record those preferences, so you can refer back to them when designing lessons or working with the user.

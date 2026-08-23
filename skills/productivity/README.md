@@ -6,15 +6,15 @@
 
 仅在您输入它们时才可访问（Claude Code：`disable-model-invocation: true`；Codex：`agents/openai.yaml` 中的 `policy.allow_implicit_invocation: false`）。
 
-* **[grill-me](./grill-me/SKILL.md)** — 针对计划或设计接受持续盘问，直到设计树的每一条分支都被解决。
-* **[handoff](./handoff/SKILL.md)** — 将当前对话压缩成一份交接文档，以便另一个代理可以继续这项工作。
-* **[teach](./teach/SKILL.md)** — 在多次会话中教用户掌握一项新技能或概念，将当前目录用作有状态的教学工作区。
-* **[to-questionnaire](./to-questionnaire/SKILL.md)** — 将你独自无法定夺的决策变成一份 Markdown 问卷，交给那位唯一能回答的人——可异步填写，也可在会议中共同完成。
-* **[wait-what](./wait-what/SKILL.md)** — 当消息未能被理解时立刻触发。代理会使用你的 `CONTEXT.md` 词汇，用通俗的英语、结合你所缺失的上下文重新解释。
+* 一直被追问关于计划或设计的方案，直到设计树的每个分支都得到解决。
+* 将当前对话精简为移交文档，以便另一个代理能够继续工作。
+* 在多个会话中向用户传授新技能或概念，使用当前目录作为有状态的教工作空间。
+* 将您独自无法做出的决定转化为一份 Markdown 问卷，交给那个能做出决定的人（可异步填写，或在会议中共同完成）。
+* 一旦消息未送达，立即触发此功能。代理将使用您缺少的上下文，用通俗易懂的英语（使用您的 `CONTEXT.md` 词汇）重新推介该消息。
 
 ## 模型调用
 
 模型或用户均可访问（采用丰富的触发措辞，便于模型主动调用）。
 
-* **[grilling](./grilling/SKILL.md)** — 就计划、决策或想法对用户进行无情追问，直到设计树的每一条分支都被解决。
-* **[writing-for-agents](./writing-for-agents/SKILL.md)** — 为代理编写文档：技能、AGENTS.md/CLAUDE.md，以及代理通过指针访问的任何文档。
+* 对用户进行无情追问，关于计划、决定或想法，直到设计树的每个分支都得到解决。
+* 为代理撰写文档：技能、AGENTS.md/CLAUDE.md 以及代理通过指针引用到的任何文档。

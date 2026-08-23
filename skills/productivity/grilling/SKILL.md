@@ -8,10 +8,16 @@ description: 无情地拷问用户关于计划、决策或想法。当用户想�
 
 以**轮次**推进设计树。**前沿**是所有前提条件已经确定的决策：也就是你现在*可以*问的问题，而无需猜测尚未听到的答案。在一轮中询问整个前沿：为每个问题编号并给出你的推荐答案。然后等待用户的回答，再进入下一轮。
 
-每个问题应按如下格式呈现：
+请按如下格式编排一轮：
 
 ```
 ❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
+
+➡️ <your recommended answer>
+
+---
+
+❓ **Q2** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
 
 ➡️ <your recommended answer>
 ```

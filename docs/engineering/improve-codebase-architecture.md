@@ -1,16 +1,16 @@
 ## 它做什么
 
-`improve-codebase-architecture` 会扫描代码库寻找**深化机会** —— 即浅层模块（接口几乎与其隐藏的东西一样复杂的模块）有可能变深的地方 —— 将其整理成一份自包含的 HTML 报告，然后针对你选中的任一候选，通过 [盘问](https://www.aihero.dev/ai-coding-dictionary/grilling) 的方式引导你深入探讨。
+`improve-codebase-architecture` 会调查代码库中的**深化机会**：那些原本是浅层模块（隐藏它的接口几乎与被隐藏的东西一样复杂）的地方，可以变成深层模块的地方。它会将这些整理成一份独立的 HTML 报告，然后通过你选中的那个进行 [盘问](https://www.aihero.dev/ai-coding-dictionary/grilling)。
 
 它永远不会修改代码。整次运行只会在操作系统临时目录中生成一个 HTML 文件，并展开一段对话；重构本身会在之后、于独立的 [会话](https://www.aihero.dev/ai-coding-dictionary/session) 中，通过正常的构建流程进行。这正是它之所以是调查工具而非重构工具的原因，也是为什么这个技能值得在你还没准备好改动的代码库上运行。
 
-两道过滤器让这份报告不至于沦为泛泛的清理建议。每个候选都必须通过**删除测试** —— 删除这个模块会把复杂性集中到更小的接口后面，还是仅仅分散到各个调用方？只有“集中”的情况才配得上一个卡片。除非你明确指向某个特定区域，否则它会先读取最近的提交历史，并将扫描偏向正在活跃变化的路径，理由是一处没人碰的代码的深化，是你永远无法兑现的重构。
+两个过滤器可以防止报告变成通用的清理建议。每个候选都必须通过**删除测试**：删除这个模块是否会将复杂性集中在一个更小的接口后面，还是仅仅将其分散到调用者那里？只有“集中”的情况才会获得一张卡片。除非你将其指向特定区域，否则它会先读取最近的提交历史，并将扫描偏向于那些正在积极变更的路径，理由是代码中没人碰触的地方的深化，是你永远无法兑现的重构。
 
 ## 何时使用它
 
-你通过输入 `/improve-codebase-architecture` 来调用它 —— [代理](https://www.aihero.dev/ai-coding-dictionary/agent) 不会自行使用它。
+你通过输入 `/improve-codebase-architecture` 来调用它；[代理](https://www.aihero.dev/ai-coding-dictionary/agent)不会自行使用它。
 
-它位于构建循环之外 —— 它不是主循环中的一个步骤，而是你定期运行、以便积攒更多改善代码库工作的事项。它被用于四种情形：
+It sits outside the build loop: it is not a step in the main loop but something you run periodically to queue up more work to improve the codebase. The four situations it gets used in:
 
 | 情况     | 如何使用                                                                                                          |
 | ------ | ------------------------------------------------------------------------------------------------------------- |
@@ -21,19 +21,19 @@
 
 它与同类技能容易混淆之处：
 
-* 如果要设计一个你已选定好的模块，请使用 [codebase-design](https://aihero.dev/skills-codebase-design) —— 那是工作台，而这是找出该把什么放到工作台上的调查。
+* 对于你已经选定的单个模块设计，请使用 [codebase-design](https://aihero.dev/skills-codebase-design)：那是设计台，这是找出要放在上面什么内容的调查工具。
 * 对于大到一个会话装不下的整体工作，请使用 [wayfinder](https://aihero.dev/skills-wayfinder)。
 * 对于“这个具体的东西坏了”的情况，请使用 [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs)。当真正的发现是没有好的接缝来锁定 bug 时，它会把问题交回这里。
 
 ## 先决条件
 
-运行它不需要任何前置条件。它会读取 `CONTEXT.md` 以及 `docs/adr/` 中存在的任何 ADR，并在这些文件存在时使用你所在领域自己的名词来表达 —— 一条候选读起来会是“深化 Order 录入模块”，而不是“重构 FooBarHandler”。
+无需任何先决条件即可运行。它会读取 `CONTEXT.md` 以及 `docs/adr/` 中的任何 ADR（如果存在的话），并在存在时使用你领域内的术语：候选者会读作“深化订单录入模块”，而不是“重构 FooBarHandler”。
 
 它会在两个地方写入内容。报告会写到仓库之外的 `<tmpdir>/architecture-review-<timestamp>.html`。在盘问循环期间，它会在 `CONTEXT.md` 中添加或精炼术语，若该文件不存在则创建它，并主动提出把被否决的候选记录为 ADR，以便未来的运行不再重复建议它。
 
 ## 深度，以及追寻深度的报告
 
-这个技能围绕一个理念展开：**深度**。一个深模块把大量行为放在一个小而稳定的接口后面。一个浅模块则通过一个几乎与其下方代码一样宽的接口泄漏其实现。这份报告是对浅层性的搜寻 —— 仅仅为了可测试性而抽取出来、真正的 bug 却存在于调用方式中的纯函数（没有**局部性**），跨越**接缝**泄漏的模块，以及一个不打开五个文件就无法理解的概念 —— 并给出修复它的深化方案。
+该技能基于一个概念开启：**深度**。深层模块将大量行为隐藏在小型、稳定的接口后面。浅层模块则通过一个几乎与其下方代码一样宽的接口泄露其实现。报告以三种形式寻找浅层：仅为了可测试性而提取的纯函数，而真正的 bug 存在于它们是如何被调用的（缺乏**局部性**），跨**接缝**泄露的模块，以及不打开五个文件就无法理解的概念。它以一个深化建议结束，该建议能修复问题。
 
 每条候选都是一张卡片：涉及的文件、摩擦点、平实易懂的解决方案、以**局部性**和**杠杆作用**表述的收益、前后对比图，以及一个强度徽章。
 
@@ -43,17 +43,17 @@
 | `Worth exploring` | 看起来合理的深化，但收益取决于代码下一步的走向。      |
 | `Speculative`     | 出于完整性而列出。其中大多数可以放心忽略。         |
 
-报告以一项**首选推荐**结尾 —— 即它会最先处理的那一个 —— 然后技能停下来，询问你想探索哪个候选。此时尚未决定任何事，也没有任何代码被改动。
+报告以**首要推荐**（它首先会处理的那一个）结束，然后技能会停止并询问你想探索哪个候选。此时还没有做出任何决定，也没有代码移动。
 
 ## 选定一个之后会发生什么
 
-选定一个候选会开启一场围绕它的 [盘问](https://aihero.dev/skills-grilling) 会话：约束条件、接缝背后有什么、哪些测试会保留下来、深化后的接口应该是什么样。该会话的输出是一个决策，而不是一个 diff。接下来就遵循正常流程 —— 把决策带入 [to-spec](https://aihero.dev/skills-to-spec)，然后是 [to-tickets](https://aihero.dev/skills-to-tickets)，最后是 [implement](https://aihero.dev/skills-implement)。
+选择一个候选会启动一个关于它的 [盘问](https://www.aihero.dev/skills-grilling) 会话：约束条件、接缝后面是什么、哪些测试能存活、深化后的接口应该长什么样。该会话的输出是一个决策，而不是差异。从这里开始应用正常流程：把决策带入 [to-spec](https://www.aihero.dev/skills-to-spec)，然后 [to-tickets](https://www.aihero.dev/skills-to-tickets)，最后 [implement](https://www.aihero.dev/skills-implement)。
 
 ## 常见问题
 
 **它针对一个想法盘问了我一个小时，而不是向我展示选项。我能关掉这个功能吗？**
 
-可以 —— 在调用时直接说明（“不要盘问我，只显示报告”）。这是这个技能收到的最强烈的抱怨。一位用户直言不讳：他们喜欢把它当作“一种获取改进项深入分析的便捷方式”，在盘问循环加入后却觉得它“几乎无法使用”，并报告说会话中它先提出一个解决方案，然后问“几十个甚至几百个问题”。设计意图是先给出报告，盘问只在你选中的候选上开始，但较弱的 [模型](https://www.aihero.dev/ai-coding-dictionary/model) 会直接跳到就它们想到的第一个想法采访你。那个讨论串中的报告因模型不同而差异很大，而且这是一个未解决的问题 —— 该技能还没有文档化的免盘问模式。
+可以：在调用它时说明（“别盘问我，只给我报告”）。这是该技能收到的最大投诉。一位用户直言不讳地说，他们喜欢它作为“获得改进全面分析的一种便捷方式”，但在添加了盘问循环后发现它“几乎无法使用”，报告的会话中它提出一个解决方案，然后问“十几个或上百个问题”。设计的初衷是报告优先，盘问只在你选择的候选上开始，但较弱的 [模型](https://www.aihero.dev/ai-coding-dictionary/model) 会直接跳过盘问你关于它想到的第一个想法。该线程中的报告因模型而异很大，这是一个开放问题：该技能还没有记录的“无盘问”模式。
 
 **报告打开时是无样式、没有图表的原始 HTML。发生了什么？**
 
@@ -73,11 +73,11 @@
 
 **本技能在哪些方面不同于 `/codebase-design`？**
 
-`/codebase-design` 是一个参考，而不是会话驱动者。它提供了词汇——模块、接口、深度、接缝、适配器、杠杆、局部性——本技能借用了这些词汇。让一个新 agent 把 `/codebase-design` 当作要'执行'的事情，是一个已知的失败：由于它本身没有可遵循的流程，agent 会发明一个流程、重新探索代码，并在问你任何问题之前运行很长时间。用本技能来驱动，把那个当作参考来用。
+`/codebase-design` 是一个参考，而不是会话驱动器。它提供词汇（模块、接口、深度、接缝、适配器、杠杆作用、局部性），本技能借用这些词汇。将一个全新的代理指向 `/codebase-design` 作为要“做”的事情是一个已知的失败案例：由于没有自己的流程可遵循，代理会编造一个流程，重新探索代码并运行很长时间才问你任何问题。用本技能驱动；使用那个。
 
 **它到底会不会告诉我代码库没问题？**
 
-很少，而且你应该事先知道这一点。本技能的设计目标就是输出发现，因此它的框架会推动它产生候选，而不是得出'一切正常'的结论。强度徽章就是防御机制——如果一份报告中的所有内容都是 `Speculative`，那就是技能在以它唯一知道的方式告诉你：它什么都没找到。
+很少见，而且你应该事先知道。该技能被设计为输出发现，所以框架会推动它生成候选而不是得出“没有问题”的结论。强度徽章就是防御机制：如果报告中的一切都是 `Speculative`，那就是该技能以它唯一知道的方式告诉你它什么也没找到。
 
 **它在 Codex 或其他 harness 中能工作吗？**
 
@@ -89,13 +89,13 @@
 
 ## 如果它起作用了
 
-* 候选者命名的是你领域中的概念，而不是编造的类名——是'订单接收模块'，而不是'FooBarHandler'。
+* The candidates name your domain's concepts, not invented class names: "the Order intake module," not "the FooBarHandler."
 * 候选者集中在最近编辑过的文件中，而不是仓库中沉寂的角落。
 * 运行期间没有任何代码被改动。唯一的新文件就是临时目录中的 HTML 报告。
 * 它会在报告后停下来，询问你想要哪个候选，而不是自行继续。
-* 每张卡片都会把收益解释为局部性或杠杆效应，并说明哪些测试会变得更简单——而不只是'这样更干净'。
+* Each card explains the payoff as locality or leverage, and says which tests get simpler, not just "this is cleaner."
 * 如果因为一个持续有效的理由拒绝了某个候选，你会得到一个记录 ADR 的提议，这样下次运行就不会再推荐它。
 
 ## 它在系统中的位置
 
-`improve-codebase-architecture` 是**周期性维护**——每隔几天运行一次，在任意链之外运行，用来把工作排入队列，而不是去执行工作。它的邻居是 [codebase-design](https://aihero.dev/skills-codebase-design)——它拥有深度与接缝词汇，每个候选者都是用这种词汇写成的；[grilling](https://aihero.dev/skills-grilling) 在你选定候选后遍历决策树；以及 [domain-modeling](https://aihero.dev/skills-domain-modeling)，在决策稳定下来时让 `CONTEXT.md` 和 ADR 保持最新。它产生的是一种想法，这个想法会在 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) 或 [to-spec](https://aihero.dev/skills-to-spec) 重新进入主构建流程。至于某个情境适合哪个技能，[ask-matt](https://aihero.dev/skills-ask-matt) 是整个技能集的路由器。
+`improve-codebase-architecture` 是**定期维护**：每隔几天运行一次，不处于任何流程链中，以排队待办而不是直接完成工作。它的邻居是 [codebase-design](https://aihero.dev/skills-codebase-design)，它拥有每个候选所使用的深度和接缝词汇；[grilling](https://aihero.dev/skills-grilling)，在你选择候选后遍历决策树；以及 [domain-modeling](https://aihero.dev/skills-domain-modeling)，随着决策的确定而保持 `CONTEXT.md` 和 ADRs 的最新状态。它产生的是一个想法，这个想法在 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) 或 [to-spec](https://aihero.dev/skills-to-spec) 时重新进入主构建流程。对于哪种技能适合哪种情况，[ask-matt](https://aihero.dev/skills-ask-matt) 是整个集合的路由器。

@@ -6,30 +6,30 @@
 
 ## 约束：分桶技能与单路径选择
 
-技能存放在 `skills/` 下的分桶文件夹中——`engineering/` 和 `productivity/` 是**已发布**（随产品发布）的；`misc/`、`personal/`、`in-progress/` 和 `deprecated/` 则**不是**。插件必须只暴露已发布的技能集，而该技能集横跨其中两个分桶文件夹。
+技能位于 `skills/` 下的分桶文件夹中：`engineering/` 和 `productivity/` 是**已发布**（已交付）的；`misc/`、`personal/`、`in-progress/` 和 `deprecated/` 则**不是**。插件只能公开已发布的集合，该集合跨越了其中两个分桶文件夹。
 
-* **Claude Code** —— `.claude-plugin/plugin.json` 将 `skills` 接受为**显式技能目录路径的数组**。我们逐一列出已发布的技能，明确排除其他所有内容，并添加 `.claude-plugin/marketplace.json`，使该仓库成为自己的单插件市场。已做端到端验证：`claude plugin validate . --strict` 通过，`marketplace add` → `install` 可解析所有已发布的技能。
+* **Claude Code**: `.claude-plugin/plugin.json` 将 `skills` 接受为**显式技能目录路径的数组**。我们逐个列出已发布的技能，零歧义地排除其他所有内容，并添加 `.claude-plugin/marketplace.json`，使该仓库成为其自己的单插件市场。端到端验证：`claude plugin validate . --strict` 通过，`marketplace add` → `install` 解析所有已发布的技能。
 
-* **Codex** —— `.codex-plugin/plugin.json` 只接受 `skills` 作为**单个路径字符串**（数组会被拒绝并提示 `missing or invalid plugin.json`），Codex 会递归发现该路径下的 `SKILL.md` 文件。无法通过一个路径指定两个分桶文件夹，或精选一个子集。测试并否决了两种变通方案：
-  * 将路径指向 `./skills/` 也会一并发布 `deprecated/`、`in-progress/`、`personal/` 和 `misc/`——这些是我们刻意不发布的已弃用、草稿和个人技能。
+* **Codex**: `.codex-plugin/plugin.json` 仅将 `skills` 接受为**单个路径字符串**（数组会被 `missing or invalid plugin.json` 拒绝），Codex 会递归发现其下的 `SKILL.md` 文件。无法从一个路径中指定两个分桶文件夹，也无法精选一个子集。测试并拒绝了两个变通方案：
+  * 指向 `./skills/` 也会交付 `deprecated/`、`in-progress/`、`personal/` 和 `misc/`：这是我们故意不发布的已退役、草稿和个人技能。
   * 一个由指向各分桶的**符号链接**组成的精选扁平目录在安装后无法保留：Codex 会将插件树复制到其缓存中并**丢弃符号链接**，因此技能内容为空。
 
-要为 Codex 提供单一且仅含已发布技能的路径，唯一的稳健方式是：(a) **重构**，让 `skills/` 只包含已发布的技能（将非发布分桶移出——这会波及 `CLAUDE.md`、`scripts/link-skills.sh`、各分桶的 README，以及依赖 `in-progress/` 和 `personal/` 的本地开发工作流），或者 (b) **提交重复副本**，将已发布技能复制到一个扁平目录中（这会造成同步负担，并形成第二个事实来源）。这两者都属于结构性决策，不应作为 Claude 插件发布的一部分捆绑处理。这很可能就是当初插件未能更早发布的那个被半遗忘的原因：清单格式无法干净地表达分桶仓库中的精选子集。
+给 Codex 提供单个仅已发布路径的唯一可靠方法是 (a) **重构**，使 `skills/` 仅包含已发布的技能（将未发布的分桶移出，在 `CLAUDE.md`、`scripts/link-skills.sh`、分桶 README 以及依赖 `in-progress/` 和 `personal/` 的本地开发工作流中产生巨大影响），或者 (b) 将已发布技能的**重复副本**提交到扁平目录（这带来同步负担并成为第二个真相来源）。两者都是结构决策，而不是捆绑到交付 Claude 插件中的内容。这很可能就是插件之前未交付的原始、半记得的原因：清单格式无法干净地表达分桶仓库的精选子集。
 
 ## 决策
 
 * 现在发布 **Claude Code 插件**（`.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`），精选到已发布的技能集，作为 v1.2 的主要交付物。
-* 继续将 **skills.sh** 作为通用安装器——它目前已经服务于 Codex 和其他工具，因此不会有 Codex 用户缺少安装途径。
+* 将 **skills.sh** 保留为通用安装程序：它今天已经服务于 Codex 和其他工具，因此没有 Codex 用户会缺少安装路径。
 * **暂缓**原生 Codex 插件，直到我们决定是将 `skills/` 重构为仅含已发布技能，还是提交一份生成的扁平副本。当 Codex 支持 `skills` 数组/包含列表，或在安装时保留符号链接时，再重新评估。
 
 ## 由此产生的不变项
 
 * 每个已发布的技能都必须在 `.claude-plugin/plugin.json` 的 `skills` 数组中有一条记录（这原本已是 `CLAUDE.md` 中的规则；现在它同样决定插件的内容）。
-* `.claude-plugin/plugin.json` 的 `version` 与 `package.json` 的版本保持一致——发布时两者需同步升级。Claude 使用插件的 `version` 来决定已安装用户何时看到更新。
+* `.claude-plugin/plugin.json` 的 `version` 跟踪 `package.json` 的版本：发布时同时提升两者。Claude 使用插件 `version` 来决定安装的用户何时看到更新。
 
 ## 更新于 2026-08-05
 
-`mattpocock-skills` 已被收录进 **Claude Code 官方市场**——配置名为 `claude-plugins-official`，源仓库为 `anthropics/claude-plugins-official`——这是每个 Claude Code 安装默认自带的市场。现在，`claude plugins install mattpocock-skills` 是文档记录的安装方式，上述 `marketplace add` → `install` 路径已被取代。安装说明见 [.agents/install-block.md](../install-block.md)。
+`mattpocock-skills` 已被接受进入 **Claude Code 的官方市场**（配置名称 `claude-plugins-official`，源仓库 `anthropics/claude-plugins-official`），每个 Claude Code 安装默认都包含该市场。`claude plugins install mattpocock-skills` 现在是文档化的安装路径，上述 `marketplace add` → `install` 路径已被取代。安装说明位于 [.agents/install-block.md](../install-block.md)。
 
 官方列表指向本仓库的 git URL，并直接读取 `.claude-plugin/plugin.json`，因此它不依赖 `.claude-plugin/marketplace.json`。该文件仅保留作为直接安装仓库（未发布的提交或 fork）时的后备方案。
 
@@ -37,5 +37,5 @@
 
 * `claude plugins install mattpocock-skills` 无需先添加市场即可解析，并显示 `mattpocock-skills@claude-plugins-official`。
 * 随后 `claude plugin details mattpocock-skills` 显示版本 1.2.0，并加载已发布的技能。
-* 列表的 `source` 为 `{"source": "url", "url": "https://github.com/mattpocock/skills.git", "sha": …}` —— **sha 被固定**，因此发布会在该固定值移动时到达已安装用户，而不是在我们打标签时。撰写本文时，该固定值落后 `main` 两个提交，这正是它列出 22 个技能而非 `plugin.json` 中 24 个技能的原因。
-* 会话内的 `/plugin install mattpocock-skills` **未**实际执行——在无头（`claude -p`）会话中无法使用 `/plugin`。它运行与 CLI 相同的解析器，文档中的示例形式为 `/plugin install <name>@claude-plugins-official`。
+* 列表的 `source` 是 `{"source": "url", "url": "https://github.com/mattpocock/skills.git", "sha": …}`：**sha 被固定**，因此发布会在该 pin 移动时触达已安装的用户，而不是我们打标签的那一刻。在撰写本文时，pin 位于 `main` 两个提交之后，这就是它列出 22 个技能而不是 `plugin.json` 中的 24 个的原因。
+* 会话中的 `/plugin install mattpocock-skills` **未被执行**：`/plugin` 在无头（`claude -p`）会话中不可用。它运行与 CLI 相同的解析器，文档化的示例形式是 `/plugin install <name>@claude-plugins-official`。
