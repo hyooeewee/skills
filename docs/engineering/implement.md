@@ -6,7 +6,7 @@
 
 ## 何时使用它
 
-你通过输入 `/implement` 来调用它——代理不会自己主动使用它。它自带 `disable-model-invocation: true`，所以其他技能也无法调用它。无论 [ask-matt](https://aihero.dev/skills-ask-matt) 还是 [to-tickets](https://aihero.dev/skills-to-tickets) 在哪里说"然后按工单 `/implement`"，那都是给你的指令，而不是代理会未经提示就去做的事。
+你需要自己输入 `/implement` 来调用它：代理不会主动去调用它。它默认设置了 `disable-model-invocation: true`，所以其他技能也无法调用它。无论 `[ask-matt](https://aihero.dev/skills-ask-matt)` 还是 `[to-tickets](https://www.aihero.dev/skills-to-tickets)` 提到"按工单执行 `/implement`"，那都是给你的指令，而不是代理会自发做的事情。
 
 工作目前所处的位置决定了是否该选用这个技能：
 

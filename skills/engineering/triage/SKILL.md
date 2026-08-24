@@ -1,6 +1,6 @@
 ---
 name: triage
-description: 将 issue 和外部 PR 通过一个分流角色的状态机进行流转 — 分类、验证、必要时追问，并编写可供 agent 直接使用的简报。
+description: 将 issue 和外部 PR 通过分流角色状态机进行流转，进行分类、验证，如有需要则进行追问，并编写 agent 可用的简报。
 disable-model-invocation: true
 
 ---
@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 将项目 issue 跟踪器上的 issue 通过一个简单的分流角色状态机进行流转。
 
-如果此仓库将外部拉取请求视为请求面（参见 issue-tracker 配置），分流同样适用于它们：**PR 就是附带代码的 issue** — 相同的角色、相同的状态、相同的状态机，下面有几处标记为“for a PR”的差异。根据跟踪器配置将裸 `#42` 解析为 issue 或 PR。
+如果此仓库将外部拉取请求视为请求面（参见 issue 跟踪器配置），分流也会覆盖它们：**一个 PR 是一个带有代码的 issue**，使用相同的角色、相同的状态和相同的机器，下面有几个标记为“用于 PR”的细节。根据跟踪器配置解析裸编号 `#42` 为 issue 或 PR。
 
 在分流期间发布到 issue 跟踪器的每条评论或 issue **必须**以下面这条免责声明开头：
 
@@ -19,31 +19,31 @@ disable-model-invocation: true
 
 ## 参考文档
 
-* [AGENT-BRIEF.md](AGENT-BRIEF.md) — 如何编写可长期使用的 agent 简报
-* [OUT-OF-SCOPE.md](OUT-OF-SCOPE.md) — `.out-of-scope/` 知识库的工作原理
+* [AGENT-BRIEF.md](AGENT-BRIEF.md)：如何编写持久的 agent 简报
+* [OUT-OF-SCOPE.md](OUT-OF-SCOPE.md)：`.out-of-scope/` 知识库如何工作
 
 ## 角色
 
 两种**类别**角色：
 
-* `bug` — 有东西坏了
-* `enhancement` — 新功能或改进
+* `bug`：某事坏了
+* `enhancement`：新功能或改进
 
 五种**状态**角色：
 
-* `needs-triage` — 需要维护者评估
-* `needs-info` — 等待报告者提供更多信息
-* `ready-for-agent` — 已经完全明确，可供 AFK agent 接手
-* `ready-for-human` — 需要人工实施
-* `wontfix` — 将不会处理
+* `needs-triage`：维护者需要评估
+* `needs-info`：等待报告者提供更多信息
+* `ready-for-agent`：完全指定，准备好由 AFK agent 接手
+* `ready-for-human`：需要人工实现
+* `wontfix`：不会被处理
 
 对于 PR，相同的状态对照附加的代码来解读：`ready-for-agent` 意味着已附加简报，agent 应对 diff 采取下一步行动；`ready-for-human` 意味着已准备好由人工合并。
 
 每个经过分流的 issue 都应恰好带有一个类别角色和一个状态角色。如果状态角色冲突，请标记出来并先询问维护者，再做任何其他事情。
 
-这些是规范的角色名称 — issue 跟踪器中实际使用的标签字符串可能有所不同。映射应该已经提供给你。如果没有，请告诉用户运行 `/setup-matt-pocock-skills`。
+这些是规范的名称。跟踪器中使用的实际标签字符串可能不同。映射应该已经提供给你了。如果没有，请告诉用户运行 `/setup-matt-pocock-skills`。
 
-状态转换：未标记的 issue 通常先进入 `needs-triage`；然后移动到 `needs-info`、`ready-for-agent`、`ready-for-human` 或 `wontfix`。一旦报告者回复，`needs-info` 回到 `needs-triage`。维护者可以随时覆盖 — 标记看起来不寻常的转换，并在继续之前询问。
+状态转换：未标记的 issue 通常首先进入 `needs-triage`；从那里它移动到 `needs-info`、`ready-for-agent`、`ready-for-human` 或 `wontfix`。一旦报告者回复，`needs-info` 会返回到 `needs-triage`。维护者可以随时覆盖；标记看起来不寻常的转换并在继续前询问。
 
 ## 调用
 
@@ -58,33 +58,33 @@ disable-model-invocation: true
 
 查询 issue 跟踪器并呈现三个分组，按时间最早的在前：
 
-1. **未标记** — 从未分流过。
-2. **`needs-triage`** — 正在评估中。
-3. **`needs-info` 且报告者在最近一次分流备注后有活动** — 需要重新评估。
+1. **Unlabeled**：从未分流。
+2. **`needs-triage`**：评估进行中。
+3. **`needs-info` 且自上次分流备注以来报告者有活动**：需要重新评估。
 
-当 PR 在范围内时，将外部 PR 包含在这些分组中，并为每一行标记 `[PR]` 或 `[issue]`。发现功能仅展示*外部* PR（跟踪器配置定义了谁算外部）— 协作者正在进行的 PR 不属于分流工作。此过滤仅用于发现；显式提及的 PR 无论作者是谁，始终会被分流。
+当 PR 在范围内时，将这些分组中的外部 PR 包含在内，并标记每行 `[PR]` 或 `[issue]`。发现列表仅显示 *外部* PR（跟踪器配置定义谁算作外部），因此协作者进行中的 PR 不是分流工作。此过滤器仅用于发现；明确命名的 PR 总是会被分流，无论作者是谁。
 
 显示数量以及每个条目的单行摘要。让维护者选择。
 
 ## 对特定的 issue 或 PR 进行分流
 
-1. **收集背景信息。** 阅读完整的 issue 或 PR（正文、评论、标签、作者、日期；对于 PR，还包括 diff）。解析任何先前的分流备注，以免重复询问已解决的问题。使用项目的领域词汇表探索代码库，并尊重该区域的 ADR。对代码库执行两项检查：(a) **冗余** — 按领域概念（而不仅仅是请求的措辞）搜索请求的行为是否已有实现，并报告你查看过的地方。如果找到，则属于已实现的 `wontfix`（第 5 步）。 (b) **先前拒绝** — 阅读 `.out-of-scope/*.md`，并指出任何与此请求相似的内容。
+1. **收集上下文。** 阅读完整的 issue 或 PR（正文、评论、标签、作者、日期；对于 PR，还包括 diff）。解析任何先前的分流备注，以免你重复询问已解决的问题。使用项目的领域词汇表探索代码库，并尊重该区域的 ADR。对代码库运行两次检查：(a) **冗余性**：通过领域概念（而不仅仅是请求的措辞）搜索所请求行为的现有实现，并报告你查看的位置。如果找到，它是一个已实现的 `wontfix`（步骤 5）。(b) **先前的拒绝**：读取 `.out-of-scope/*.md` 并找出任何与此请求相似的内容。
 
-2. **给出建议。** 告诉维护者你的类别和状态建议，并附上理由，以及与该请求相关的简要代码库摘要 — 包括它是否已经实现。等待指示。
+2. **推荐。** 向维护者说明你的类别和状态推荐及理由，加上与请求相关的简短代码库摘要（包括是否已实现）。等待指示。
 
-3. **验证声明。** 在进行任何追问之前，检查声明是否成立。对于 bug，按照报告者的步骤复现。对于 PR，确认 diff 确实如其所述 — 将其检出，运行相关的测试或命令。报告结果：已确认（附代码路径）、失败，或细节不足（这是强烈的 `needs-info` 信号）。经过确认的验证会让 agent 简报有力得多。
+3. **验证声明。** 在任何追问之前，检查声明是否成立。对于 bug，从报告者的步骤中复现它。对于 PR，确认 diff 做它声称的事情：检出它，运行相关的测试或命令。报告发生了什么：已确认（附带代码路径）、失败，或细节不足（强烈的 `needs-info` 信号）。确认的验证会使 agent 简报强得多。
 
-4. **追问（如有必要）。** 如果请求需要进一步充实，请调用 Skill 工具两次，分别用于“grilling”和“domain-modeling” — 一轮一轮地通过提问将其打磨成形，逐步明确领域术语，并在决策落定时内联更新 `CONTEXT.md`/ADR。
+4. **追问（如需要）。** 如果请求需要充实，调用 Skill 工具两次，分别用于“grilling”和“domain-modeling”，并一次一轮问题将其追问成形，完善领域术语并在决策落地时内联更新 `CONTEXT.md`/ADRs。
 
 5. **应用结果：**
-   * `ready-for-agent` — 发布一条 agent 简报评论（[AGENT-BRIEF.md](AGENT-BRIEF.md)）。
-   * `ready-for-human` — 结构与 agent 简报相同，但需注明为何无法委派（需要人为判断、外部访问、设计决策、手动测试）。
-   * `needs-info` — 发布分流备注（模板如下）。
-   * `wontfix` — 关闭，评论内容取决于*原因*：
-     * **已实现** — 该变更已存在于代码库中。指出其所在位置；**不要**写入 `.out-of-scope/`（该知识库用于*被拒绝*的请求，而非已构建的请求）。
-     * **被拒绝（bug）** — 礼貌解释，然后关闭。
-     * **被拒绝（enhancement）** — 写入 `.out-of-scope/`，在评论中链接到它，然后关闭（[OUT-OF-SCOPE.md](OUT-OF-SCOPE.md)）。
-   * `needs-triage` — 应用该角色。如果有部分进展，可选择性添加评论。
+   * `ready-for-agent`：发布 agent 简报评论（[AGENT-BRIEF.md](AGENT-BRIEF.md)）。
+   * `ready-for-human`：与 agent 简报结构相同，但注明为什么不能委派（判断决策、外部访问、设计决策、手动测试）。
+   * `needs-info`：发布分流备注（模板如下）。
+   * 对于 `wontfix`，关闭 issue，评论取决于 *原因*：
+     * **已实现**：更改已存在于代码库中。指出它所在的位置；不要写入 `.out-of-scope/`（该 KB 用于 *被拒绝* 的请求，而非已构建的请求）。
+     * **拒绝 (bug)**：给出礼貌的解释，然后关闭。
+     * **拒绝 (enhancement)**：写入 `.out-of-scope/`，从评论中链接到它，然后关闭（[OUT-OF-SCOPE.md](OUT-OF-SCOPE.md)）。
+   * `needs-triage`：应用角色。如果有部分进展，可选评论。
 
 ## 快速状态覆盖
 

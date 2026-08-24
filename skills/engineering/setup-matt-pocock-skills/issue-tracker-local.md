@@ -6,7 +6,7 @@
 
 * 每个功能一个目录：`.scratch/<feature-slug>/`
 * 规格说明文件为 `.scratch/<feature-slug>/spec.md`
-* 实现 issue 按每个工单一个文件存放于 `.scratch/<feature-slug>/issues/<NN>-<slug>.md`，编号从 `01` 开始——永远不要使用单一的合并工单文件。
+* 实现问题每个工单一个文件，位于 `.scratch/<feature-slug>/issues/<NN>-<slug>.md`，编号从 `01` 开始，绝不使用单个合并的工单文件
 * Triage 状态以 `Status:` 行记录在每个 issue 文件顶部附近（角色字符串参见 `triage-labels.md`）。
 * 评论和对话历史追加到文件末尾的 `## Comments` 标题下。
 
@@ -22,7 +22,7 @@
 
 由 `/wayfinder` 使用。**map** 是一个文件，每个工单对应一个 **child** 文件。
 
-* **Map**：`.scratch/<effort>/map.md` — 即 Notes / Decisions-so-far / Fog 正文。
+* **Map**: `.scratch/<effort>/map.md`（Notes / Decisions-so-far / 迷雾正文）
 * **Child ticket**：`.scratch/<effort>/issues/NN-<slug>.md`，编号从 `01` 开始，问题写在正文中。`Type:` 行记录工单类型（`research`/`prototype`/`grilling`/`task`）；`Status:` 行记录 `claimed`/`resolved`。
 * **Blocking**：顶部附近的 `Blocked by: NN, NN` 行。当某个工单列出的所有文件均为 `resolved` 时，该工单解除阻塞。
 * **Frontier**：扫描 `.scratch/<effort>/issues/`，查找打开、未阻塞且未被认领的文件；编号最小者优先。

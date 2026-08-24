@@ -1,8 +1,8 @@
 ---
 name: wait-what
-description: 停下。上一条消息没有达到预期——重新表达一下。
+description: 停。上一条消息没有送达：请重新表述一下。
 disable-model-invocation: true
 
 ---
 
-等等——我不明白你在这里讲到哪一步了。重新表达一下：给我一点背景信息，用 ASD-STE100 简化技术英语交谈，并使用 `CONTEXT.md` 中的通用语言。
+等等，我不明白你现在的进展。请重新表述一下：给我一点上下文，使用 ASD-STE100 简化技术英语，并使用 `CONTEXT.md` 中的通用语言（如果仓库中有多个上下文，请遵循 `CONTEXT-MAP.md` 指向正确的那个）。

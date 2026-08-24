@@ -22,7 +22,7 @@
 
 正文复用了你的全局 `CLAUDE.md` 和项目 `CONTEXT.md` 中已有的引导词。ASD-STE100 简化技术英语设定了语域。通用语言提供了名词。该技能、`CLAUDE.md` 和 `CONTEXT.md` 使用的是相同的 [tokens](https://www.aihero.dev/ai-coding-dictionary/token)，因此调用它并不是一条新指令，而是对 agent 已经同意的一条指令的提醒。
 
-如果你没有 `CONTEXT.md`，该技能仍然有效。你只是失去了领域词汇那一半。
+如果你没有 `CONTEXT.md`（也没有 `CONTEXT-MAP.md` 指向当前上下文），该技能仍然有效。你只是失去了领域词汇这一半。
 
 ## 如果它起作用了
 

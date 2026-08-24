@@ -1,11 +1,13 @@
 ---
 name: to-spec
-description: 将当前对话转化为一份规格说明，并发布到项目议题跟踪器——不进行访谈，仅综合你们已经讨论过的内容。
+description: "Turn the current conversation into a spec and publish it to the
+  project issue tracker: no interview, just synthesis of what you've already
+  discussed."
 disable-model-invocation: true
 
 ---
 
-此技能获取当前对话上下文和对代码库的理解，并生成一份规格说明。不要对用户进行访谈——只需综合你已经掌握的信息。
+This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
 
 你的问题跟踪器和分流标签词汇表应该已经提供给你。如果没有，请告诉用户运行 `/setup-matt-pocock-skills`。
 
@@ -55,7 +57,7 @@ disable-model-invocation: true
 
 不要包含具体的文件路径或代码片段。它们可能很快就会过时。
 
-Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it within the relevant decision and note briefly that it came from a prototype. Trim to the decision-rich parts — not a working demo, just the important bits.
+Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it within the relevant decision and note briefly that it came from a prototype. Trim to the decision-rich parts, not a working demo, just the important bits.
 
 ## 测试决策
 

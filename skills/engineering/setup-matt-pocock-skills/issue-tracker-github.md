@@ -11,7 +11,7 @@
 * **添加 / 移除标签**：`gh issue edit <number> --add-label "..."` / `--remove-label "..."`
 * **关闭**：`gh issue close <number> --comment "..."`
 
-从 `git remote -v` 推断仓库——在克隆内运行时，`gh` 会自动完成。
+从 `git remote -v` 推断仓库；当在克隆目录中运行时，`gh` 会自动完成此操作。
 
 ## 将 Pull Request 作为分流入口
 
@@ -23,7 +23,7 @@
 * **列出外部 PR 用于分流**：`gh pr list --state open --json number,title,body,labels,author,authorAssociation,comments`，然后只保留 `authorAssociation` 为 `CONTRIBUTOR`、`FIRST_TIME_CONTRIBUTOR` 或 `NONE` 的（去掉 `OWNER`/`MEMBER`/`COLLABORATOR`）。
 * **评论 / 标签 / 关闭**：`gh pr comment`、`gh pr edit --add-label`/`--remove-label`、`gh pr close`。
 
-GitHub 在 Issue 和 PR 之间共享同一编号空间，因此单独的 `#42` 可能是其中之一——用 `gh pr view 42` 解析，若不存在则回退到 `gh issue view 42`。
+GitHub 在 Issue 和 PR 之间共享同一个编号空间，因此单独的 `#42` 可能指向 Issue 也可能指向 PR：请先用 `gh pr view 42` 尝试解析，如果不行再回退到 `gh issue view 42`。
 
 ## 当某个技能说“发布到 issue tracker”时
 
@@ -39,7 +39,7 @@ GitHub 在 Issue 和 PR 之间共享同一编号空间，因此单独的 `#42` �
 
 * **地图**：一个标记为 `wayfinder:map` 的 Issue，承载 Notes / Decisions-so-far / Fog 正文。`gh issue create --label wayfinder:map`。
 * **子工单**：作为 GitHub 子 Issue 链接到地图的 Issue（使用 sub-issues 端点上的 `gh api`）。如果未启用子 Issue，则将子项添加到地图正文的任务列表中，并在子工单正文顶部放置 `Part of #<map>`。标签：`wayfinder:<type>`（`research`/`prototype`/`grilling`/`task`）。一旦被认领，工单将分配给负责的开发者。
-* **阻塞**：GitHub 的**原生 Issue 依赖**——规范的、UI 可见的表示。使用 `gh api --method POST repos/<owner>/<repo>/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>` 添加一条边，其中 `<blocker-db-id>` 是阻塞者的数字**数据库 ID**（`gh api repos/<owner>/<repo>/issues/<n> --jq .id`，*不是* `#number` 或 `node_id`）。GitHub 报告 `issue_dependencies_summary.blocked_by`（仅开放阻塞者——实时门禁）。如果依赖不可用，则回退到在子工单正文顶部添加 `Blocked by: #<n>, #<n>` 一行。当所有阻塞者都关闭时，工单解除阻塞。
+* **Blocking**：GitHub 的 **原生 issue 依赖**，即标准化的、UI 可见的表示形式。使用 `gh api --method POST repos/<owner>/<repo>/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>` 添加一条边，其中 `<blocker-db-id>` 是阻塞者的数字 **数据库 ID**（通过 `gh api repos/<owner>/<repo>/issues/<n> --jq .id` 获取，*不是* `#number` 或 `node_id`）。GitHub 会报告 `issue_dependencies_summary.blocked_by`（仅限开放阻塞者，即实时门控）。当依赖不可用时，回退到子正文顶部的 `Blocked by: #<n>, #<n>` 行。当所有阻塞者都被关闭时，工单即被解阻塞。
 * **前沿查询**：列出地图的开放子项（`gh issue list --state open`，范围限定在地图的子 Issue / 任务列表中），丢弃任何带有开放阻塞者（`issue_dependencies_summary.blocked_by > 0`，或 `Blocked by` 行中的开放 Issue）或已被指派人的子项；按地图顺序第一个获胜。
-* **认领**：`gh issue edit <n> --add-assignee @me`——会话的第一次写入。
+* **Claim**：`gh issue edit <n> --add-assignee @me`，这是会话中的首次写入。
 * **解决**：`gh issue comment <n> --body "<answer>"`，然后 `gh issue close <n>`，接着将上下文指针（gist + 链接）追加到地图的 Decisions-so-far。

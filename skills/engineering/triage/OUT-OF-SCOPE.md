@@ -2,8 +2,8 @@
 
 仓库中的 `.out-of-scope/` 目录用于持久保存被拒绝的功能请求记录。它有两个用途：
 
-1. **组织记忆**——记录功能被拒绝的原因，以便在 issue 关闭后，其理由不会丢失
-2. **去重**——当新 issue 与先前的拒绝相匹配时，技能可以呈现先前的决定，而无需重新讨论
+1. **机构记忆**：为什么拒绝某个功能，这样在关闭 issue 时不会丢失理由
+2. **去重**：当出现一个与新拒绝相匹配的新 issue 时，技能可以展示之前的决定，而不是重新辩论
 
 ## 目录结构
 
@@ -18,7 +18,7 @@
 
 ## 文件格式
 
-文件应以轻松、可读的风格编写——更像一份简短的设计文档，而非数据库条目。使用段落、代码示例和实例，使推理对首次遇到的人清晰且有用。
+文件应以轻松、可读的风格编写，更像是简短的设计文档而不是数据库条目。使用段落、代码示例和实例来使推理过程清晰，并对首次遇到它的人有用。
 
 ````markdown
 # Dark Mode
@@ -48,9 +48,9 @@ interface ThemeConfig {
 
 ## 先前的请求
 
-* \#42 — “添加深色模式支持”
-* \#87 — “无障碍夜间主题”
-* \#134 — “深色主题选项”
+* \#42："添加暗黑模式支持"
+* \#87："夜间主题，用于无障碍访问"
+* \#134："暗黑主题选项"
 
 ```
 
@@ -60,31 +60,31 @@ Use a short, descriptive kebab-case name for the concept: `dark-mode.md`, `plugi
 
 ### Writing the reason
 
-The reason should be substantive — not "we don't want this" but why. Good reasons reference:
+The reason should be substantive: not "we don't want this" but why. Good reasons reference:
 
 - Project scope or philosophy ("This project focuses on X; theming is a downstream concern")
 - Technical constraints ("Supporting this would require Y, which conflicts with our Z architecture")
 - Strategic decisions ("We chose to use A instead of B because...")
 
-The reason should be durable. Avoid referencing temporary circumstances ("we're too busy right now") — those aren't real rejections, they're deferrals.
+The reason should be durable. Avoid referencing temporary circumstances ("we're too busy right now"); those aren't real rejections, they're deferrals.
 
 ## When to check `.out-of-scope/`
 
 During triage (Step 1: Gather context), read all files in `.out-of-scope/`. When evaluating a new issue:
 
 - Check if the request matches an existing out-of-scope concept
-- Matching is by concept similarity, not keyword — "night theme" matches `dark-mode.md`
-- If there's a match, surface it to the maintainer: "This is similar to `.out-of-scope/dark-mode.md` — we rejected this before because [reason]. Do you still feel the same way?"
+- Matching is by concept similarity, not keyword: "night theme" matches `dark-mode.md`
+- If there's a match, surface it to the maintainer: "This is similar to `.out-of-scope/dark-mode.md`. We rejected this before because [reason]. Do you still feel the same way?"
 
 The maintainer may:
 
-- **Confirm** — the new issue gets added to the existing file's "Prior requests" list, then closed
-- **Reconsider** — the out-of-scope file gets deleted or updated, and the issue proceeds through normal triage
-- **Disagree** — the issues are related but distinct, proceed with normal triage
+- **Confirm**: the new issue gets added to the existing file's "Prior requests" list, then closed
+- **Reconsider**: the out-of-scope file gets deleted or updated, and the issue proceeds through normal triage
+- **Disagree**: the issues are related but distinct, proceed with normal triage
 
 ## When to write to `.out-of-scope/`
 
-Only when an **enhancement** (not a bug) is *rejected* as `wontfix`. This applies to enhancement PRs exactly as it does to issues — a rejected PR is recorded here so the same request doesn't return as fresh code.
+Only when an **enhancement** (not a bug) is *rejected* as `wontfix`. This applies to enhancement PRs exactly as it does to issues: a rejected PR is recorded here so the same request doesn't return as fresh code.
 
 Do **not** write here when something is closed as `wontfix` because it's **already implemented**. That's a built feature, not a rejected one; recording it would poison the dedup checks with false rejections. Instead, the closing comment points to where the feature already lives.
 
@@ -102,6 +102,6 @@ The flow:
 If the maintainer changes their mind about a previously rejected concept:
 
 - Delete the `.out-of-scope/` file
-- The skill does not need to reopen old issues — they're historical records
+- The skill does not need to reopen old issues; they're historical records
 - The new issue that triggered the reconsideration proceeds through normal triage
 ```
