@@ -4,7 +4,7 @@
 
 `mattpocock-skills` 列在 **Claude Code 的官方市场**（配置名称为 `claude-plugins-official`，源仓库为 `anthropics/claude-plugins-official`）中，这是所有 Claude Code 安装都自带的。无需先添加市场。官方 Anthropic 市场默认启用自动更新（[discover-plugins](https://code.claude.com/docs/en/discover-plugins)），因此“更新会自动到达”是确凿的陈述，而非一种希望。
 
-## Claude Code: the plugin
+## Claude Code：插件
 
 <canonical-block name="claude-code">
 
@@ -22,7 +22,7 @@ claude plugins install mattpocock-skills
 
 </canonical-block>
 
-## Codex, and other agents: skills.sh
+## Codex，以及其他代理：skills.sh
 
 该插件仅适用于 Claude Code。在其他所有地方，[skills.sh](https://skills.sh/mattpocock/skills) 会将可编辑的技能文件复制到项目中。在 `README.md` 上使用整套形式：
 

@@ -18,7 +18,7 @@ disable-model-invocation: true
 
 ### 1. 探索
 
-**Scope before you scan: YAGNI.** Deepening a module pays off by making future changes to it easier, so put extra weight on the parts of the codebase that have recently changed. Decide *where* to look before you look:
+扫描前的范围：YAGNI。深化模块之所以值得，是因为它能让未来的变更变得更容易，因此请重点关注最近发生变化的代码库部分。在查看之前，决定 *去哪里* 查看：
 
 * 如果用户指定了方向（一个模块、一个子系统、一个痛点），就采纳它，并跳过下面的推断。
 * 否则，回溯一段不错的提交历史（`git log --oneline`）以找到代码库的热点，即反复出现的文件和区域，并让这些路径首先吸引你的注意。如果变化分散且没有明显的热点，就扩大搜索范围。

@@ -2,7 +2,7 @@
 
 `codebase-design` 界定了你设计模块时所用的词汇：**module**（模块）、**interface**（接口）、**depth**（深度）、**seam**（接缝）、**adapter**（适配器）、**leverage**（杠杆）、**locality**（局部性）。它精确地定义每一个词，禁用松散的替代词（“component”、“service”、“API”、“boundary”），并阐明由它们得出的那几条原则。
 
-It is a reference, not a process. There is no loop to run, no artifact it produces, no checkpoint where it asks you a question. Every other skill that touches design borrows its vocabulary; on its own it gives you the language and stops. That is the thing to know before you invoke it, because a skill with no process and no stopping rule will improvise one if you point a [会话](https://www.aihero.dev/ai-coding-dictionary/session) at it and say "go." See the questions below for what that looks like in practice.
+它是一个参考，而不是一个流程。没有循环可运行，没有它产生的工件，也没有它会问你问题的检查点。其他所有涉及设计的技能都借用它的词汇；单独来看，它给了你语言然后停止。这就是在你调用它之前要知道的事情，因为如果一个技能没有流程也没有停止规则，当你把 [session](https://www.aihero.dev/ai-coding-dictionary/session) 指向它并说“go”时，它会即兴创作出一个流程。请看下面的常见问题，看看这在实践中是什么样子。
 
 ## 何时使用它
 
