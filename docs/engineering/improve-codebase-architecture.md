@@ -10,7 +10,7 @@
 
 你通过输入 `/improve-codebase-architecture` 来调用它；[代理](https://www.aihero.dev/ai-coding-dictionary/agent)不会自行使用它。
 
-It sits outside the build loop: it is not a step in the main loop but something you run periodically to queue up more work to improve the codebase. The four situations it gets used in:
+它位于构建循环之外：它不是主循环中的一个步骤，而是一种你定期运行以排队更多工作来改进代码库的操作。它被使用的四种情况：
 
 | 情况     | 如何使用                                                                                                          |
 | ------ | ------------------------------------------------------------------------------------------------------------- |
@@ -89,11 +89,11 @@ It sits outside the build loop: it is not a step in the main loop but something 
 
 ## 如果它起作用了
 
-* The candidates name your domain's concepts, not invented class names: "the Order intake module," not "the FooBarHandler."
+* 候选者使用你的领域概念命名，而不是编造的类名：“订单录入模块”，而不是“FooBarHandler”。
 * 候选者集中在最近编辑过的文件中，而不是仓库中沉寂的角落。
 * 运行期间没有任何代码被改动。唯一的新文件就是临时目录中的 HTML 报告。
 * 它会在报告后停下来，询问你想要哪个候选，而不是自行继续。
-* Each card explains the payoff as locality or leverage, and says which tests get simpler, not just "this is cleaner."
+* 每张卡片都解释收益是局部性还是杠杆作用，并指出哪些测试会变得更简单，而不仅仅是“这更整洁”。
 * 如果因为一个持续有效的理由拒绝了某个候选，你会得到一个记录 ADR 的提议，这样下次运行就不会再推荐它。
 
 ## 它在系统中的位置

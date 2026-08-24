@@ -24,7 +24,7 @@
 
 地图及其工单存放在仓库的 issue 跟踪器上，因此 wayfinder 需要 [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) 铺设的跟踪器接线。该步骤会写入一个“Wayfinding operations”部分，描述地图、其子工单、阻塞边以及前沿查询在 GitHub、GitLab 或本地 markdown 中如何表达。wayfinder 通过你 `CLAUDE.md` / `AGENTS.md` 中的指针而不是固定路径来解析该文档；如果完全没有配置跟踪器，它会回退到本地 markdown 文件。
 
-The tracker is not decoration. Blocking is what renders the frontier visually in the tracker's own UI, and a tracker without native dependency links (a self-hosted Gitea, say) degrades wayfinder to inferring blockers from the map text, which works but needs closer supervision.
+跟踪器不是装饰品。阻塞正是跟踪器自身 UI 中以视觉方式呈现前沿的原因，而一个没有原生依赖链接（例如自托管的 Gitea）的跟踪器会将 wayfinder 降级为从地图文本推断阻塞项，这虽然可行，但需要更密切的监督。
 
 ## 地图、迷雾与前沿
 

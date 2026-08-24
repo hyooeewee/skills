@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # # 转为票据
 
-Break a plan, spec, or conversation into a set of **工单**: tracer-bullet vertical slices, each declaring the tickets that **块** it.
+将计划、规格或当前对话拆分为一组**票据**：曳光弹式的垂直切片，每张声明其**阻塞**的其他票据。
 
 你的问题跟踪器和分流标签词汇表应该已经提供给你。如果没有，请告诉用户运行 `/setup-matt-pocock-skills`。
 

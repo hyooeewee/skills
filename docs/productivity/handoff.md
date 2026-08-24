@@ -6,7 +6,7 @@
 
 ## 何时使用它
 
-You invoke this by typing `/handoff`; the agent won't reach for it on its own. Pass a note about what the next session is for, and the document is written for it.
+你通过输入 `/handoff` 来调用它；agent 不会自行决定使用它。传递一条关于下一个 session 用途的便条，文档就会据此生成。
 
 四种情况构成了全部触发条件：
 

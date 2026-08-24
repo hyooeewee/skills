@@ -1,98 +1,98 @@
-## What it does
+## 它做什么
 
-`wizard` generates an interactive bash script that walks a human, step by step, through a manual procedure: wiring up third-party services, running a one-off migration, moving a project from state A to state B. It opens each URL, says what to click and copy, captures what comes back, and writes it into `.env` files and GitHub Actions secrets.
+`wizard` 生成一个交互式 bash 脚本，一步步引导人类完成手动流程：连接第三方服务、运行一次性迁移、将项目从状态 A 移动到状态 B。它会打开每个 URL，告诉你点击和复制什么，捕获返回的内容，并将其写入 `.env` 文件和 GitHub Actions 密钥中。
 
-The [agent](https://www.aihero.dev/ai-coding-dictionary/agent) writes the script; it never runs it. You do, on your own machine. So a wizard is not a list of instructions you follow; it is a program that drives the procedure and holds the state, and your part is to click, paste, and press Enter.
+[agent](https://www.aihero.dev/ai-coding-dictionary/agent) 负责编写脚本；它从不运行。你在自己的机器上运行。因此，wizard 不是你遵循的指令列表；它是一个驱动流程并保存状态的程序，你的部分工作就是点击、粘贴并按 Enter 键。
 
-## When to reach for it
+## 何时使用它
 
-You can type `/wizard`, and the agent can also reach for it on its own. When it hits a step you have to take (a key it can't mint, a dashboard it can't click), it builds you a wizard instead of writing the instructions into the chat, where they scroll away.
+你可以输入 `/wizard`，agent 也可以主动调用它。当它遇到你必须执行的一步（它无法生成的密钥、无法点击的仪表盘）时，它会为你构建一个 wizard，而不是将指令写入聊天中，因为那些指令会被滚走。
 
-Reach for it when the next thing blocking you is a trip through a dashboard:
+当挡在你面前的下一步是穿越仪表盘时，就使用它：
 
-| Situation | What the wizard does |
-| --- | --- |
-| A new dev needs six services configured before the app boots | Opens each dashboard in order, captures the keys, writes them to `.env` and CI |
-| A one-off migration needs switches flipped in a specific order | Sequences the irreversible steps behind confirmation gates |
-| A project has to move from state A to state B once | Walks the transition and reports what it could not do |
-| You are about to write those steps into a README | Writes an executable version instead, which can't rot as quietly |
+| 情况                  | wizard 会做什么                        |
+| ------------------- | ---------------------------------- |
+| 新开发人员需要在应用启动前配置六项服务 | 按顺序打开每个仪表盘，捕获密钥，并将它们写入 `.env`以及 CI |
+| 一次性迁移需要按特定顺序拨动开关    | 将不可逆的步骤排列在确认门之后                    |
+| 项目必须一次性从状态 A 移到状态 B | 引导转换过程，并报告它无法完成的部分                 |
+| 你正打算把这些步骤写进 README  | 改而编写一个可执行版本，它无法悄无声息地腐坏。            |
 
-Don't reach for it to *decide* what to build; for that, [grill-with-docs](https://aihero.dev/skills-grill-with-docs) and [to-spec](https://aihero.dev/skills-to-spec) are the tools.
+不要用它来*决定*要构建什么；那是 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) 和 [to-spec](https://aihero.dev/skills-to-spec) 的用武之地。
 
-## Prerequisites
+## 先决条件
 
-None to generate one. The wizard it writes runs on bash, and uses `gh` when a stage sets a GitHub secret or variable. If `gh` is missing or unauthenticated, that stage becomes a warning and the closing summary tells you what to set by hand, instead of failing the run.
+生成一个不需要任何先决条件。它生成的 wizard 在 bash 上运行，当一个阶段设置 GitHub secret 或 variable 时会用到 `gh`。如果 `gh` 缺失或未认证，该阶段会变成警告，收尾摘要会告诉你需要手动设置什么，而不是让运行失败。
 
-## Stages
+## 阶段
 
-A **stage** is one focused task on one screen. The script clears the terminal between stages, so a stage that overflows the screen loses the part that scrolled away. You author stages in dependency order and set `TOTAL_STAGES`, which drives the progress display.
+**阶段（stage）** 是在一个屏幕上完成的一项聚焦任务。脚本会在阶段之间清空终端，因此超出屏幕的阶段会丢失滚走的部分。你按依赖顺序编写阶段，并设置 `TOTAL_STAGES`，它驱动进度显示。
 
-Scoping happens before a line is written. The [skill](https://www.aihero.dev/ai-coding-dictionary/skill) reads the repo instead of asking cold: `.env*`, `docker-compose*`, framework config, and every `secrets.*` / `vars.*` reference in `.github/workflows/`: each of those is a value the wizard has to produce. It then shows you the ordered stage list to confirm, and only after that maps each stage to the exact path a human follows ("Dashboard → Developers → API keys → Reveal test key → copy"). Where it doesn't know the current UI, it asks you or checks the docs rather than inventing clicks.
+范围界定在写入任何一行之前进行。[skill](https://www.aihero.dev/ai-coding-dictionary/skill) 会读取仓库而不是冷启动询问：`.env*`、`docker-compose*`、框架配置，以及 `.github/workflows/` 中所有的 `secrets.*` / `vars.*` 引用：这些中的每一个都是 wizard 必须生成的值。然后它会向你展示有序的阶段列表以供确认，之后才将每个阶段映射到人类实际遵循的确切路径（"仪表盘 → 开发者 → API 密钥 → 显示测试密钥 → 复制"）。在不知道当前 UI 的情况下，它会询问你或查阅文档，而不是臆造点击操作。
 
-For each captured value, scoping settles where it lands:
+对于每个捕获的值，范围界定决定它的去向：
 
-| Destination | When |
-| --- | --- |
-| `.env` only | Local dev needs it, CI doesn't |
-| GitHub secret | CI reads it, and it's sensitive |
-| GitHub variable | CI reads it, and it's public |
-| Both `.env` and a secret | Local dev and CI both need it |
-| Nowhere | The stage is a pure action: a switch flipped, a plan upgraded |
+| 去向                  | 何时                  |
+| ------------------- | ------------------- |
+| `.env`仅             | 本地开发需要它，CI 不需要      |
+| GitHub secret       | CI 会读取它，且它是敏感的      |
+| GitHub variable     | CI 会读取它，且它是公开的      |
+| 同时写入 `.env`和 secret | 本地开发和 CI 都需要它       |
+| 无处                  | 该阶段是一个纯动作：拨动开关、升级计划 |
 
-## The template already solves the UX
+## 模板已经解决了 UX 问题
 
-The [template](https://github.com/mattpocock/skills/blob/main/skills/engineering/wizard/template.sh) ships the whole experience: progress with time remaining, confirmation gates, cross-platform URL opening including WSL, hidden entry for secrets, idempotent `.env` upserts, `gh secret` / `gh variable` writes, and a closing summary of everything it had to skip. Everything above the `STAGES` marker is a fixed library, identical in every wizard and never hand-edited. The consistency is the point. Your job is only to scope the procedure and author its stages.
+[template](https://github.com/mattpocock/skills/blob/main/skills/engineering/wizard/template.sh) 自带完整体验：带剩余时间的进度、确认门、跨平台 URL 打开（包括 WSL）、密钥的隐藏输入、幂等的 `.env` upsert、`gh secret` / `gh variable` 写入，以及一份列出所有不得不跳过内容的收尾摘要。`STAGES` 标记以上的所有内容都是一个固定库，在每个 wizard 中都完全相同，也从不手工编辑。一致性正是关键。你的工作只是界定流程范围并编写各个阶段。
 
-The agent that writes a wizard never runs it end to end, because it opens browsers and waits for human input. It verifies statically instead: `bash -n`, `shellcheck` where available, and a trace that every value lands where scoping said it would, with every `set_secret` name matching a real `secrets.*` reference in CI. Set your expectations accordingly: the first run is yours, and that run is the test.
+编写 wizard 的 agent 不会从头到尾运行它，因为它需要打开浏览器并等待人类输入。它通过静态验证代替：`bash -n`、尽可能使用 `shellcheck`，以及跟踪每个值都落在范围界定所说的位置，确保每个 `set_secret` 名称都与 CI 中真实的 `secrets.*` 引用匹配。相应地调整你的预期：第一次运行是给你的，而那次运行就是测试。
 
-## Ephemeral by default
+## 默认即临时
 
-| What you have | What to do with the script |
-| --- | --- |
-| A one-off migration, a personal setup, a transition you'll never repeat | Save it to a scratch or `scripts/` path, run it, delete it |
-| A setup path the next person on the repo will also need | Commit it and link it from the README, so they run the script instead of re-asking an agent |
+| 你拥有什么                 | 如何处理该脚本                                 |
+| --------------------- | --------------------------------------- |
+| 一次性迁移、个人设置、你永远不会重复的过渡 | 将它保存到一个临时目录或 `scripts/`路径下，运行它，然后删除     |
+| 仓库中下一个人也会需要的设置路径      | 提交它并从 README 中链接它，这样他们运行脚本而不是重新询问 agent |
 
-## Common questions
+## 常见问题
 
-**Do my API keys end up in the model's context?**
+**我的 API 密钥最终会进入模型的上下文（context）吗？**
 
-No. The agent writes a script; it doesn't run it. You run the script yourself, and it captures the key with hidden terminal entry and writes it straight to `.env` or `gh secret`. The wizard is a CLI, and the model is not connected to it. One caveat: that holds for values the wizard captures at runtime. If you paste a key into the chat while scoping the procedure, it's in the [context](https://www.aihero.dev/ai-coding-dictionary/context) like any other pasted text.
+不会。agent 编写脚本；它不运行脚本。你自己运行脚本，它会通过隐藏的终端输入捕获密钥，并直接写入 `.env` 或 `gh secret`。wizard 是一个 CLI，模型与它没有连接。有一点需要注意：这适用于 wizard 在运行时捕获的值。如果你在界定流程范围时把密钥粘贴到聊天中，它就会像任何其他粘贴的文本一样进入[上下文](https://www.aihero.dev/ai-coding-dictionary/context)。
 
-**Can I go back and fix a value I mistyped?**
+**我能返回去修正输错的值吗？**
 
-Not mid-run. There is no back button: the stages run forward, and a wrong answer on stage 3 means Ctrl-C and re-run. Re-running is cheap by design: any value already written to `.env` is offered back as a default, so you press Enter through the stages you got right and retype only the wrong one. This came up in the launch week and hasn't been closed since: "loved it! One thing though, is there a way to go back and correct what you've entered?"
+运行中途无法返回。没有后退按钮：阶段会向前运行，第三阶段答错意味着 Ctrl-C 并重新运行。重新运行在设计上是廉价的：任何已经写入 `.env` 的值都会作为默认值再次提供，因此你可以在答对的阶段按 Enter 跳过，只重新输入答错的那个。这在发布周被提到过，但一直没解决：“很喜欢！不过有一点，有没有办法返回并修正你输入的内容？”
 
-There's a related open bug. Arrow keys in an `ask` prompt insert `^[[D` / `^[[C` instead of moving the cursor, because the prompt uses `read -r` rather than Readline ([issue #741](https://github.com/mattpocock/skills/issues/741)). Backspace works; arrow keys don't. Delete back to the mistake rather than moving the cursor into it.
+还有一个相关的未决 bug。`ask` 提示中的方向键会插入 `^[[D` / `^[[C` 而不是移动光标，因为该提示使用 `read -r` 而不是 Readline（[issue #741](https://github.com/mattpocock/skills/issues/741)）。退格键有效；方向键无效。请删回到错误处，而不是把光标移进去。
 
-**Does it know what I've already set up?**
+**它知道我已完成什么设置吗？**
 
-Partly, and less than the launch reactions assumed. It reads the repo before it asks (your `.env` files, `docker-compose`, framework config, the `secrets.*` references in CI), so it scopes to values that are genuinely missing rather than starting from zero the way a README does. What it doesn't do is check the third-party service. If a key exists in your `.env` the wizard offers it back and Enter keeps it; if you already created the Stripe account but never saved the key, the wizard still sends you to the dashboard for it.
+部分知道，且少于发布时的反应所假设的。它在询问之前会读取仓库（你的 `.env` 文件、`docker-compose`、框架配置、CI 中的 `secrets.*` 引用），所以它会将范围界定到真正缺失的值，而不是像 README 那样从零开始。它不做的是检查第三方服务。如果密钥存在于你的 `.env` 中，wizard 会将其回显并提供，按 Enter 保留；如果你已经创建了 Stripe 账户但从未保存密钥，wizard 仍会引导你去该仪表盘。
 
-**Where does it sit in the workflow, after grilling and the spec?**
+**它在 grill-with-docs 和 to-spec 之后的工作流中处于什么位置？**
 
-Nowhere in particular. It's a standalone, not a chain step. The common guess is `/grill-with-docs → /to-spec → /wizard`, and that sequence is fine, but the trigger is a manual procedure showing up, which can happen at any point: before you start, mid-build, or long after ship. It also works as a discovery tool: scoping surfaces the hidden prerequisites of a task, like the three API keys you hadn't thought about, before you commit to the work.
+并没有特定位置。它是一个独立的技能，不是链式步骤。常见的猜测是 `/grill-with-docs → /to-spec → /wizard`，这个顺序没问题，但触发点是出现了一个手动流程，这可以发生在任何时间点：开始之前、构建中途，或者是发布很久之后。它也作为一个发现工具发挥作用：范围界定会揭示任务的隐藏先决条件，比如你没想到的那三个 API 密钥，在你承诺工作之前。
 
-**Does it work outside Claude Code?**
+**它在 Claude Code 之外也能用吗？**
 
-The artifact does, unconditionally: it's a plain bash script and it doesn't care what [harness](https://www.aihero.dev/ai-coding-dictionary/harness) generated it. The skill itself is model-invoked, so it's listed everywhere: type `/wizard` in Claude Code or `$wizard` in Codex, or just describe the setup you're stuck on. Being model-invoked also keeps it clear of [#693](https://github.com/mattpocock/skills/issues/693), where Claude's desktop and web surfaces drop *user-invoked* skills from the [model](https://www.aihero.dev/ai-coding-dictionary/model)'s listing and report them as not installed.
+该产物无条件可以工作：它是一个普通的 bash 脚本，不在乎是哪个 [harness](https://www.aihero.dev/ai-coding-dictionary/harness) 生成的。技能本身由模型调用，因此它列在到处：在 Claude Code 中输入 `/wizard` 或在 Codex 中输入 `$wizard`，或者只是描述你卡住的设置。由模型调用也使其远离 [#693](https://github.com/mattpocock/skills/issues/693)，在那里 Claude 的桌面和网页界面会从 [model](https://www.aihero.dev/ai-coding-dictionary/model) 列表中删除 *用户调用* 的技能，并将它们报告为未安装。
 
-**Didn't this used to be user-invoked?**
+**它以前不是由用户调用的吗？**
 
-It did. It's now model-invoked, so the agent reaches for it unprompted when it hits a step you have to take. Nothing you could do before stopped working: model-invocation *adds* the agent's reach, it never removes yours, so `/wizard` behaves exactly as it did. What changed is the failure mode it retires: the agent hitting a credentials wall mid-build and dumping six numbered steps into the chat for you to follow by hand.
+以前是。现在它由模型调用，所以当 agent 遇到你必须执行的一步时，它会主动调用它。以前你能做的任何事情都没有停止工作：模型调用*增加了* agent 的触达范围，它从未移除你的，所以 `/wizard` 的行为和以前完全一样。改变的是它淘汰的失败模式：agent 在构建中途遇到凭据墙，然后向聊天中倾倒六个编号步骤供你手动执行。
 
-**It used to be in `in-progress/`: where is it now?**
+**它以前位于 `in-progress/`它现在在哪里？**
 
-`engineering/`, as of v1.2. It graduated out of the beta bucket and now ships in the plugin, so it arrives with the rest of the promoted set rather than needing an individual install. Its behaviour didn't change on graduation.
+`engineering/`，自 v1.2 起。它从 beta 分类中毕业，现在随插件一起发布，因此它会与其他正式发布的技能一同到达，而无需单独安装。它在毕业时行为没有变化。
 
-## It's working if
+## 如果它起作用了
 
-- You're shown an ordered list of stages, and the values each one produces, and asked to confirm, before any script exists.
-- Every URL is opened before the value from that page is asked for. You're never asked to paste something you haven't been sent to fetch.
-- Secrets are typed blind. Nothing sensitive echoes into your scrollback.
-- Each stage fits one screen. Nothing you still need has scrolled away.
-- Ctrl-C and re-run picks up where you left off, offering the values already saved as defaults.
-- The final screen lists what it wrote, and separately lists what it couldn't do and you have to finish by hand.
+* 在任何脚本存在之前，你会看到一个排序列表，以及每个阶段产生的值，并被要求确认。
+* 每个 URL 都会先被打开，然后才会询问该页面的值。你永远不会被要求粘贴你没有被引导去获取的内容。
+* 机密内容以盲输方式输入。不会有任何敏感内容回显到你的滚动历史中。
+* 每个阶段都适配一屏。你仍然需要的内容不会滚出屏幕。
+* Ctrl-C 后重新运行会从你上次中断的地方继续，并将已保存的值作为默认值提供。
+* 最终屏幕会列出它写入的内容，并单独列出它无法完成、需要你手动完成的事项。
 
-## Where it fits
+## 它在系统中的位置
 
-`wizard` is a reach-for-it-anytime standalone, sitting at the line where automation stops and a human has to click. Its nearest neighbour is [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills), because both exist to get a repo into a working state: that one configures this skill set, while `wizard` generates a setup path for everything else. It also pairs with [implement](https://aihero.dev/skills-implement): when a build lands a feature that needs credentials or a manual cutover, a wizard is how the human half gets done. When you're unsure which skill fits the moment, [ask-matt](https://aihero.dev/skills-ask-matt) routes you.
+`wizard` 是一个随时可用的独立技能，位于自动化停止而人类必须点击的那条线上。它最近的邻居是 [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills)，因为两者都是为了将仓库置于可用状态：前者配置这组技能，而 `wizard` 为其他所有内容生成设置路径。它也与 [implement](https://aihero.dev/skills-implement) 配对：当构建中需要凭据或手动切换的功能时，wizard 是完成人类那部分工作的方式。当你不确定哪个技能适合此时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指路。

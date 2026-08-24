@@ -1,67 +1,68 @@
 ---
 name: writing-beats
-description: Writing, exploit; assemble raw material into a journey of beats, grounding each term before a beat leans on it.
+description: 写作，利用；将原始材料组装成一段节拍的旅程，在节拍依赖某个术语之前先将其奠定基础。
 disable-model-invocation: true
+
 ---
 
 <what-to-do>
 
-The user has passed (or will pass) a markdown file of raw material. This is **exploit**: the exploring is done, the pile is fixed. Commit to a path through it and mine the pile to fill each beat.
+用户已传递（或将要传递）一份原始材料的 Markdown 文件。这就是**利用**：探索已完成，素材堆已固定。确定一条通往它的路径，并挖掘素材堆以填充每个节拍。
 
-If the user did not say where to save the article, ask once and remember the path.
+如果用户没有说明文章保存到哪里，问一次并记住该路径。
 
-Then run a beat-by-beat journey, choose-your-own-adventure style:
+然后开始逐节拍的旅程，采用“选择你自己的冒险”式流程：
 
-1. **Establish the prerequisites.** Before any beats, settle with the user what the audience already knows walking in: the concepts that are **grounded** from the start. Everything else must be grounded by a beat before a later beat can use it. See [Grounding](#grounding).
-2. Write 2–3 candidate **starting beats**, drawn from the raw material. Each is a different entry point into the article. Each may only lean on grounded concepts; note what new concepts each one grounds. Show the user the beats before writing to the article file. The user picks one. Preview what beats that pick unlocks, as if the user is seeing a little way down the path.
-3. Once the user picks a starting beat, write **only that beat** to the article file. A beat may be one sentence or several paragraphs, whatever that beat naturally is. Stop there.
-4. Re-read the article file from disk. Then offer 2–3 candidate **next beats**: different directions the journey could pivot to from where the article now stands. Each must be reachable from the current grounded set; note what each one grounds.
-5. Loop steps 3–5 until the article reaches a natural end.
+1. **确立先决条件。** 在开始任何节拍之前，与用户商定观众走进来时已经知道什么：那些从一开始就**已奠定基础**的概念。其他所有内容必须在后续节拍使用它之前，通过一个节拍将其奠定基础。参见 [Grounding](#grounding)。
+2. 从原始材料中撰写 2–3 个候选**起始节拍**。每个都是文章的不同切入点。每个节拍可能只能依赖已奠定基础的概念；记下每个节拍奠定了哪些新概念。在写入文章文件之前向用户展示这些节拍。用户选择其中一个。预览所选节拍解锁了哪些后续节拍，就好像用户正在看到路径前方的一小段一样。
+3. 一旦用户选择了起始节拍，将**仅该节拍**写入文章文件。一个节拍可能是一句话或几个段落，视该节拍的自然形态而定。到此为止。
+4. 从磁盘重新读取文章文件。然后提供 2–3 个候选**下一个节拍**：从文章当前所处的位置，旅程可以转向的不同方向。每个节拍必须都能从当前的已奠定基础集合中到达；记下每个节拍奠定了什么。
+5. 循环执行步骤 3–5，直到文章自然结束。
 
 </what-to-do>
 
 <supporting-info>
 
-## Grounding
+## 铺垫
 
-Every **concept** has to be **grounded** before a beat can lean on it: the audience either walked in knowing it or met it in an earlier beat. A beat that reaches for an ungrounded concept loses the reader; that is the one move the journey can't make. The unit is the concept, not the word for it: a beat can lean on an idea the reader lacks even with no jargon in sight. Where a concept has a name (a **term**), grounding it means landing the idea and the term together.
+每个**概念**都必须在节拍依赖它之前**已奠定基础**：观众要么走进来时就知道它，要么在较早的节拍中遇到它。试图依赖未奠定基础的概念的节拍会失去读者；那是旅程无法做出的唯一一步。单位是概念，而不是它的名称：即使没有术语出现，节拍也可以依赖读者缺乏的想法。当一个概念有名称（一个**术语**）时，将其奠定基础意味着将这个想法和术语一并落地。
 
-A concept gets grounded one of two ways:
+概念通过两种方式之一获得铺垫：
 
-- **Prerequisite**: grounded before the first beat. The audience brings it. Fixed at the start.
-- **Introduced**: a beat establishes it, and from then on it's grounded for every later beat.
+* **先决条件**：在第一个节拍之前已奠定基础。观众自带。在开始时固定。
+* **引入**：一个节拍确立它，从那时起它对后续的每个节拍都已奠定基础。
 
-So each beat does two jobs: it **requires** concepts that are already grounded, and it **grounds** new ones. Keep a running list of what's grounded so far, and update it each time a beat lands.
+因此每个节拍承担两件事：它**要求**已经铺垫的概念，同时**铺垫**新的概念。持续记录到目前为止已铺垫的内容，并在每个节拍落地时更新。
 
-This is what shapes the choose-your-own-adventure. A candidate beat is only reachable if everything it requires is already grounded; picking a beat that grounds concept X unlocks every beat that was waiting on X. When you offer next beats, they must all be reachable from the current grounded set, and say what each one grounds, so the user can see which paths it opens.
+这决定了“选择你自己的冒险”的走向。一个候选节拍只有在其所需的一切都已铺垫时才能被选中；选中一个铺垫了概念 X 的节拍，就会解锁所有等待 X 的节拍。当你提供下一个节拍选项时，它们必须都能从当前的已铺垫集合中到达，并说明每个节拍会铺垫什么，以便用户能看到它打开了哪些路径。
 
-The big lever is what you make a prerequisite versus what you ground inside the piece. Demand too much up front and you shut out readers who don't have it; ground too much inside and the early beats drown in definitions. Settle this with the user when you establish prerequisites, and revisit it whenever a tempting beat turns out to require a concept nothing has grounded yet: the fix is either a grounding beat before it, or promoting the concept to a prerequisite.
+关键的杠杆在于你将什么设为先决条件，以及你在文中铺垫什么。如果要求太多，你会把不具备这些条件的读者拒之门外；如果在文中铺垫太多，早期的节拍会被定义淹没。在确立先决条件时与用户商定这一点，并在每当一个诱人的节拍结果发现需要尚未被铺垫的概念时重新审视：解决方案要么是在它之前加一个铺垫节拍，要么是将该概念提升为先决条件。
 
-## What is a beat
+## 什么是节拍
 
-A beat is one move in the journey. It does one thing: sets a scene, lands a point, asks a question, drops an aside, twists the angle. Then it stops, leaving the reader at a place where the next beat can pivot.
+节拍是旅程中的一步。它只做一件事：设定场景，阐述观点，提出问题，抛出旁注，扭转角度。然后它停止，让读者停留在下一个节拍可以转向的地方。
 
-A beat is sized by what it needs:
+节拍的大小由它需要什么来决定：
 
-- A single sentence if that's all the move is ("And then nothing happened for three weeks.").
-- A short paragraph if the move needs setup.
-- Multiple paragraphs if the beat is a self-contained vignette, argument, or example.
+* 如果推进本身只需要一句话，那就一句话（“然后三个星期什么都没有发生。”）。
+* 如果这次推进需要铺垫，那就一个短段落。
+* 如果这个节拍是一个自足的小场景、论证或示例，那就多个段落。
 
-If a "beat" needs five paragraphs and three subheadings, it's not a beat; it's two beats glued together. Split it.
+如果一个“节拍”需要五段话和三个副标题，那它不是一个节拍；它是两个节拍粘合在一起的。把它拆开。
 
-## Pulling from the pile
+## 从素材堆中提取
 
-Pull material from the raw pile to populate each beat. You can paraphrase, split, recombine, or quote. The pile is a quarry.
+从原始素材堆中提取材料来填充每个节拍。你可以改写、拆分、重组或引用。素材堆就是一座采石场。
 
-## Ending the journey
+## 结束旅程
 
-The article ends when the journey is complete, not when the pile is empty. Most piles will have leftover fragments that don't make it in. That is fine; that is the point of having more raw material than you need.
+当旅程完成时文章结束，而不是当素材堆空的时候。大多数素材堆都会有未能入选的剩余片段。这没关系；这就是拥有比所需更多原始材料的目的所在。
 
-## Writing rhythm
+## 写作节奏
 
-- Append one beat at a time. Never write ahead.
-- Re-read the article file from disk before every write. Preserve user edits absolutely.
-- If the user edits a previous beat substantially, let it change what comes next.
-- If the user says "rewrite that beat" or "go back and try a different beat 3", do it: edit in place, leave the rest alone.
+* 一次只追加一个节拍。绝不提前写。
+* 每次写入前都从磁盘重新读取文章文件。绝对保留用户的修改。
+* 如果用户大幅修改了之前的某个节拍，让它改变之后的内容。
+* 如果用户说“重写那个节拍”或“回去试试不同的节拍 3”，就照做：就地编辑，其余的保持不变。
 
 </supporting-info>

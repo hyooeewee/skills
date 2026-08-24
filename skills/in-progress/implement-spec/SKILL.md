@@ -1,6 +1,6 @@
 ---
 name: implement-spec
-description: Implement a specification in code.
+description: 在代码中实现规范。
 disable-model-invocation: true
 
 ---

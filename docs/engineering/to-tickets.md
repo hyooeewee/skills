@@ -2,7 +2,7 @@
 
 `to-tickets` 接收一个计划、一个[规格](https://www.aihero.dev/ai-coding-dictionary/spec)，或你当前的对话，并将其分解为问题跟踪器上的一组\*\*[工单](https://www.aihero.dev/ai-coding-dictionary/ticket)**。每张工单都声明其**阻塞边\*\*：在它开始之前必须完成的其它工单。
 
-Every ticket is a **tracer bullet**: a narrow but complete path through every layer of the change (schema, API, UI, tests) that can be demoed on its own the moment it lands. That is the constraint that makes it behave differently from the obvious way to split work, which is to cut one layer at a time and integrate at the end. It also sizes each ticket to fit in a single fresh [上下文窗口](https://www.aihero.dev/ai-coding-dictionary/context-window), because the thing that will pick the ticket up is a [会话](https://www.aihero.dev/ai-coding-dictionary/session) that has never seen your spec.
+每张工单都是一颗**曳光弹**：一条狭窄但完整的路径，穿过变更的每一层（模式、API、UI、测试），一旦落地即可独立演示。这就是约束，使其行为与显而易见的工作拆分方式不同，后者是“一次切一层，最后集成”。它还会调整每张工单的大小，使其能装进一个全新的\[上下文窗口]，因为领取工单的\[会话]从未见过你的规格。
 
 ## 何时使用它
 

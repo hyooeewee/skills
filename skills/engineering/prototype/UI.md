@@ -51,7 +51,7 @@
 * 项目的组件库 / 样式系统（TailwindCSS、shadcn、MUI、纯 CSS 等）。
 * 一个清晰的导出组件名称，例如 `VariantA`、`VariantB`、`VariantC`。
 
-Variants must be **structurally different**: different layout, different information hierarchy, different primary affordance, not just different colours. Three slightly-tweaked card grids isn't a UI prototype, it's wallpaper. If two drafts come out too similar, redo one with explicit "do not use a card grid" guidance.
+变体必须在**结构上有所不同**：不同的布局、不同的信息层级、不同的主要交互方式，而不仅仅是不同的颜色。三个稍作调整的卡片网格并不是 UI 原型，它只是壁纸。如果两个草稿过于相似，请用明确的“不要使用卡片网格”的指示重做一个。
 
 ### 3. 将它们连接起来
 

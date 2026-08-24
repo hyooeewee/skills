@@ -1,96 +1,96 @@
-# Writing docs pages
+# 编写文档页面
 
-Every skill in `engineering/` and `productivity/` has a human-facing **docs page** at `docs/<bucket>/<skill-name>.md`. The docs tree mirrors those two bucket folders under `skills/`. It is published at `https://aihero.dev/skills-<skill-name>`; the URL is always `skills-<skill-name>` regardless of bucket, so the docs path is repo organisation only. The page is not the skill and not a copy of `SKILL.md`. Only these two buckets are promoted; the rest (`misc/`, `in-progress/`, `deprecated/`) ship no docs page.
+`engineering/` 和 `productivity/` 中的每个技能都有一个面向人类的 **文档页面**，位于 `docs/<bucket>/<skill-name>.md`。文档树在 `skills/` 下镜像了这两个 bucket 文件夹。它发布在 `https://aihero.dev/skills-<skill-name>`；URL 始终是 `skills-<skill-name>`，与 bucket 无关，因此文档路径仅由仓库组织决定。该页面不是技能本身，也不是 `SKILL.md` 的副本。只有这两个 bucket 被推广；其余的 (`misc/`, `in-progress/`, `deprecated/`) 不附带文档页面。
 
-Most of these skills are **user-invoked**: the agent will never fire them for you, so *you* are the index that has to remember they exist and when to reach for them. That memory is **cognitive load**. The job of a docs page is to relieve it: to orient one reader around one skill so they can hold it in their head, know when to reach for it, and see where it sits in the system. The pages are collectively a distributed router; each is a node.
+这些技能大多数是 **用户触发** 的：智能体永远不会为你触发它们，所以 *你* 是必须记住它们存在以及何时使用它们的索引。这种记忆是 **认知负荷**。文档页面的工作是减轻它：让读者围绕一个技能进行定位，以便他们能在脑海中掌握它，知道何时使用它，并了解它在系统中的位置。这些页面共同构成一个分布式路由器；每一个都是一个节点。
 
-Act whenever a promoted skill is added, renamed, or has its behaviour changed: create or re-sync its docs page. A rename moves the file too (`docs/<bucket>/<old>.md` → `docs/<bucket>/<new>.md`), because the published URL tracks the name; a skill that moves between `engineering/` and `productivity/` moves its docs file to the matching folder. Skills in `misc/`, `in-progress/`, and `deprecated/` get no page, because none of those buckets is promoted. A skill moving *out* of one of them into `engineering/` or `productivity/` gains a page; one moving the other way loses it.
+每当一个推广的技能被添加、重命名或行为发生变化时，都要采取行动：创建或重新同步其文档页面。重命名也会移动文件 (`docs/<bucket>/<old>.md` → `docs/<bucket>/<new>.md`)，因为发布的 URL 追踪的是名称；在 `engineering/` 和 `productivity/` 之间移动的技能也会将其文档文件移动到匹配的文件夹。`misc/`、`in-progress/` 和 `deprecated/` 中的技能没有页面，因为这些 bucket 都没有被推广。从其中一个移动到 `engineering/` 或 `productivity/` 的技能会获得一个页面；反方向移动的则会失去它。
 
-Because these pages are published on `aihero.dev`, **every link is absolute**: never a repo-relative path. A link to another skill points at `https://aihero.dev/skills-<name>`; a link into the repo points at its full `https://github.com/mattpocock/skills/...` URL. A relative link that works in the repo breaks once published.
+因为这些页面发布在 `aihero.dev` 上，**每个链接都是绝对链接**：绝不是仓库相对路径。指向另一个技能的链接指向 `https://aihero.dev/skills-<name>`；指向仓库内部的链接指向其完整的 `https://github.com/mattpocock/skills/...` URL。在仓库中有效的相对链接一旦发布就会失效。
 
-There is no H1. The published page takes its title from the slug.
+没有主标题 (H1)。发布的页面使用 slug 作为标题。
 
-## Page structure
+## 页面结构
 
-Fill the template below, keeping its order. The **fixed frame** (`## What it does`, `## When to reach for it`, `## Where it fits`) appears on every page. `## Prerequisites` and the free-form substance sections carry only what this particular skill needs; delete the rest.
+按下面的模板填写，并保持其顺序。**固定框架**（`## What it does`、`## When to reach for it`、`## Where it fits`）出现在每个页面上。`## Prerequisites` 和自由形式的实质内容部分只承载这个特定技能所需的内容；其余部分删掉。
 
-Four sections make a page worth reading: `What it does`, `When to reach for it`, `Common questions`, `It's working if`. The first two orient the reader; the last two are where the page stops summarising the skill and starts answering the reader's own situation. Each of the last two has a bar to clear, below, but treat a page that clears neither as unfinished, not as finished-and-short.
+四个部分让页面值得一读：`它做什么`、`何时使用它`、`常见问题`、`如果它起作用了`。前两个帮助读者定位；后两个是页面停止总结技能并开始回答读者自身情况的地方。后两个都有待清除的栏，但不要把既未清除任何栏也未写完的页面当作“已完成但简短”。
 
-**A page carries no install commands.** The ai-hero page template renders the install widget itself (a copy button, the single-skill command, the whole-set command, and the update line) above the body. A page that also writes them out shows the reader the same command twice, and the two copies drift: the hand-written pair on every page went stale against the widget beside it. Install wording is a property of the site, not of the page. If it needs changing, change it in ai-hero; the canonical wording lives in [the install block](./install-block.md).
+**页面不包含安装命令**。ai-hero 页面模板在正文上方渲染安装小部件本身（一个复制按钮、单个技能命令、整个集合命令和更新行）。如果页面也写出了这些命令，读者就会看到同一个命令两次，且两个副本会分道扬镳：每个页面上手写的这对命令都会与旁边的部件变得过时。安装说明文字是网站的属性，而不是页面的属性。如果需要更改，请在 ai-hero 中更改；标准的说明文字位于 [安装块](./install-block.md) 中。
 
 <page-template>
 
-## What it does
+## 它做什么
 
-One or two plain-language paragraphs. Lead with the skill's one-sentence job, then state the **defining constraint**: the single fact that makes this skill behave differently from the obvious default (for `to-spec`: it does not interview the user again, it synthesises what is already known). Write it as a plain declarative sentence, never a labelled aside like "The defining constraint:" or "The key thing:"; the formula reads as filler. This line is the most valuable on the page; never omit it.
+一到两个通俗语言段落。以技能的一句工作描述开头，然后陈述 **定义约束**：使此技能行为与明显默认值不同的唯一事实（对于 `to-spec`：它不会再次询问用户，它综合已知信息）。将其写成普通的陈述句，而不是像“定义约束：”或“关键点：”这样的带标签的旁注；这种公式读起来像是填充内容。这一行是页面上最有价值的；绝对不要省略。
 
-## When to reach for it
+## 何时使用它
 
-How and when you reach for the skill, in two beats that are both effectively always present:
+你如何以及何时使用该技能，分为两个实际上是始终存在的节拍：
 
-- **Invocation mode.** State whether you type it or the agent fires it. A user-invoked skill: "You invoke this by typing `/<name>`, and the agent won't reach for it on its own." A model-invoked skill: "Type `/<name>`, or the agent reaches for it automatically when a task fits."
-- **Trigger boundary.** The index entry: "reach for this when …". Where the skill is confusable with a sibling, add the other half: "for <X> instead, use [<sibling>](https://aihero.dev/skills-<sibling>)."
+* **调用模式**。说明你是手动输入还是由智能体触发。用户触发的技能：“你通过输入 `/<name>` 来调用它，智能体不会自行使用它。”模型触发的技能：“输入 `/<name>`，或者当任务合适时智能体会自动使用它。”
+* **触发边界**。索引条目：“当……时使用这个技能”。当该技能容易与兄弟技能混淆时，补充另一半：“对于 <X>，使用 [<兄弟技能>](https://aihero.dev/skills-<sibling>)。”
 
-## Prerequisites
+## 先决条件
 
-Optional: include only when the skill needs something in place to be functional; omit the heading entirely otherwise. Covers: a **workspace it writes into** (a stateful skill like `grill-with-docs` writes `CONTEXT.md` and ADRs; `teach` builds a whole directory, so say what it writes and where), **prior setup** (`triage`/`to-spec`/`to-tickets` need `setup-matt-pocock-skills` to have configured an issue tracker), or **repo-specific tooling**. A stateless skill that runs anywhere has no prerequisites, so drop the section.
+可选：仅当技能需要某些条件才能运行时才包含；否则完全省略。涵盖：一个它写入的 **工作区**（像 `grill-with-docs` 这样的有状态技能会写入 `CONTEXT.md` 和 ADR；`teach` 构建整个目录，所以要说明它写入什么以及在哪里），**前置设置**（`triage`/`to-spec`/`to-tickets` 需要 `setup-matt-pocock-skills` 配置了问题跟踪器），或 **仓库特定工具**。任何地方都能运行的无状态技能没有先决条件，所以删除该部分。
 
 ## <free-form middle>
 
-One to three short sections, in the skill's *own vocabulary*, that make it click. Choose whatever headings fit the skill: the loop it runs, the artifact it produces, the fork it makes, the one anti-pattern it kills. There is no prescribed heading; the skills are too heterogeneous for one.
+一到三个简短部分，使用技能的*自身术语*，使其易于理解。选择任何适合技能的标题：它运行的循环、它产生的工件、它做的分叉、它杀死的单一反模式。没有规定的标题；技能太过多样化，无法用一个统称。
 
-The single non-negotiable: **surface the skill's leading word / defining idea** (`tight` feedback loop, `deep module`, throwaway-code-answers-a-question, red-green). It pays off twice: the reader learns what the skill *is*, and learns the word they'll later think with to *reach for* it.
+唯一不可妥协的点：**展示技能的引导词 / 定义思想**（`tight` 反馈循环、`deep` 模块、throwaway-code-answers-a-question、red-green）。这有两重回报：读者学习了技能*是什么*，并且学习了他们稍后用来*使用*该技能的词。
 
-## Common questions
+## 常见问题
 
-The questions readers really ask about this skill, each in bold with the answer in the lines beneath it. No sub-headings.
+读者真正关于这个技能的问题，每个都用粗体显示，答案在它下方的行中。没有子标题。
 
-An observed question always beats an invented one, so go and find them before you write any:
+一个观察到的真实问题总是胜过虚构的问题，所以在写任何问题之前，先去找到它们：
 
-- **The wiki.** If `~/repos/matt/personal-wiki` exists on this machine, it is the richest source there is. Its `wiki/audience/` area is organised around what the audience wants, discusses, and **is confused by**: read `wiki/index.md` first for the registry of pages, then the pages bearing on this skill. Every page carries `sources:` linkbacks to the original X, Discord, GitHub, and email threads; the wiki is a secondary source, so quote the asker's own question rather than the wiki's summary of it. Skip this bullet where the directory does not exist.
-- **This repo's issues.** `gh issue list --repo mattpocock/skills --search "<skill-name>" --state all`. A question filed twice is a question the page owes an answer to.
-- **`CHANGELOG.md`.** Anything renamed, moved, or behaviourally changed generates a "where did it go?" that the page has to answer.
+* **Wiki**。如果这台机器上存在 `~/repos/matt/personal-wiki`，那就是最丰富的来源。其 `wiki/audience/` 区域围绕受众想要什么、讨论什么以及**感到困惑的地方**来组织：先阅读 `wiki/index.md` 获取页面注册表，然后阅读与此技能相关的页面。每个页面都带有 `sources:` 链接回原始的 X、Discord、GitHub 和电子邮件线程；Wiki 是次要来源，所以引用提问者自己的问题，而不是 Wiki 对它的总结。在目录不存在的地方跳过此条。
+* * **本仓库的 issues。** `gh issue list --repo mattpocock/skills --search "<skill-name>" --state all`。一个问题被提交了两次，就说明这个页面欠它一个答案。
+* * **`CHANGELOG.md`。** 任何被重命名、移动或行为发生变化的东西，都会产生一个“它去哪了？”的问题，页面必须回答这个问题。
 
-Where the hunt comes up thin, the section may also carry a question a reader would plainly ask, but **the count stays honest to the evidence**. A well-discussed skill earns six; an obscure one earns one or two, or none at all. Padding a thin skill out to match a rich one is how the section fills with questions nobody has, and an invented question teaches the reader nothing.
+当搜寻结果不足时，该部分也可能包含一个读者会明显提出的问题，但**计数必须诚实反映证据**。一个讨论良好的技能得六分；一个晦涩的技能得一分或两分，或者零分。将一个薄弱的技能填充到与一个丰富的技能相匹配，是这个部分充满没人回答的问题的方式，而一个虚构的问题对读者毫无教益。
 
-Order them by how often each comes up, sharpest first, and say the unflattering thing where it is true: a very long grilling session usually means the scope was too big; a model asked to write its own skill produces something verbose. Omit the heading where there is nothing worth answering.
+按每个问题出现的频率排序，最尖锐的在前，并在真实的情况下说出不中听的事实：非常长时间的盘问通常意味着范围太大了；被要求编写自己技能的模型会产生冗长的东西。在没有任何值得回答的问题的地方省略标题。
 
-## It's working if
+## 如果它起作用了
 
-A few bullets naming what the reader sees when the skill is doing its job. The bar on each is that the reader can check it without opening `SKILL.md`: a signal in their own work, or in the trace in front of them. "The document gets shorter as it gets better" passes; "the library section is byte-identical to `template.sh`" is a compliance check on the skill's internals wearing this section's name. Include it wherever the tells are crisp; omit the heading where they stay vague.
+几个要点，说明当技能完成工作时读者看到什么。每个要点都有待清除的栏，即读者无需打开 `SKILL.md` 就可以检查：在他们自己的工作中看到的信号，或面前跟踪记录中的信号。“文档变得更好时变短了”算通过；“库部分与 `template.sh` 字节完全相同”是对技能内部的一致性检查，使用了本部分的名称。在线索清晰的地方包含它；在线索模糊的地方省略标题。
 
-## Where it fits
+## 它在系统中的位置
 
-Always present. Situate the skill in the system in a sentence or two:
+始终存在。用一两句话把技能放在系统中：
 
-- **Role.** Name it: a **chain step** (`grill-with-docs → to-spec → to-tickets → implement → code-review`), a **run-once setup** (`setup-matt-pocock-skills`), **periodic maintenance** (`improve-codebase-architecture`, "every few days"), or a **reach-for-it-anytime standalone** (`diagnosing-bugs`, `prototype`, `handoff`). A standalone's map is one honest sentence, which is far better than omitting the section.
-- **Neighbours.** The one or two siblings that matter, each with a because-clause, linked absolutely.
-- **The map.** Point to [ask-matt](https://aihero.dev/skills-ask-matt), the router over the whole set, so this page stays a node and never has to redraw the graph.
+* **角色**。命名它：一个**链式步骤**（`grill-with-docs → to-spec → to-tickets → implement → code-review`），一个**一次性设置**（`setup-matt-pocock-skills`），**定期维护**（`improve-codebase-architecture`，“每隔几天”），或一个**随时可用的独立技能**（`diagnosing-bugs`、`prototype`、`handoff`）。独立技能的地图是一句诚实的句子，远比省略该部分要好。
+* * **邻居。** 一个或两个重要的兄弟技能，每个都带有 because 从句，并使用绝对链接。
+* * **地图。** 指向 [ask-matt](https://aihero.dev/skills-ask-matt)，它是整个技能集的路由器，这样这个页面就仍然只是一个节点，永远不必重画整个图。
 
 </page-template>
 
-## Conventions
+## 约定
 
-- Explain the **why**, not the process. The page orients and situates the skill; it never reproduces the `SKILL.md` steps or template dumps: a human choosing a tool does not need the runbook.
-- **Never name the author.** The page is a technical document, not a record of who said what. "Matt says", "Matt's own answer", "his position is", a quoted reply: all of it goes. A finding from the question hunt is worth keeping; its attribution is not. State the substance as a plain claim about the skill ("the fix is a direct instruction: …", "the split comes down to session count") and drop the frame. The reader is deciding whether to use a tool; an opinion carries the same weight either way, and an attributed one dates as soon as the position moves. Quoting a *user* stays fine: "one user reported …" is evidence about the skill in the wild, and stays anonymous.
-- Use the skill's **leading words** (_seam_, _deep module_, _tracer bullet_) so the page and the skill speak one language.
-- **Use the [AI Coding Dictionary](https://www.aihero.dev/ai-coding-dictionary)'s term where one exists, and link its first use on the page.** The dictionary is the house vocabulary for AI coding: _context window_, _subagent_, _harness_, _primary source_, _agent mode_. Prefer its word over a synonym you invent. Link the first occurrence of each term to `https://www.aihero.dev/ai-coding-dictionary/<slug>` (the slug is the term lowercased with non-alphanumerics as hyphens: _context window_ → `context-window`), and leave every later occurrence unlinked. Link only where the word carries the dictionary's sense: a domain *model*, background *context* or an auth *token* is a different word that happens to match. Never link inside a heading, a code span, or an existing link, and never link a word that names a skill in this repo rather than the concept. For the full term list, read `~/repos/ai/ai-coding-dictionary/dictionary/` if it exists on this machine (one file per term, the filename *is* the term), and otherwise [mattpocock/dictionary-of-ai-coding](https://github.com/mattpocock/dictionary-of-ai-coding), which is the source of truth either way.
-- **Branches go in a table or a list, never in a paragraph.** Where the page presents a choice (two artifacts the skill can produce, four situations that trigger it, five options at a boundary), the reader is scanning for the one row that matches their situation. A paragraph makes them read all of it to find out. A short markdown table (condition in the left column, what to do in the right) or a bulleted list gives it back in one glance. This applies wherever the branch appears, most often in `## When to reach for it` and the free-form middle.
-- Keep the page itself low-load. It is documentation *about* low-cognitive-load skills; furniture (spare headings, restated links) is the thing it is arguing against.
+* 解释**原因**，而不是流程。页面定位并阐述技能；它从不复现 `SKILL.md` 的步骤或模板转储：选择工具的人不需要操作手册。
+* **绝不提及作者姓名**。页面是技术文档，而不是谁说了什么的记录。“Matt 说”、“Matt 的回答”、“他的立场是”、引用的回复：这些都要删掉。从问题搜寻中得到的发现值得保留，但归因不值得。将实质内容作为关于技能的简单陈述（“修复是一个直接指令：……”、“分歧归结为会话数”）并去掉框架。读者正在决定是否使用工具；无论哪种方式，意见都有同样的分量，而带有归因的意见一旦立场改变就过时了。引用*用户*是可以的：“一位用户报告……”是关于野外技能的证据，并且保持匿名。
+* 使用该技能的**核心词汇**（*seam*、*deep module*、*tracer bullet*），使页面与技能讲同一种语言。
+* **在存在对应术语时使用 [AI Coding Dictionary](https://www.aihero.dev/ai-coding-dictionary) 的术语，并链接其首次出现**。该词典是 AI 编码的通用词汇：*context window*、*subagent*、*harness*、*primary source*、*agent mode*。优先使用它的词而不是你发明的同义词。将每个术语的首次出现链接到 `https://www.aihero.dev/ai-coding-dictionary/<slug>`（slug 是将术语小写并将非字母数字字符转换为连字符：*context window* → `context-window`），并保留其后的所有出现不链接。仅在单词承载词典含义时链接：领域 *model*、背景 *context* 或认证 *token* 是恰好匹配的不同词汇。永远不要在标题、代码 span 或现有链接内部链接，也永远不要链接命名此仓库技能而非概念的字。要获取完整的术语列表，如果此机器上存在，请阅读 `~/repos/ai/ai-coding-dictionary/dictionary/`（每个术语一个文件，文件名*就是*该术语），否则阅读 [mattpocock/dictionary-of-ai-coding](https://github.com/mattpocock/dictionary-of-ai-coding)，无论如何它都是事实来源。
+* **分支放在表格或列表中，绝不在段落中**。当页面呈现选择时（技能可以产生的两个工件、触发的四种情况、边界处的五个选项），读者会扫描以找到与其情况匹配的那一行。段落会让它们读完整段才能知道。简短的 markdown 表格（左侧为条件，右侧为操作）或项目符号列表能一眼看清。这适用于分支出现的任何地方，最常出现在 `## When to reach for it` 和自由格式的中间部分。
+* 保持页面本身的低负荷。它是*关于*低认知负荷技能的文档；装饰元素（多余的标题、重复的链接）正是它所反对的。
 
-## Done when
+## 完成标准
 
-- The page exists at `docs/<bucket>/<name>.md`, and no stale page survives a rename or bucket move.
-- The page carries no source link and writes no install command of its own.
-- `## What it does` states the defining constraint, as plain prose rather than a labelled aside.
-- The page names no author and quotes no author: every claim stands on its own.
-- `## When to reach for it` states invocation mode and the trigger boundary.
-- `## Where it fits` names the role and links to `ask-matt`.
-- A prerequisite (workspace, prior setup, tooling) is stated where one exists, and the section is absent where none does.
-- The middle surfaces the leading word.
-- Every AI Coding Dictionary term the page uses is spelt the dictionary's way, and its first use (and only its first use) links to the dictionary entry.
-- Every multi-way branch is a table or a list, not a paragraph the reader has to read in full.
-- The hunt for real questions ran (the wiki, the issues, the changelog), and `## Common questions` is sized to what it found, not padded to match a richer skill's page.
-- Every `## It's working if` bullet is checkable without opening `SKILL.md`.
-- The sections appear in the template's order.
-- Every link is absolute, and every one resolves.
+* 页面存在于 `docs/<bucket>/<name>.md`，并且重命名或 bucket 迁移后不得有过时页面残留。
+* 页面不附带来源链接，也不自行编写安装命令。
+* `## What it does` 以朴素的行文而非标签式旁白来陈述定义性约束。
+* 页面不提及作者姓名，也不引用作者：每个主张都独立成立。
+* `## When to reach for it` 说明调用模式和触发边界。
+* `## Where it fits` 指明角色并链接到 `ask-matt`。
+* 有前置条件（工作区、先前准备、工具）时加以说明，没有时则省略该部分。
+* 中间部分突出核心词汇。
+* 页面使用的每个 AI Coding Dictionary 术语都按词典拼写，且其首次使用（仅首次使用）链接到词典条目。
+* 每个多路分支都是表格或列表，而不是需要读者通读全文的段落。
+* 搜寻真实问题已完成（包括 wiki、issues、changelog），且 `## Common questions` 的篇幅根据发现的情况而定，而非为了匹配更丰富技能的页面而填充。
+* `## It's working if` 的每个条目都无需打开 `SKILL.md` 即可核查。
+* 各部分按模板顺序出现。
+* 每个链接都是绝对链接，并且每个都能正常解析。
