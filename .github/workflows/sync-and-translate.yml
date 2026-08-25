@@ -91,7 +91,7 @@ jobs:
         if: needs.sync.outputs.doc != '0'
         continue-on-error: true
         # Use custom modified version
-        uses: hyooeewee/action-continuous-translation@v0.2.8
+        uses: hyooeewee/action-continuous-translation@v0.2.11
         with:
           lang: zh
           files: "**/*.md*"
