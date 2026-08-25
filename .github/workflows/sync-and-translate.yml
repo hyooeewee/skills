@@ -48,7 +48,9 @@ jobs:
             sort -u > /tmp/non_doc.txt || true
           grep -E '\.md$' /tmp/changed.txt | sort -u > /tmp/doc.txt || true
           echo "doc=$(wc -l < /tmp/doc.txt)" >> "$GITHUB_OUTPUT"
+          echo "/tmp/non_doc.txt $(wc -l < /tmp/non_doc.txt) file(s)"
           cat /tmp/non_doc.txt
+          echo "/tmp/doc.txt $(wc -l < /tmp/doc.txt) file(s)"
           cat /tmp/doc.txt
 
   translation:
@@ -88,12 +90,15 @@ jobs:
       - name: Translate docs to zh
         if: needs.sync.outputs.doc != '0'
         continue-on-error: true
-        uses: pelikhan/action-continuous-translation@v0
+        # Use custom modified version
+        uses: hyooeewee/action-continuous-translation@v0.2.8
         with:
           lang: zh
           files: "**/*.md*"
           debug: true
           filename_template: "{{dirname}}/{{basename}}{{extname}}"
+          instructions: |
+            For EVERY ┌P###┐ or ┌T###┐ marker you MUST return exactly one fenced code block whose language is the SAME identifier (e.g. ```P001).  Never rename P to T or change the number. Do not merge, skip, reorder or omit any block. Keep all Markdown links, bold, and inline code intact; translate only the natural-language text and keep URLs unchanged. 
           model_alias: |
             translation: openai:${{ vars.OPENAI_MODEL_NAME }}
             validation: openai:${{ vars.OPENAI_MODEL_NAME }}
