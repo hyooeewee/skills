@@ -15,3 +15,4 @@ npx skills@latest add mattpocock/skills --skill=<name>
 * **[claude-handoff](./claude-handoff/SKILL.md)**：将当前的对话交接给一个全新的后台代理，该代理立即开始工作，并通过 `claude --bg` 注入交接摘要。由用户调用。
 * **[setup-ts-deep-modules](./setup-ts-deep-modules/SKILL.md)**：将 dependency-cruiser 连接到 TypeScript 仓库，以便每个包都是一个深度模块：实现隐藏在子文件夹中，只能通过其入口文件访问，测试通过这些文件来执行。由用户调用。
 * **[implement-spec](./implement-spec/SKILL.md)**：在一个分支上实现整个规范。将工单作为任务图而不是列表来处理，在就绪前沿运行实现者子代理以实现最大并发，并将结果作为一个 PR 交付。由用户调用。
+* **[retro](./retro/SKILL.md)**：在会话后建议改进编码代理的环境（引导文件、编码标准、自动化检查、工具）。存根：仅包含设计笔记，尚未实现功能。由用户调用。
