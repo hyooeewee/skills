@@ -29,10 +29,12 @@ jobs:
       doc: ${{ steps.sync.outputs.doc }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Fetch upstream
         run: |
           git remote add upstream "$UPSTREAM_REPOSITORY_URL"
           git fetch upstream "$UPSTREAM_BRANCH" --no-tags
+
       - name: Detect changes
         id: sync
         run: |
@@ -59,10 +61,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Fetch upstream
         run: |
           git remote add upstream "$UPSTREAM_REPOSITORY_URL"
           git fetch upstream "$UPSTREAM_BRANCH" --no-tags
+
       # Prepare content on the origin/main worktree WITHOUT creating the PR branch:
       # a pre-created branch tracking upstream breaks create-pull-request.
       - name: Prepare content from upstream
@@ -87,6 +91,16 @@ jobs:
           key: continuous-translation-${{ github.run_id }}
           restore-keys: |
             continuous-translation-
+
+      - name: Get Secrets
+        uses: bitwarden/sm-action@v2
+        with:
+          access_token: ${{ secrets.BW_ACCESS_TOKEN }}
+          secrets: |
+            16aa98e0-2c29-43d3-888f-b4b400574913 > OPENAI_API_BASE
+            bb9e30e3-dc05-4bf8-a079-b4b40056d6c2 > OPENAI_API_KEY
+            aca6cba0-1773-426e-b78b-b4b400581b43 > OPENAI_MODEL_NAME
+
       - name: Translate docs to zh
         if: needs.sync.outputs.doc != '0'
         continue-on-error: true
@@ -98,13 +112,10 @@ jobs:
           debug: true
           filename_template: "{{dirname}}/{{basename}}{{extname}}"
           instructions: |
-            For EVERY ┌P###┐ or ┌T###┐ marker you MUST return exactly one fenced code block whose language is the SAME identifier (e.g. ```P001).  Never rename P to T or change the number. Do not merge, skip, reorder or omit any block. Keep all Markdown links, bold, and inline code intact; translate only the natural-language text and keep URLs unchanged. 
+            For EVERY ┌P###┐ or ┌T###┐ marker you MUST return exactly one fenced code block whose language is the SAME identifier (e.g. ```P001).  Never rename P to T or change the number. Do not merge, skip, reorder or omit any block. Keep all Markdown links, bold, and inline code intact; translate only the natural-language text and keep URLs unchanged.
           model_alias: |
-            translation: openai:${{ vars.OPENAI_MODEL_NAME }}
-            validation: openai:${{ vars.OPENAI_MODEL_NAME }}
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_API_BASE: ${{ vars.OPENAI_API_BASE }}
+            translation: openai:${{ env.OPENAI_MODEL_NAME }}
+            validation: openai:${{ env.OPENAI_MODEL_NAME }}
 
       - name: Fix ownership of generated files
         if: needs.sync.outputs.changed == 'true'
