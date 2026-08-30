@@ -1,13 +1,11 @@
 ---
 name: to-spec
-description: "Turn the current conversation into a spec and publish it to the
-  project issue tracker: no interview, just synthesis of what you've already
-  discussed."
+description: 将当前对话转化为规格说明并发布到项目议题跟踪器：无需访谈，只需综合您已讨论的内容。
 disable-model-invocation: true
 
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
+此技能获取当前对话上下文和代码库理解并生成规格说明。请勿访谈用户；只需综合您已知的信息。
 
 你的问题跟踪器和分流标签词汇表应该已经提供给你。如果没有，请告诉用户运行 `/setup-matt-pocock-skills`。
 
