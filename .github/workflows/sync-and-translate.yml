@@ -28,7 +28,7 @@ jobs:
       changed: ${{ steps.sync.outputs.changed }}
       doc: ${{ steps.sync.outputs.doc }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Fetch upstream
         run: |
@@ -60,7 +60,7 @@ jobs:
     if: needs.sync.outputs.changed == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Fetch upstream
         run: |
@@ -84,7 +84,7 @@ jobs:
           done
           git rm -q --ignore-unmatch .github/workflows/release.yml 2>/dev/null || true
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         if: needs.sync.outputs.doc != '0'
         with:
           path: .genaiscript/cache/**
@@ -93,7 +93,7 @@ jobs:
             continuous-translation-
 
       - name: Get Secrets
-        uses: bitwarden/sm-action@v2
+        uses: bitwarden/sm-action@v3
         with:
           access_token: ${{ secrets.BW_ACCESS_TOKEN }}
           secrets: |
