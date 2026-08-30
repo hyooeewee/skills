@@ -4210,5 +4210,9 @@
   "Choose scenarios that demonstrate the awkward cases, the ones hard to reason abo.3883DCF7DD5D3A5410F6": "选择能够展示棘手情况的场景，即那些在纸上很难推理的情况：正常路径、棘手的边缘情况，以及对某些本应非法之事的尝试。",
   "Keep it beautiful but restrained: clean typography, generous spacing, one accent.3EFF31166076EB0D43DD": "保持美观但克制：清晰的排版、充足的间距和一种强调色。没有动画，没有花哨的噱头：任何都不应干扰状态和按钮的展示。",
   "Send them the file, or open it for them. They'll click through the walkthroughs .CD3C7906347B3458A88B": "把文件发给他们，或者为他们打开。他们会在任何时候浏览演练和自由操作；有趣的时刻是当他们说「等等，那不应该可能」或「嗯，我以为 X 会不同」的时候；这些是*想法*中的缺陷，这正是其全部意义所在。如果他们想要新的动作或场景，就添加它们。原型是会演变的。",
-  "Once the prototype has answered its question, capture the answer, then capture t.3636D6C3A7C0290BC70D": "一旦原型回答了其问题，捕获答案，然后按照 [SKILL](SKILL.md) 的描述捕获原型。针对逻辑的具体映射：经过验证的 reducer / 状态机 / 函数集会提升到真实模块中（决策被吸收）；HTML 外壳会附带到保留原型的丢弃分支，并且由于它是自包含的，因此在那里可以随时重新运行。"
+  "Once the prototype has answered its question, capture the answer, then capture t.3636D6C3A7C0290BC70D": "一旦原型回答了其问题，捕获答案，然后按照 [SKILL](SKILL.md) 的描述捕获原型。针对逻辑的具体映射：经过验证的 reducer / 状态机 / 函数集会提升到真实模块中（决策被吸收）；HTML 外壳会附带到保留原型的丢弃分支，并且由于它是自包含的，因此在那里可以随时重新运行。",
+  "Turn the current conversation into a spec and publish it to the project issue tr.EA6B127117E78FDEC497": "将当前对话转化为规格说明并发布到项目议题跟踪器：无需访谈，只需综合您已讨论的内容。",
+  "This skill takes the current conversation context and codebase understanding and.4842E7B8A0564C7F2879": "此技能获取当前对话上下文和代码库理解并生成规格说明。请勿访谈用户；只需综合您已知的信息。",
+  "When the user wants to explore alternative interfaces for a chosen deepening can.616DD91DF50DA0E26009": "当用户想要为选定的深化候选探索替代接口时，使用此并行子代理模式。基于\"设计两次\"（Ousterhout）：你的第一个想法不太可能是最好的。",
+  "Uses the vocabulary in [SKILL.md](SKILL.md): **module**, **interface**, **seam**.032DF2952B5906BF8AC0": "使用 [SKILL.md](SKILL.md) 中的词汇：**模块**、**接口**、**接缝**、**适配器**、**杠杆作用**。"
 }
