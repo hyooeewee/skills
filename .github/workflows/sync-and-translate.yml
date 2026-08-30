@@ -93,7 +93,7 @@ jobs:
             continuous-translation-
 
       - name: Get Secrets
-        uses: bitwarden/sm-action@v3
+        uses: bitwarden/sm-action@v3.0.1
         with:
           access_token: ${{ secrets.BW_ACCESS_TOKEN }}
           secrets: |
