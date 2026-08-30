@@ -104,7 +104,7 @@ jobs:
       - name: Translate docs to zh
         if: needs.sync.outputs.doc != '0'
         continue-on-error: true
-        # Use custom modified version
+        # Pinned to v0.2.11 of the upstream action (fork mirrors upstream).
         uses: hyooeewee/action-continuous-translation@v0.2.11
         with:
           lang: zh
@@ -113,9 +113,41 @@ jobs:
           filename_template: "{{dirname}}/{{basename}}{{extname}}"
           instructions: |
             For EVERY ┌P###┐ or ┌T###┐ marker you MUST return exactly one fenced code block whose language is the SAME identifier (e.g. ```P001).  Never rename P to T or change the number. Do not merge, skip, reorder or omit any block. Keep all Markdown links, bold, and inline code intact; translate only the natural-language text and keep URLs unchanged.
+          openai_api_base: ${{ env.OPENAI_API_BASE }}
+          openai_api_key: ${{ env.OPENAI_API_KEY }}
           model_alias: |
             translation: openai:${{ env.OPENAI_MODEL_NAME }}
             validation: openai:${{ env.OPENAI_MODEL_NAME }}
+
+      - name: Restore docs left untranslated by the translation step
+        if: needs.sync.outputs.changed == 'true'
+        run: |
+          # The translation action skips writing a file back on several paths
+          # (LLM validation rejected the chunk, low success ratio, invalid
+          # Markdown, ...). It then leaves the raw upstream English that the
+          # "Prepare content from upstream" step checked out. Committing that
+          # would overwrite an existing Chinese translation with English.
+          # Restore any doc still byte-identical to upstream English back to
+          # origin/main, so the PR keeps the last good translation until a
+          # successful one exists.
+          restored=0
+          while IFS= read -r f; do
+            case "$f" in
+              *.md|*.mdx) ;;
+              *) continue ;;
+            esac
+            [ -f "$f" ] || continue
+            # Unchanged by the translation step, i.e. still raw upstream content?
+            cmp -s "$f" <(git show "upstream/$UPSTREAM_BRANCH:$f") || continue
+            # Is there an origin/main version to restore?
+            git cat-file -e "origin/main:$f" 2>/dev/null || continue
+            # Skip when origin/main is not a translation of upstream (no regression).
+            cmp -s <(git show "origin/main:$f") <(git show "upstream/$UPSTREAM_BRANCH:$f") && continue
+            echo "::notice::restoring $f (left as raw upstream English; origin/main has a translation)"
+            git checkout origin/main -- "$f"
+            restored=$((restored+1))
+          done < <(git diff --name-only origin/main -- '*.md' '*.mdx')
+          echo "restored=$restored doc(s) from origin/main"
 
       - name: Fix ownership of generated files
         if: needs.sync.outputs.changed == 'true'
