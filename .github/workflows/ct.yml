@@ -1,7 +1,5 @@
 name: Continuous Translation
 
-# Sync upstream, translate docs to zh, open/update a PR to main.
-
 on:
   schedule:
     - cron: "0 4 * * *"
@@ -18,7 +16,6 @@ concurrency:
 env:
   UPSTREAM_REPOSITORY_URL: ${{ vars.UPSTREAM_REPOSITORY_URL }}
   UPSTREAM_BRANCH: ${{ vars.UPSTREAM_BRANCH || 'main' }}
-  # Files re-imported from our repo (not translated, not from upstream).
   KEEP_FROM_ORIGIN: ".github translations .ctignore"
 
 jobs:
@@ -67,8 +64,6 @@ jobs:
           git remote add upstream "$UPSTREAM_REPOSITORY_URL"
           git fetch upstream "$UPSTREAM_BRANCH" --no-tags
 
-      # Prepare content on the origin/main worktree WITHOUT creating the PR branch:
-      # a pre-created branch tracking upstream breaks create-pull-request.
       - name: Prepare content from upstream
         run: |
           # Resolve the workspace workflow files from our repo, not upstream, so
@@ -104,8 +99,7 @@ jobs:
       - name: Translate docs to zh
         if: needs.sync.outputs.doc != '0'
         continue-on-error: true
-        # Pinned to v0.2.11 of the upstream action (fork mirrors upstream).
-        uses: hyooeewee/action-continuous-translation@v0.2.11
+        uses: hyooeewee/action-continuous-translation@v0
         with:
           lang: zh
           files: "**/*.md*"
@@ -122,14 +116,6 @@ jobs:
       - name: Restore docs left untranslated by the translation step
         if: needs.sync.outputs.changed == 'true'
         run: |
-          # The translation action skips writing a file back on several paths
-          # (LLM validation rejected the chunk, low success ratio, invalid
-          # Markdown, ...). It then leaves the raw upstream English that the
-          # "Prepare content from upstream" step checked out. Committing that
-          # would overwrite an existing Chinese translation with English.
-          # Restore any doc still byte-identical to upstream English back to
-          # origin/main, so the PR keeps the last good translation until a
-          # successful one exists.
           restored=0
           while IFS= read -r f; do
             case "$f" in
