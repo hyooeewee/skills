@@ -4214,5 +4214,6 @@
   "Turn the current conversation into a spec and publish it to the project issue tr.EA6B127117E78FDEC497": "将当前对话转化为规格说明并发布到项目议题跟踪器：无需访谈，只需综合您已讨论的内容。",
   "This skill takes the current conversation context and codebase understanding and.4842E7B8A0564C7F2879": "此技能获取当前对话上下文和代码库理解并生成规格说明。请勿访谈用户；只需综合您已知的信息。",
   "When the user wants to explore alternative interfaces for a chosen deepening can.616DD91DF50DA0E26009": "当用户想要为选定的深化候选探索替代接口时，使用此并行子代理模式。基于\"设计两次\"（Ousterhout）：你的第一个想法不太可能是最好的。",
-  "Uses the vocabulary in [SKILL.md](SKILL.md): **module**, **interface**, **seam**.032DF2952B5906BF8AC0": "使用 [SKILL.md](SKILL.md) 中的词汇：**模块**、**接口**、**接缝**、**适配器**、**杠杆作用**。"
+  "Uses the vocabulary in [SKILL.md](SKILL.md): **module**, **interface**, **seam**.032DF2952B5906BF8AC0": "使用 [SKILL.md](SKILL.md) 中的词汇：**模块**、**接口**、**接缝**、**适配器**、**杠杆作用**。",
+  "To (re)link every skill outside `deprecated/` and `misc/` into the local harness.E974320C65E2CADBB491": "要将 `deprecated/` 和 `misc/` 之外的每个技能（重新）链接到本地 harness 技能目录（`~/.claude/skills`、`~/.agents/skills`），请运行 `scripts/link-skills.sh`。每个条目都是指向此仓库的符号链接，因此 `git pull` 即可保持已安装技能为最新状态；添加、删除或重命名技能后请重新运行该脚本。"
 }
