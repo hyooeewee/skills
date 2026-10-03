@@ -13,7 +13,7 @@
 | 你拥有什么                           | 选择                                                                                                                                                                                                                     |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 你不在工作目录中工作                      | [grill-me](https://aihero.dev/skills-grill-me)同样的\[会话]\(https\://www\.aihero.dev/ai-coding-dictionary/session)，以一个 agent 永远不会自行触发的名称运行 [会话](https://www.aihero.dev/ai-coding-dictionary/session)，以 agent 永远不会自行触发的名称运行 |
-| 你处于工作目录中                        | [grill-with-docs](https://aihero.dev/skills-grill-with-docs)同样的会话，并且在过程中会写入 \`CONTEXT.md\` 和 ADR `CONTEXT.md`以及在这个过程中生成的 ADR                                                                                           |
+| 你处于工作目录中                        | [grill-with-docs](https://aihero.dev/skills-grill-with-docs)同样的会话，并且在过程中会写入 \`CONTEXT.md\` 和 ADR `GLOSSARY.md`以及在这个过程中生成的 ADR                                                                                          |
 | 一个规模太大、无法在单个会话中完成的工作            | [wayfinder](https://aihero.dev/skills-wayfinder)它绘制地图并在决策单内运行 grilling                                                                                                                                                 |
 | 一个无法通过交谈解决的问题是：某样东西应该看起来或感觉起来如何 | [prototype](https://aihero.dev/skills-prototype)构建废弃版本，然后再回来                                                                                                                                                           |
 | 你自己的、需要访谈的技能                    | 从中调用 `/grilling`，而不是编写另一个访谈                                                                                                                                                                                            |
@@ -38,7 +38,7 @@
 | ----------------------------------- | ------------------------------------------------------------ |
 | 树、前沿、轮次、问题格式、事实与决策                  | 这里                                                           |
 | 会话应该运行多久、如何处理无法通过交谈回答的问题、如何避免一味点头附和 | [grill-me](https://aihero.dev/skills-grill-me)               |
-| 什么会被写入 `CONTEXT.md`，什么会成为 ADR       | [grill-with-docs](https://aihero.dev/skills-grill-with-docs) |
+| 什么会被写入 `GLOSSARY.md`，什么会成为 ADR      | [grill-with-docs](https://aihero.dev/skills-grill-with-docs) |
 
 ## 常见问题
 

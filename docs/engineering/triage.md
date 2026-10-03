@@ -94,4 +94,4 @@
 
 ## 它在系统中的位置
 
-`triage` 是一个**入口**，而不是主流程中的一个步骤。主流程源于你的想法（grill, spec, tickets, implement, review），而 `triage` 是为那些以不同方式到达的工作开辟的并行车道。它在同一个地方汇合：一个标记为 `ready-for-agent` 并带有简报的 issue，[implement](https://aihero.dev/skills-implement) 会像处理来自 [to-tickets](https://aihero.dev/skills-to-tickets) 的 ticket 一样接手它。当一个请求在简报之前需要打磨时，`triage` 会同时运行 [grilling](https://aihero.dev/skills-grilling) 和 [domain-modeling](https://aihero.dev/skills-domain-modeling)，一次进行一轮提问，这样决策就会在做出时落入 `CONTEXT.md` 和 ADRs 中。当你不确定自己处于哪个车道时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指路。
+`triage` 是一个**入口匝道**，而不是主链中的一个步骤。主流程从你的一个想法开始（grill、spec、tickets、implement、review），而 `triage` 是为到达的工作准备的并行车道。它们在同一个地方汇合：一个带有简报并标记为 `ready-for-agent` 的 issue，[implement](https://aihero.dev/skills-implement) 会像拾起 [to-tickets](https://aihero.dev/skills-to-tickets) 的工单一样拾起它。当一个请求在生成简报前需要打磨时，`triage` 会一起运行 [grilling](https://aihero.dev/skills-grilling) 和 [domain-modeling](https://aihero.dev/skills-domain-modeling)，一次一轮问题，让决策在生成时落入 `GLOSSARY.md` 和 ADRs 中。当你不确定自己在哪条车道时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指路。

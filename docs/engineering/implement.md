@@ -54,11 +54,11 @@
 
 **我能让它一次处理我所有的工单，或者并行运行多个吗？**
 
-不行。一次调用只处理一个工单。跨工单队列的批量调度和 [subagent](https://www.aihero.dev/ai-coding-dictionary/subagent) 扇出都被反复要求过，但两者都不存在。在同一个检出中并排运行多个 `/implement` 会话比不受支持还要糟糕：一份现场报告描述了在三个 issue 上，一个下午之内，一个会话中的 `git commit --amend` 落在了另一个会话的提交上，一个 stash 从 `refs/stash` 中消失，还有提交落在了错误的分支上。这些会话共享同一个工作目录、同一个索引和同一个 HEAD。Git worktree 是社区的变通方案，但请注意 `refs/stash` 在不同 worktree 之间也是共享的，所以仅靠 worktree 并不能解决 stash 的问题。如果你今天想要并行，就得自己组装。
+不能用 `/implement`：一次调用，一个工单。若要在一次运行中完成整个规格，请使用 [implement-spec](https://aihero.dev/skills-implement-spec)，它会把工单分发给各个 [subagents](https://www.aihero.dev/ai-coding-dictionary/subagent)，每个在自己的工作树中、跨越就绪前沿运行，最后合并到同一个集成分支。在一个检出里并行跑多个 `/implement` 会话比“不支持”还糟糕：一份现场报告描述了在一个下午三个 issue 里，一个会话的 `git commit --amend` 落到了另一个会话的提交上，一个 stash 从 `refs/stash` 消失了，提交落到了错误的分支上。这些会话共享同一个工作目录、同一个索引、同一个 HEAD。Git worktree 是社区的变通方案，但要注意 `refs/stash` 在 worktree 间也是共享的，所以光用 worktree 并不能解决 stash 的问题。
 
 **它能创建一个拉取请求来代替提交吗？**
 
-没有内置此功能。它会直接提交到当前分支，这让一些人觉得太过急切：代码在他们有机会验证其能否工作之前就已经落地。没有配置标志，也没有 PR 模式。人们会在调用时覆盖这一行为（"提交到分支并打开 PR"），或者通过编辑本地技能副本。
+没有内置。它直接提交到当前分支，有几个人觉得太激进了：代码落地前他们还没来得及验证能不能跑通。没有配置标志，也没有 PR 模式。大家要么在调用时覆盖（“提交到分支并开 PR”），要么改技能的本地副本。等代理真写 PR 时，[pr](https://aihero.dev/skills-pr) 会负责生成正文。
 
 **`code-review`说它看不到我的改动。**
 
@@ -84,10 +84,10 @@
 
 ## 它在系统中的位置
 
-`implement` 是主链的构建步骤，倒数第二个：
+`implement` 是主链的构建步骤：
 
 ```txt
-grill-with-docs → to-spec → to-tickets → implement → code-review
+grill-with-docs → to-spec → to-tickets → implement → code-review → retro
 ```
 
 它的邻居有 [to-tickets](https://aihero.dev/skills-to-tickets)，它负责生成 `implement` 所消费的工单，并声明决定其顺序的阻塞边；[tdd](https://aihero.dev/skills-tdd)，它在每个接缝处内部驱动；以及 [code-review](https://aihero.dev/skills-code-review)，它在提交前运行。它位于规划技能的下游，并信任它们。它不会重新验证交给它的内容形态，因此一个结构糟糕的地图或一个水平分层的工单会按原样被构建。

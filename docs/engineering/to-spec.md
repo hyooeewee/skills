@@ -2,7 +2,7 @@
 
 `to-spec` 会将你刚刚进行的对话转化为一份 **[spec](https://www.aihero.dev/ai-coding-dictionary/spec)**，并将其作为一个 issue 发布到你的问题追踪器中。
 
-它不会采访你。当你使用它时，决定已经做完了，所以它会综合已知信息（来自线程、代码库、你的 `CONTEXT.md` 和 ADR），而不是开启新一轮提问。Spec 是已做出决策的记录，而不是做出新决策的地方。
+它不会采访你。当你想到它时，决定已经做出了，所以它综合已知信息（来自线程、代码库、你的 `GLOSSARY.md` 和 ADR），而不是开启新一轮提问。规格说明书是已做决定的记录，而不是做出新决定的地方。
 
 ## 何时使用它
 
@@ -45,7 +45,7 @@ Spec 的存在是因为上下文窗口会结束。你在 [grilling](https://www.
 
 spec 是供我审查的，还是仅仅给 agent 看的？主要是给 agent 看的，读起来也是这种感觉：完整、密集、参考资料丰富。值得你关注的部分是接缝和超出范围的部分，因为那是两个地方——错误决定最容易发现（成本最低），但也最晚被发现（成本最高）。从头读到尾是人们的一个真实抱怨，而且没有摘要模式：诚实的回答是，如果 spec 令你惊讶，那说明 grilling 太浅了，而不是 spec 太长。
 
-一旦 tickets 开始，我是应该保持 spec 冻结，还是让 agent 重写它？没有任何东西能保持它的同步，所以实际上它是你当时所知事物的快照，一旦实现阶段教会了你新东西，它就会变得过时。一旦工作发布，就把它当作一次性用品。旨在让它长久存在的工件是你的 `CONTEXT.md` 和 ADRs；如果在实现过程中学到了值得保留的东西，它应该属于那里，而不是属于被编辑过的 spec。
+一旦 tickets 开始，我是保持 spec 冻结，还是让 agent 重写它？没有任何东西能保持它同步，所以实际上它是你当时所知的快照，实现过程第一次教会你新东西时它就过时了。工作交付后将其视为一次性用品。旨在比它更持久的产物是你的 `GLOSSARY.md` 和 ADR；如果实现过程中学到的东西值得保留，它应该放在那里，而不是放在编辑过的 spec 里。
 
 我的工作是重构或模块边界，而不是一个特性。模板适用吗？适用性较差，这是一个已知的限制。模板严重依赖用户故事，这是架构工作的错误形态：你最终会写一些没人要求的"故事"，围绕那些实际上关于接口和不变量的决策。相反，应依赖实现决策和测试决策部分，并通过 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) 让持久性的架构决策作为 ADR 落地，而不是试图让 spec 来承载它们。
 
@@ -66,7 +66,7 @@ spec 是供我审查的，还是仅仅给 agent 看的？主要是给 agent 看�
 `to-spec` 是主构建链中的一个步骤，而且只在其中的多会话分支上：
 
 ```txt
-grill-with-docs → to-spec → to-tickets → implement → code-review
+grill-with-docs → to-spec → to-tickets → implement → code-review → retro
 ```
 
 它上游的邻居是 [grill-with-docs](https://aihero.dev/skills-grill-with-docs)——它负责做本技能只负责记录的决策——以及 [wayfinder](https://aihero.dev/skills-wayfinder)，其完成的地图正好在此处合并到链上。下游的 [to-tickets](https://aihero.dev/skills-to-tickets) 会把 spec 切分为曳光弹式（tracer-bullet）tickets，供 [implement](https://aihero.dev/skills-implement) 构建。当你不确定哪种技能或流程合适时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指路。

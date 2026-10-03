@@ -88,7 +88,7 @@ Mock 只用于系统边界：外部 API、时间、随机性，有时是文件�
 `tdd` 是主链路中构建步骤内部的引擎，而不是独立的一步：
 
 ```txt
-grill-with-docs → to-spec → to-tickets → implement → code-review
+grill-with-docs → to-spec → to-tickets → implement → code-review → retro
 ```
 
 [to-spec](https://aihero.dev/skills-to-spec) 提前商定测试接缝，[implement](https://aihero.dev/skills-implement) 按工单驱动 `tdd`，而 [code-review](https://aihero.dev/skills-code-review) 随后检查是否只使用了商定的接缝，并拥有 `tdd` 不再执行的重构。它的另一个邻居是 [codebase-design](https://aihero.dev/skills-codebase-design)，这是 `tdd` 所说的接缝和深模块词汇的共享来源。你也可以随时单独使用它，只要有具体的行为要构建且没有完整的规格在运行。当你不确定哪个技能适合你的情况时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你路由。
