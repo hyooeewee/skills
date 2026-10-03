@@ -119,7 +119,7 @@ npx skills@latest add mattpocock/skills
 Example
 </summary>
 
-这是我 `course-video-manager` 仓库中的一个 [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md) 示例。哪一个更容易阅读？
+这里有一个[词汇表](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md)示例（在该固定提交中仍命名为 `CONTEXT.md`，源于技能重命名约定之前），来自我的 `course-video-manager` 仓库。哪一个更容易阅读？
 
 * **之前**：“当课程某个部分中的一课被‘实体化’（即在文件系统中获得一个位置）时，就会出现问题。”
 * **之后**：“物化级联存在问题。”
@@ -192,14 +192,16 @@ Example
 **用户调用**
 
 * 询问哪种技能或流程适合你的情况。这是本仓库中用户调用技能的路由器。
-* 盘问环节，同时构建你的项目的领域模型，完善术语并在内联更新 `CONTEXT.md` 和 ADR。
+* **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)**：盘问环节，同时构建项目的领域模型，优化术语并内联更新 `GLOSSARY.md` 和 ADR。
 * 通过分类角色的状态机移动问题。
 * 扫描代码库以寻找深化机会，将其作为视觉 HTML 报告呈现，然后通过你选择的那个进行盘问。
 * 为工程技能配置此仓库（问题追踪器、分类标签、领域文档布局）。在使用其他工程技能之前，在每个仓库上运行一次。
 * 将当前的对话转换为规格说明并发布到问题追踪器。不需要面试，只是综合你已经讨论过的内容。
 * 将任何计划、规格说明或对话分解为一组追踪子弹工单，每个工单声明其阻塞边，以文本形式写入本地文件，或作为真实追踪器上的原生阻塞链接。
 * 构建规格说明或一组工单所描述的工作，在预先商定的接缝处驱动 `/tdd`，并在提交前以 `/code-review` 结束。
+* **[implement-spec](./skills/engineering/implement-spec/SKILL.md)**：在一个集成分支上实现整个规格说明。将工单作为任务图处理，在就绪前沿运行实现子智能体以实现最大并发，最后通过 `/code-review` 收尾。
 * 将一大块工作规划为问题追踪器上决策工单的共享地图，并逐个解决它们，直到通往目的地的路径清晰。
+* **[retro](./skills/engineering/retro/SKILL.md)**：在会话后建议对编码智能体环境的改进（导航、自动化检查、编码标准、引导文件、工具），按严重程度排序。
 
 **模型调用**
 
@@ -207,10 +209,10 @@ Example
 * * **[tdd](./skills/engineering/tdd/SKILL.md)**: Red-green-refactor loop.
 * * **[code-review](./skills/engineering/code-review/SKILL.md)**: Review code with an emphasis on the big picture.
 * * **[diagnosing-bugs](./skills/engineering/diagnosing-bugs/SKILL.md)**: Diagnose bugs with a disciplined loop, gated phase by phase.
-* * **[test-coverage](./skills/engineering/test-coverage/SKILL.md)**: Generate a coverage report and open it in a browser.
+* **[domain-modeling](./skills/engineering/domain-modeling/SKILL.md)**：主动构建并打磨项目的领域模型：对照词汇表挑战术语、用边缘场景压力测试，并内联更新 `GLOSSARY.md` 和 ADR。
 * * **[next-steps](./skills/engineering/next-steps/SKILL.md)**: Suggest next steps based on the codebase state, with options to confirm, edit, or cancel.
 * * **[code-owners](./skills/engineering/code-owners/SKILL.md)**: Identify the owner of a specific file or directory.
-* 逐个解决进行中的 git 合并或变基冲突块，通过追溯到每方主要来源的意图来解决，然后完成操作（永远不要 `--abort`）。
+* **[pr](./skills/engineering/pr/SKILL.md)**：Pull Request 正文应有的结构：一个最小可视化摘要让变更一目了然、前后对比证据证明其工作正常，以及合并风险提示（单向门或双向门，加爆炸半径）。
 * 生成一个交互式 bash 向导，引导人类完成只有他们能执行的步骤：配置基础设施、设置凭据或 CI 密钥、浏览不熟悉的外部仪表板，或运行一次性迁移或切换。
 
 ### 生产力
@@ -223,7 +225,7 @@ Example
 * 将当前的对话压缩成交接文档，以便另一个代理可以继续工作。
 * 在多个会话中向用户教授新技能或概念，使用当前目录作为有状态的教学工作区。
 * 将一个你无法独自回答的决定转化为一个 Markdown 问卷，给那个能回答的人填写，可以异步填写，也可以在会议中一起填写。它盘问你的是发送信息（发给谁，你需要什么反馈），而不是盘问主题内容。
-* 当消息未送达时立即触发此操作。代理会用你缺失的上下文重新提出请求，使用通俗英语和你的 `CONTEXT.md` 词汇。
+* **[wait-what](./skills/productivity/wait-what/SKILL.md)**：当信息没对上时立即触发。智能体用你缺失的上下文、通俗易懂的语言、并结合你的 `GLOSSARY.md` 词汇重新讲一遍。
 
 **模型调用**
 

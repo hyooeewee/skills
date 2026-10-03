@@ -13,7 +13,7 @@
 你想要三种 grilling 技能中的哪一种，取决于你面前的东西：
 
 * “任何事，任何地”：`grill-me`。它不需要代码库，也不写文件，且主题不必是代码。
-* “用于对照的代码库”：[grill-with-docs](https://aihero.dev/skills-grill-with-docs)。同样的访谈，但是 [有状态](https://www.aihero.dev/ai-coding-dictionary/stateful)：它会读取你的代码，并将学到的内容保存在 `CONTEXT.md` 和 ADRs 中。
+* **一个用于对齐的代码库**：[grill-with-docs](https://aihero.dev/skills-grill-with-docs)。同样的访谈，但是 [有状态的](https://www.aihero.dev/ai-coding-dictionary/stateful)：它读取你的代码，并将学到的内容保存在 `GLOSSARY.md` 和 ADRs 中。
 * “单次会话无法处理”：[wayfinder](https://aihero.dev/skills-wayfinder)。它将工作量绘制成地图，并在其中运行 grilling 会话。
 
 关闭 [计划模式](https://www.aihero.dev/ai-coding-dictionary/agent-mode)。计划模式会让代理急于产出计划，这与保持探究恰恰相反。
@@ -70,6 +70,6 @@ When grilling, ask one question at a time.
 
 `grill-me` 是一个 **你可以随时在任何东西上运行的独立工具**。无状态正是使其可移植的原因：没有代码库，没有工作区，没有设置，也没有关于想法甚至与软件无关的假设。人们把它指向业务决策、写作、接下来做什么：任何不会停留在他们脑海中的事物。
 
-这种可移植性正是它与 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) 的全部区别，后者运行同样的访谈，但会读取一个代码库来对齐，并将其学到的内容记录为 `CONTEXT.md` 和 ADR。两者都基于 [grilling](https://aihero.dev/skills-grilling) 原语；`grill-me` 是用户调用的、不携带任何东西的入口。
+这种可移植性正是与 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) 的全部区别，后者运行同样的访谈，但会读取代码库以便对齐，并将学到的内容记录为 `GLOSSARY.md` 和 ADRs。两者都建立在 [grilling](https://aihero.dev/skills-grilling) 这一基元之上；`grill-me` 是用户调用的前门，不携带任何东西。
 
 如果你 grill 的东西确实结果是软件，你可以将同一个对话交给 [to-spec](https://aihero.dev/skills-to-spec) 并继续进入构建流程（这是一个选项，不是技能的重点）。当你不确定哪个流程适合时，[ask-matt](https://aihero.dev/skills-ask-matt) 会为你指引。

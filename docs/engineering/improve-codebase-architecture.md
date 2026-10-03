@@ -27,9 +27,9 @@
 
 ## 先决条件
 
-无需任何先决条件即可运行。它会读取 `CONTEXT.md` 以及 `docs/adr/` 中的任何 ADR（如果存在的话），并在存在时使用你领域内的术语：候选者会读作“深化订单录入模块”，而不是“重构 FooBarHandler”。
+无需任何前置条件即可运行。如果存在，它会读取 `GLOSSARY.md` 和 `docs/adr/` 中的任何 ADR，并使用你领域自己的名词表达：候选项会表述为“深化订单录入模块”，而不是“重构 FooBarHandler”。
 
-它会在两个地方写入内容。报告会写到仓库之外的 `<tmpdir>/architecture-review-<timestamp>.html`。在盘问循环期间，它会在 `CONTEXT.md` 中添加或精炼术语，若该文件不存在则创建它，并主动提出把被否决的候选记录为 ADR，以便未来的运行不再重复建议它。
+它在两个地方写入内容。报告输出到 `<tmpdir>/architecture-review-<timestamp>.html`，位于仓库之外。在盘问循环期间，它会在 `GLOSSARY.md` 中添加或细化术语（如果该文件不存在则创建），并提议将被拒绝的候选项记录为 ADR，以便将来的运行不再重复建议它。
 
 ## 深度，以及追寻深度的报告
 
@@ -98,4 +98,4 @@
 
 ## 它在系统中的位置
 
-`improve-codebase-architecture` 是**定期维护**：每隔几天运行一次，不处于任何流程链中，以排队待办而不是直接完成工作。它的邻居是 [codebase-design](https://aihero.dev/skills-codebase-design)，它拥有每个候选所使用的深度和接缝词汇；[grilling](https://aihero.dev/skills-grilling)，在你选择候选后遍历决策树；以及 [domain-modeling](https://aihero.dev/skills-domain-modeling)，随着决策的确定而保持 `CONTEXT.md` 和 ADRs 的最新状态。它产生的是一个想法，这个想法在 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) 或 [to-spec](https://aihero.dev/skills-to-spec) 时重新进入主构建流程。对于哪种技能适合哪种情况，[ask-matt](https://aihero.dev/skills-ask-matt) 是整个集合的路由器。
+`improve-codebase-architecture` 是**定期维护**：每隔几天运行一次，不在任何工具链中，目的是排队待办工作而非直接执行。它的邻近技能有 [codebase-design](https://aihero.dev/skills-codebase-design)，它拥有每个候选项所使用的深度与接缝词汇；[grilling](https://aihero.dev/skills-grilling)，在你选定候选项后遍历决策树；以及 [domain-modeling](https://aihero.dev/skills-domain-modeling)，它随着决策落地保持 `GLOSSARY.md` 和 ADR 的最新状态。它产出的是一个想法，该想法会在 [grill-with-docs](https://aihero.dev/skills-grill-with-docs) 或 [to-spec](https://aihero.dev/skills-to-spec) 处重新进入主构建流程。主流程末尾的对应技能是 [retro](https://aihero.dev/skills-retro)：本技能改进代理工作的代码，`retro` 在构建后改进其周围的环境（检查、标准、指引文件）。对于哪个技能适合某种情况，[ask-matt](https://aihero.dev/skills-ask-matt) 是整个技能集的路由器。

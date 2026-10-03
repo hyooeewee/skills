@@ -85,9 +85,11 @@ Spec 维度需要一个存在且可被找到的规格。它按以下顺序查找
 
 ## 它在系统中的位置
 
-`code-review` 是构建链末尾的审查步骤：`grill-with-docs → to-spec → to-tickets → implement → code-review`。它也可以独立运行在你指向的任何分支或 PR 上。
+`code-review` 是构建链末端附近的审查步骤：`grill-with-docs → to-spec → to-tickets → implement → code-review → retro`。它也可以单独用于你指向的任何分支或 PR。
 
-* [implement](https://aihero.dev/skills-implement) 是最接近的邻居：它驱动构建，并在提交前调用本技能作为自己的收尾审查。
+* [implement](https://aihero.dev/skills-implement) 是最近的邻居：它驱动构建，并在提交前将此技能作为其自己的结束审查步骤调用。[implement-spec](https://aihero.dev/skills-implement-spec) 在整个集成分支上做同样的事情，一次性完成。
+* [retro](https://aihero.dev/skills-retro) 在它之后运行并对其进行调优：当一个会话显示审查遗漏了一类错误时，`retro` 会提出检查项或 `CODING_STANDARDS.md` 规则，供 Standards 轴随后读取。
+* [pr](https://aihero.dev/skills-pr) 在经过审查的工作推送后编写 pull request 正文。
 * [to-spec](https://aihero.dev/skills-to-spec) 和 [to-tickets](https://aihero.dev/skills-to-tickets) 生成 Spec 轴对照的文档；模糊的规范会让该轴也变得模糊。
 * [improve-codebase-architecture](https://aihero.dev/skills-improve-codebase-architecture) 是整个代码库的对应技能：本技能只查看一个 diff。
 

@@ -14,7 +14,7 @@
 
 每个桶文件夹都有一个 `README.md`，列出该桶中的每个技能并附一行描述，技能名称链接到其 `SKILL.md`。已推广桶的 `README.md` 和顶层 `README.md` 将条目分组为**用户调用**和**模型调用**；未推广桶的 `README.md`（`misc/`、`in-progress/`）使用平铺列表。
 
-`engineering/` 和 `productivity/` 中的技能在 `docs/<bucket>/<skill-name>.md` 处也有面向人类的文档页面（文档树镜像了 `skills/` 下这两个桶文件夹）。无论桶是什么，发布的 URL 都是 `https://aihero.dev/skills-<skill-name>`：文档路径仅用于仓库组织。当你在 `engineering/` 或 `productivity/` 中添加、重命名或更改技能的行为时，请按照 [.agents/writing-docs.md](./.agents/writing-docs.md) 创建或重新同步其文档页面。完成的页面包含四个部分：**功能**、**何时使用**、**常见问题**和 **如何判断生效**。`writing-docs.md` 包含模板、章节顺序以及问题来源位置。未推广桶（`misc/`、`in-progress/`、`deprecated/`）中的技能**没有**文档页面。
+`engineering/` 和 `productivity/` 中的技能也会在 `docs/<bucket>/<skill-name>.md` 拥有一个面向用户的文档页面（文档树镜像 `skills/` 下的这两个桶文件夹）。无论属于哪个桶，发布的 URL 都是 `https://aihero.dev/skills-<skill-name>`：文档路径仅用于仓库组织。当你在 `engineering/` 或 `productivity/` 中添加、重命名或更改技能行为时，请按照 [.agents/writing-docs.md](./.agents/writing-docs.md) 创建或重新同步其文档页面。完成的页面包含四个部分：**What it does**、**When to reach for it**、**Common questions** 和 **It's working if**。`writing-docs.md` 包含模板、部分顺序以及去哪里寻找问题。非推广桶（`misc/`、`in-progress/`、`deprecated/`）中的技能**不**获取文档页面。唯一的例外是被彻底移除的推广技能：其页面保留，标记为已归档（参见 `writing-docs.md`）。
 
 每个 `SKILL.md` 要么是用户调用的（在 `agents/openai.yaml` 中设置 `disable-model-invocation: true` 和 `policy.allow_implicit_invocation: false`，仅可由人类访问），要么是模型调用的（模型或用户均可访问）。请参阅 [.agents/invocation.md](./.agents/invocation.md)。
 
