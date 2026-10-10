@@ -5,8 +5,9 @@
 ## 约定
 
 * **创建 Issue**：`gh issue create --title "..." --body "..."`。多行正文请使用 heredoc。
-* **读取 Issue**：`gh issue view <number> --comments`，通过 `jq` 过滤评论，并同时获取标签。
+* **读取 Issue**：`gh issue view <number> --json number,title,body,labels,comments`。
 * **列出 Issues**：`gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'`，并按需使用 `--label` 和 `--state` 过滤器。
+* **将 Issue 设为父 Issue 的子 Issue**：`gh issue create --parent <parent> ...`，或事后使用 `gh issue edit <parent> --add-sub-issue <child>`（`gh` 2.94+）。旧版 `gh`：`gh api --method POST repos/<owner>/<repo>/issues/<parent>/sub_issues -F sub_issue_id=<child-db-id>`（数据库 ID，见下文 **Blocking**）。如果不支持子 Issue，请在子 Issue 正文顶部添加 `Part of #<parent>`。
 * **评论 Issue**：`gh issue comment <number> --body "..."`
 * **添加 / 移除标签**：`gh issue edit <number> --add-label "..."` / `--remove-label "..."`
 * **关闭**：`gh issue close <number> --comment "..."`
@@ -20,7 +21,7 @@
 当设为 `yes` 时，PR 与 Issue 使用相同的标签和状态，使用 `gh pr` 对应的命令：
 
 * **读取 PR**：`gh pr view <number> --comments` 查看评论，`gh pr diff <number>` 查看 diff。
-* **列出外部 PR 用于分流**：`gh pr list --state open --json number,title,body,labels,author,authorAssociation,comments`，然后只保留 `authorAssociation` 为 `CONTRIBUTOR`、`FIRST_TIME_CONTRIBUTOR` 或 `NONE` 的（去掉 `OWNER`/`MEMBER`/`COLLABORATOR`）。
+* **列出用于分流的外部 PR**：`gh api --paginate 'repos/{owner}/{repo}/pulls?state=open' --jq '.[] | select(.author_association | IN("OWNER","MEMBER","COLLABORATOR") | not) | {number, title, author: .user.login, author_association, labels: [.labels[].name]}'`。
 * **评论 / 标签 / 关闭**：`gh pr comment`、`gh pr edit --add-label`/`--remove-label`、`gh pr close`。
 
 GitHub 在 Issue 和 PR 之间共享同一个编号空间，因此单独的 `#42` 可能指向 Issue 也可能指向 PR：请先用 `gh pr view 42` 尝试解析，如果不行再回退到 `gh issue view 42`。
@@ -31,14 +32,14 @@ GitHub 在 Issue 和 PR 之间共享同一个编号空间，因此单独的 `#42
 
 ## 当某个技能说“获取相关工单”时
 
-运行 `gh issue view <number> --comments`。
+按上文 **读取 Issue** 的方式读取。
 
 ## 寻路操作
 
 由 `/wayfinder` 使用。**地图**是一个单一的 issue，**子** issues 作为工单。
 
 * **地图**：一个标记为 `wayfinder:map` 的 Issue，承载 Notes / Decisions-so-far / Fog 正文。`gh issue create --label wayfinder:map`。
-* **子工单**：作为 GitHub 子 Issue 链接到地图的 Issue（使用 sub-issues 端点上的 `gh api`）。如果未启用子 Issue，则将子项添加到地图正文的任务列表中，并在子工单正文顶部放置 `Part of #<map>`。标签：`wayfinder:<type>`（`research`/`prototype`/`grilling`/`task`）。一旦被认领，工单将分配给负责的开发者。
+* **子工单**：作为 GitHub 子 Issue 关联到地图的 Issue（见 **将 Issue 设为父 Issue 的子 Issue**）。如果未启用子 Issue，请将子项添加到地图正文的任务列表中，并在子 Issue 正文顶部添加 `Part of #<map>`。标签：`wayfinder:<type>`（`research`/`prototype`/`grilling`/`task`）。认领后，工单将指派给驱动开发者。
 * **Blocking**：GitHub 的 **原生 issue 依赖**，即标准化的、UI 可见的表示形式。使用 `gh api --method POST repos/<owner>/<repo>/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>` 添加一条边，其中 `<blocker-db-id>` 是阻塞者的数字 **数据库 ID**（通过 `gh api repos/<owner>/<repo>/issues/<n> --jq .id` 获取，*不是* `#number` 或 `node_id`）。GitHub 会报告 `issue_dependencies_summary.blocked_by`（仅限开放阻塞者，即实时门控）。当依赖不可用时，回退到子正文顶部的 `Blocked by: #<n>, #<n>` 行。当所有阻塞者都被关闭时，工单即被解阻塞。
 * **前沿查询**：列出地图的开放子项（`gh issue list --state open`，范围限定在地图的子 Issue / 任务列表中），丢弃任何带有开放阻塞者（`issue_dependencies_summary.blocked_by > 0`，或 `Blocked by` 行中的开放 Issue）或已被指派人的子项；按地图顺序第一个获胜。
 * **Claim**：`gh issue edit <n> --add-assignee @me`，这是会话中的首次写入。
