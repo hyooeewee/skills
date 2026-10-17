@@ -6,7 +6,7 @@
 
 * **创建 issue**：`glab issue create --title "..." --description "..."`。对于多行描述，使用 heredoc。传递 `--description -` 以打开编辑器。
 * **读取 issue**：`glab issue view <number> --comments`。使用 `-F json` 获取机器可读的输出。
-* **列出 issues**：`glab issue list -F json` 并配合相应的 `--label` 过滤器。
+* **列出 issues**：`glab issue list -O json` 并配合适当的 `--label` 过滤器。
 * **评论 issue**：`glab issue note <number> --message "..."`。GitLab 将评论称为 "notes"。
 * **应用/移除标签**：`glab issue update <number> --label "..."` / `--unlabel "..."`。多个标签可以用逗号分隔，或重复该标志。
 * **关闭**：`glab issue close <number>`。`glab issue close` 不接受关闭评论，因此先用 `glab issue note <number> --message "..."` 发布说明，然后关闭。
@@ -41,6 +41,6 @@
 * **地图**：一个标记为 `wayfinder:map` 的单一 issue，包含 Notes / Decisions-so-far / Fog 正文。`glab issue create --label wayfinder:map`。（在具有原生 epic 的 GitLab 层级上，epic 可以代替保存地图；但在任何地方，带标签的 issue 都能工作。）
 * **子工单**：一个在描述顶部带有 `Part of #<map>` 以及标签 `wayfinder:<type>`（`research`/`prototype`/`grilling`/`task`）的 issue。一旦被认领，该工单会分配给主导开发者。
 * "Blocking"：GitLab 的**原生阻塞链接**，这是规范、UI 可见的表示形式。使用 `/blocked_by #<n>` 快速操作添加它，作为 note 发布（`glab issue note <child> --message "/blocked_by #<blocker>"`）。原生阻塞链接是 Premium/Ultimate 功能；在免费层（或不可用的地方）回退到描述顶部的 `Blocked by: #<n>, #<n>` 行。当每个阻塞者都关闭时，工单即被解除阻塞。
-* "Frontier query"：`glab issue list -F json` 范围限定为地图的子项，排除任何具有开放阻塞者的项：指向开放 issue 的原生 `blocked_by` 链接（`glab api projects/:id/issues/:iid/links`），`Blocked by` 行中的开放 issue，或指派者；地图顺序中的第一个获胜。
+* **前沿查询**：`glab issue list -O json` 作用于地图的子项，剔除任何有开放阻塞项的项：指向开放 issue 的原生 `blocked_by` 链接 (`glab api projects/:id/issues/<child-iid>/links`)，或 `Blocked by` 行中的开放 issue，或有分配者；按地图顺序第一个胜出。
 * "Claim"：`glab issue update <n> --assignee @me`，即会话中的首次写入。
 * **解决**：`glab issue note <n> --message "<answer>"`，然后 `glab issue close <n>`，接着在地图的 Decisions-so-far 中追加一个上下文指针（gist + link）。

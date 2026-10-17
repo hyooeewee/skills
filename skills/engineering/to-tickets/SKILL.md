@@ -61,7 +61,7 @@ disable-model-invocation: true
 发布已批准的票据。**方式**取决于已配置的跟踪器 `/setup-matt-pocock-skills`；无论哪种方式，票据内容都相同，仅阻塞边的形态会改变：
 
 * **本地文件** → 在 `.scratch/<feature-slug>/issues/<NN>-<slug>.md` 下为每个票据写入一个文件，按依赖顺序从 `01` 开始编号（阻塞项在前）。每个文件的“被阻塞于”列出了其依赖的编号/标题。使用下方的单票据文件模板：每个文件一个票据，绝不要合并成一个文件。
-* **真实问题跟踪器** → 按依赖顺序（阻塞项在前）为每个票据发布一个问题，以便每个票据的阻塞边可以引用真实标识符。在平台支持原生阻塞/子问题关系时使用该关系；否则，将每个票据的“被阻塞于”设置为阻塞问题。除非另有指示，否则应用 `ready-for-agent` 分流标签；这些票据在构造上即为代理可抓取。
+* **A real issue tracker (GitHub, Linear, …)** → publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. Use the platform's native blocking relationship where it has one; otherwise set each ticket's "Blocked by" to the blocking issues. If the source was an existing issue, make each ticket its sub-issue (tracker doc's operation). Apply the `ready-for-agent` triage label unless instructed otherwise; the tickets are agent-grabbable by construction.
 
 处理**前沿**：即所有阻塞项都已完成的任务。对于纯线性链路，这意味着自上而下依次处理。
 
@@ -99,7 +99,7 @@ disable-model-invocation: true
 
 ## 阻塞于
 
-* 对每个阻塞票据的引用，或“无（可以立即开始）”。
+* A reference to each blocking ticket, or "None (can start immediately)". Omit this section when blockers were set as native edges.
 
 </issue-template>
 
