@@ -24,7 +24,7 @@
 
 ## 安装（30 秒设置）
 
-入门有两种方式，两种理念。**[Claude Code 插件](https://code.claude.com/docs/en/plugins)** 将整套技能安装为一个受管理的只读包，当我发布更新时它会自动更新，因此你是订阅而不是 Fork。**[skills.sh](https://skills.sh/mattpocock/skills)** 将可编辑的技能文件复制到你的项目中，这样你就可以对它们进行修改并使其成为你自己的。选一个吧：如果两个都装，你会得到每项技能两份。
+插件会自动更新。[skills.sh](https://skills.sh/mattpocock/skills) 会将可编辑文件复制到你的项目中，你可以手动更新它们。每个智能体只选一个，因为同时安装两个会让你获得每个技能的两份副本。
 
 ### 1. 获取技能
 
@@ -32,42 +32,67 @@
 <summary><strong>Claude Code</strong></summary>
 
 ```bash
-claude plugins install mattpocock-skills
+claude plugin install mattpocock-skills@claude-plugins-official
 ```
 
-或者在会话内部：
-
-```
-/plugin install mattpocock-skills
-```
-
-它位于 Claude Code 的官方市场中，因此无需预先添加任何内容，更新会自动到达。
+默认自动更新。
 
 </details>
 
 <details>
-<summary><strong>Codex, and other agents</strong></summary>
+<summary><strong>Codex</strong></summary>
 
 ```bash
-npx skills@latest add mattpocock/skills
+codex plugin marketplace add mattpocock/skills
+codex plugin add mattpocock-skills@mattpocock
 ```
 
-选择你想要的技能，以及要在哪些编码智能体上安装它们。**安装程序允许你选择要安装哪些技能，所以请确保 `setup-matt-pocock-skills` 是其中之一。**
-
-原生 Codex 插件已列入路线图（参见 [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)）。
+启动时自动更新。
 
 </details>
 
 <details>
-<summary><strong>For tinkerers</strong></summary>
-
-在任何智能体（包括 Claude Code）上使用相同的安装程序：
+<summary><strong>GitHub Copilot</strong> (CLI and VS Code)</summary>
 
 ```bash
-npx skills@latest add mattpocock/skills
+copilot plugin marketplace add mattpocock/skills
+copilot plugin install mattpocock-skills@mattpocock
 ```
 
-它会将技能以普通文件的形式写入你的仓库，这些文件归你所有且可编辑。不会有任何东西在你不知情的情况下更新；当你需要时，可以使用 `npx skills update` 拉取我的最新更改。
+然后，一次性添加到 `~/.copilot/settings.json`：
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "mattpocock": { "source": { "source": "github", "repo": "mattpocock/skills" }, "autoUpdate": true }
+  }
+}
+```
+
+在 VS Code 中，运行 **Chat: Install Plugin From Source** 并输入 `https://github.com/mattpocock/skills`。它每天更新。
+
+</details>
+
+<details>
+<summary><strong>Gemini CLI</strong> (manual updates)</summary>
+
+```bash
+gemini skills install https://github.com/mattpocock/skills.git --path skills/engineering
+gemini skills install https://github.com/mattpocock/skills.git --path skills/productivity
+```
+
+重新运行这两条命令以更新。
+
+</details>
+
+<details>
+<summary><strong>Any other agent, or editable files</strong> (manual updates)</summary>
+
+```bash
+npx skills@latest add mattpocock/skills -a <agent>  # cursor, opencode, devin, windsurf, amp, pi; omit -a to choose
+```
+
+当安装程序询问要获取哪些技能时，请包含 `setup-matt-pocock-skills`。要更新，请运行 `npx skills@latest update`，然后再次运行 `add` 以获取新技能。
 
 </details>
 
@@ -75,7 +100,7 @@ npx skills@latest add mattpocock/skills
 
 在你的智能体中，对每个仓库运行一次。它将：
 
-* 询问你想使用哪个问题追踪器（GitHub、Linear 或本地文件）
+* 询问你想使用哪个问题追踪器（GitHub、GitLab、本地文件，或你描述的任何其他工具）
 * 询问你在对工单进行分类时应用哪些标签（`/triage` 使用标签）
 * 询问你想将我们创建的任何文档保存到哪里
 
@@ -119,7 +144,7 @@ npx skills@latest add mattpocock/skills
 Example
 </summary>
 
-这是我 `course-video-manager` 仓库中的一个 [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md) 示例。哪一个更容易阅读？
+这是一个示例 [glossary](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md)（在该固定提交时仍名为 `CONTEXT.md`，源于技能重命名约定之前），来自我的 `course-video-manager` 仓库。哪一个更容易阅读？
 
 * **之前**：“当课程某个部分中的一课被‘实体化’（即在文件系统中获得一个位置）时，就会出现问题。”
 * **之后**：“物化级联存在问题。”
@@ -192,14 +217,16 @@ Example
 **用户调用**
 
 * 询问哪种技能或流程适合你的情况。这是本仓库中用户调用技能的路由器。
-* 盘问环节，同时构建你的项目的领域模型，完善术语并在内联更新 `CONTEXT.md` 和 ADR。
+* **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)**：在进行盘问环节的同时构建项目的领域模型，优化术语并内联更新 `GLOSSARY.md` 和 ADR。
 * 通过分类角色的状态机移动问题。
 * 扫描代码库以寻找深化机会，将其作为视觉 HTML 报告呈现，然后通过你选择的那个进行盘问。
 * 为工程技能配置此仓库（问题追踪器、分类标签、领域文档布局）。在使用其他工程技能之前，在每个仓库上运行一次。
 * 将当前的对话转换为规格说明并发布到问题追踪器。不需要面试，只是综合你已经讨论过的内容。
 * 将任何计划、规格说明或对话分解为一组追踪子弹工单，每个工单声明其阻塞边，以文本形式写入本地文件，或作为真实追踪器上的原生阻塞链接。
 * 构建规格说明或一组工单所描述的工作，在预先商定的接缝处驱动 `/tdd`，并在提交前以 `/code-review` 结束。
+* **[implement-spec](./skills/engineering/implement-spec/SKILL.md)**：在一个集成分支上实现完整的规格说明。将工单作为任务图处理，跨就绪前沿运行实施子智能体以实现最大并发性，最后通过 `/code-review` 收尾。
 * 将一大块工作规划为问题追踪器上决策工单的共享地图，并逐个解决它们，直到通往目的地的路径清晰。
+* **[retro](./skills/engineering/retro/SKILL.md)**：会话结束后，按严重程度从高到低建议改进编码智能体的环境（导航、自动化检查、编码标准、指引文件、工具）。
 
 **模型调用**
 
@@ -207,10 +234,10 @@ Example
 * * **[tdd](./skills/engineering/tdd/SKILL.md)**: Red-green-refactor loop.
 * * **[code-review](./skills/engineering/code-review/SKILL.md)**: Review code with an emphasis on the big picture.
 * * **[diagnosing-bugs](./skills/engineering/diagnosing-bugs/SKILL.md)**: Diagnose bugs with a disciplined loop, gated phase by phase.
-* * **[test-coverage](./skills/engineering/test-coverage/SKILL.md)**: Generate a coverage report and open it in a browser.
+* **[domain-modeling](./skills/engineering/domain-modeling/SKILL.md)**：主动构建并打磨项目的领域模型：根据术语表核对术语、用边缘场景压力测试，并内联更新 `GLOSSARY.md` 和 ADR。
 * * **[next-steps](./skills/engineering/next-steps/SKILL.md)**: Suggest next steps based on the codebase state, with options to confirm, edit, or cancel.
 * * **[code-owners](./skills/engineering/code-owners/SKILL.md)**: Identify the owner of a specific file or directory.
-* 逐个解决进行中的 git 合并或变基冲突块，通过追溯到每方主要来源的意图来解决，然后完成操作（永远不要 `--abort`）。
+* **[pr](./skills/engineering/pr/SKILL.md)**：Pull Request 正文应有的结构：一个能让变更一目了然的最小可视化摘要、证明其生效的前后对比证据，以及一个合并风险判定（单向门或双向门，外加影响半径）。
 * 生成一个交互式 bash 向导，引导人类完成只有他们能执行的步骤：配置基础设施、设置凭据或 CI 密钥、浏览不熟悉的外部仪表板，或运行一次性迁移或切换。
 
 ### 生产力
@@ -223,7 +250,7 @@ Example
 * 将当前的对话压缩成交接文档，以便另一个代理可以继续工作。
 * 在多个会话中向用户教授新技能或概念，使用当前目录作为有状态的教学工作区。
 * 将一个你无法独自回答的决定转化为一个 Markdown 问卷，给那个能回答的人填写，可以异步填写，也可以在会议中一起填写。它盘问你的是发送信息（发给谁，你需要什么反馈），而不是盘问主题内容。
-* 当消息未送达时立即触发此操作。代理会用你缺失的上下文重新提出请求，使用通俗英语和你的 `CONTEXT.md` 词汇。
+* **[wait-what](./skills/productivity/wait-what/SKILL.md)**: 消息没传达清楚时立即触发。代理会结合你缺失的上下文、用通俗易懂的英语、并使用你的 `GLOSSARY.md` 词汇重新解释一遍。
 
 **模型调用**
 

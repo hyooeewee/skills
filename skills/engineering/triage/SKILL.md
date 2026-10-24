@@ -74,7 +74,7 @@ disable-model-invocation: true
 
 3. **验证声明。** 在任何追问之前，检查声明是否成立。对于 bug，从报告者的步骤中复现它。对于 PR，确认 diff 做它声称的事情：检出它，运行相关的测试或命令。报告发生了什么：已确认（附带代码路径）、失败，或细节不足（强烈的 `needs-info` 信号）。确认的验证会使 agent 简报强得多。
 
-4. **追问（如需要）。** 如果请求需要充实，调用 Skill 工具两次，分别用于“grilling”和“domain-modeling”，并一次一轮问题将其追问成形，完善领域术语并在决策落地时内联更新 `CONTEXT.md`/ADRs。
+4. **追问（如有需要）。** 如果请求需要充实，调用 Skill 工具两次，分别用于“追问”和“域建模”，每轮提出一组问题，逐步完善，在决策落地时同步锐化领域术语并就地更新 `GLOSSARY.md`/ADR。
 
 5. **应用结果：**
    * `ready-for-agent`：发布 agent 简报评论（[AGENT-BRIEF.md](AGENT-BRIEF.md)）。
