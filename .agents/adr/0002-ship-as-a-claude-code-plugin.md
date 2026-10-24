@@ -39,3 +39,15 @@
 * 随后 `claude plugin details mattpocock-skills` 显示版本 1.2.0，并加载已发布的技能。
 * 列表的 `source` 是 `{"source": "url", "url": "https://github.com/mattpocock/skills.git", "sha": …}`：**sha 被固定**，因此发布会在该 pin 移动时触达已安装的用户，而不是我们打标签的那一刻。在撰写本文时，pin 位于 `main` 两个提交之后，这就是它列出 22 个技能而不是 `plugin.json` 中的 24 个的原因。
 * 会话中的 `/plugin install mattpocock-skills` **未被执行**：`/plugin` 在无头（`claude -p`）会话中不可用。它运行与 CLI 相同的解析器，文档化的示例形式是 `/plugin install <name>@claude-plugins-official`。
+
+## 更新于 2026-10-07
+
+上述 Codex 约束不再适用。Codex `main` 接受 `skills` 字符串数组，当没有 `.codex-plugin/` 时会回退到 `.claude-plugin/`（[manifest.rs](https://github.com/openai/codex/blob/main/codex-rs/core-plugins/src/manifest.rs)）。Codex 仍然会丢弃符号链接。
+
+在 Codex 0.161.0 上，`@mattpocock` 市场安装会加载已发布的模型调用技能，而不会加载 `misc/` 或 `in-progress/` 中的内容。Copilot CLI 读取相同的清单并报告"已安装 27 个技能"。
+
+## 更新于 2026-10-08：托管安装优先
+
+`@mattpocock` 现在是 Codex、Copilot 和 VS Code 的主要安装路径，代价是 Copilot 需要一次性选择加入。Claude Code 仍保持在 `claude-plugins-official` 上，如 2026-08-05 更新所述，因为它默认自动更新且不需要 `marketplace add`。
+
+上述版本不变量现在适用于每个托管路由。`npm run version` 通过运行 `scripts/sync-plugin-version.mjs` 已经保持了这一点。`marketplace.json` 没有 `version` 字段，因此不会出现偏移。
