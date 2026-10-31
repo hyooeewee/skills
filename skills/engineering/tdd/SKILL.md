@@ -8,7 +8,7 @@ description: 测试驱动开发。当用户想要以测试优先的方式构建�
 
 TDD 是红 → 绿循环。这项技能是让该循环产生值得保留的测试的参考：什么是好的测试、测试放在哪里、反模式以及循环的规则。每一节都适用于每个周期：在循环期间和之前咨询它们，而不是之后。
 
-探索代码库时，请阅读 `CONTEXT.md`（如果存在），以便测试名称和接口词汇与项目的领域语言保持一致，并尊重你所接触区域的 ADR。
+当探索代码库时，请阅读 `GLOSSARY.md`（如果存在），以便测试名称和接口词汇与项目的领域语言相匹配，并尊重你所涉及区域的 ADR。
 
 ## 什么是好的测试
 
@@ -22,7 +22,7 @@ TDD 是红 → 绿循环。这项技能是让该循环产生值得保留的测�
 
 **仅在预先商定的接缝处进行测试。** 在编写任何测试之前，写下正在测试的接缝并与用户确认。在未确认的接缝上不会编写任何测试。你无法测试所有内容，因此预先商定接缝是让测试工作落在关键路径和复杂逻辑上，而不是每个边缘情况上的方法。
 
-Ask: "What's the public interface, and which seams should we test?"
+Ask: "What's the public interface, and which seams should we test?" Give each proposed seam a one-line note on what it catches and what it misses.
 
 当该接口的形状本身存疑时（模块有多深、接缝属于哪里、接口应该暴露什么），调用 Skill 工具并使用 "codebase-design" 来获取词汇。它是模块、接口、深度、接缝、适配器、杠杆作用和局部性等术语的共享来源，它是供参考的资料，而不是要运行的会话。
 
