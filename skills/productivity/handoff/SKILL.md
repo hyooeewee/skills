@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 ---
 
-编写一份交接文档，总结当前对话，以便新代理可以继续这项工作。保存到用户操作系统的临时目录，而不是当前工作区。
+Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS (`$TMPDIR`, else `/tmp`; `%TEMP%` on Windows) - not the current workspace.
 
 在文档中包含一个“建议技能”部分，说明下一个代理应调用 Skill 工具来获取哪些技能。
 
