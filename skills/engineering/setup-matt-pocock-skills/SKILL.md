@@ -11,7 +11,7 @@ disable-model-invocation: true
 
 * Issue tracker：问题存放的位置（默认为 GitHub；本地 Markdown 也开箱即支持）
 * Triage labels：用于五个标准分流角色的字符串
-* 领域文档：`CONTEXT.md` 和 ADRs 存放的位置，以及阅读它们的消费规则
+* **领域文档**：`GLOSSARY.md` 和 ADR 的存放位置，以及读取它们的消费者规则
 
 这是一个提示驱动的技能，不是确定性脚本。先探索，展示发现，与用户确认，然后写入。
 
@@ -23,7 +23,7 @@ disable-model-invocation: true
 
 * `git remote -v` 和 `.git/config`：这是 GitHub 仓库吗？是哪一个？
 * 仓库根目录下的 `AGENTS.md` 和 `CLAUDE.md`：两者是否存在？其中是否已经有 `## Agent skills` 部分？
-* 仓库根目录下的 `CONTEXT.md` 和 `CONTEXT-MAP.md`
+* `GLOSSARY.md` 和 `GLOSSARY-MAP.md` 位于仓库根目录，以及遗留的 `CONTEXT.md` / `CONTEXT-MAP.md`。如果存在遗留文件，提议将其 `git mv` 重命名为 `GLOSSARY` 名称，并在 `docs/agents/domain.md` 中重写这些名称。
 * `docs/adr/` 以及任何 `src/*/docs/adr/` 目录
 * `docs/agents/`：此技能的先前输出是否已经存在？
 * `.scratch/`：表明已经使用本地 Markdown issue 跟踪器约定的迹象
@@ -49,6 +49,8 @@ disable-model-invocation: true
 
 将选择记录在 `docs/agents/issue-tracker.md` 中。GitHub 和 GitLab 模板携带一个 "PRs 作为请求面" 标志，默认为 **off**。保持关闭状态，不要将其开启：想要在分流队列中有外部 PR 的用户可以在文件中稍后翻转该标志。
 
+GitHub 或 GitLab 跟踪器需要一个可访问的仓库。当用户选择其中一个但没有 `git remote` 指向该主机时，从他们那里获取仓库 URL 并将其连接起来（如需要 `git init`，`git remote add origin <url>`），然后再继续。当 `gh repo view` / `glab repo view` 从此目录打印项目时完成；如果不能，停止并告诉用户缺少什么。
+
 部分 B：Triage label vocabulary。如果未安装 `triage` 技能（探索已告诉你），则完全跳过此部分，因为未安装的技能不需要标签。
 
 如果已安装，只问一个问题：
@@ -57,9 +59,9 @@ disable-model-invocation: true
 
 默认值是五个标准角色，每个标签字符串等于其名称：`needs-triage`、`needs-info`、`ready-for-agent`、`ready-for-human`、`wontfix`。在 **yes** 时，按原样写入它们。只有当用户说“不”时（通常是因为他们的跟踪器已经使用了其他名称，例如 `needs-triage` 对应 `bug:triage`），才收集覆盖项，以便 `triage` 应用现有标签而不是创建重复项。
 
-部分 C：Domain docs。默认为 **single-context**（仓库根目录下有一个 `CONTEXT.md` + `docs/adr/`）。这几乎适合所有仓库；无需询问即可写入。
+**部分 C：领域文档。** 默认为 **单上下文**（仓库根目录下一个 `GLOSSARY.md` + `docs/adr/`）。这适合几乎所有仓库；无需询问直接写入。
 
-仅当探索发现 monorepo 信号时，才提供 **multi-context**（一个根 `CONTEXT-MAP.md` 指向每个上下文的 `CONTEXT.md` 文件）。然后确认他们想要哪种布局。
+仅当探索发现 monorepo 信号时，才提供 **多上下文**（根目录 `GLOSSARY-MAP.md` 指向各上下文的 `GLOSSARY.md` 文件）。然后确认他们想要哪种布局。
 
 ### 3. 确认并编辑
 
@@ -101,6 +103,8 @@ disable-model-invocation: true
 ```
 
 仅在 `triage` 已安装且 B 部分运行时，才包含 `### Triage labels` 子块并写入 `docs/agents/triage-labels.md`。否则两者都省略。
+
+当 B 部分在 GitHub 或 GitLab 上运行时，创建跟踪器中缺少的每个已配置标签（`gh label create` / `glab label create`)。
 
 然后使用此技能文件夹中的种子模板作为起点写入文档文件：
 
