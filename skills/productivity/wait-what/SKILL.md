@@ -5,4 +5,4 @@ disable-model-invocation: true
 
 ---
 
-等等，我不明白你现在的进展。请重新表述一下：给我一点上下文，使用 ASD-STE100 简化技术英语，并使用 `CONTEXT.md` 中的通用语言（如果仓库中有多个上下文，请遵循 `CONTEXT-MAP.md` 指向正确的那个）。
+等一下，我不明白你在这里讲到了哪里。请重新表述一下：给我一点背景信息，用ASD-STE100简化技术英语交流，并使用`GLOSSARY.md`中的通用语言（如果仓库有多个，请遵循`GLOSSARY-MAP.md`找到正确的那个）。

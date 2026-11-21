@@ -12,4 +12,4 @@
 
 当某个技能提到某个角色（例如“应用 AFK-ready 分流标签”）时，请使用此表中对应的标签字符串。
 
-编辑右列，使其与你实际使用的术语保持一致。
+Edit the "Label in our tracker" column to match whatever vocabulary you actually use.
